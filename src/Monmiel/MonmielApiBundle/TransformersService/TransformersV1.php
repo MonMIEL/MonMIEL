@@ -8,7 +8,7 @@ namespace Monmiel\MonmielApiBundle\TransformersService;
 class TransformersV1
 {
     public function test() {
-        $this->daoService->getDayConso("2");
+        $jour = $this->daoService->getDayConso(2);
     }
 
     /**

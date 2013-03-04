@@ -14,6 +14,6 @@ class Jour_DAO
     /**
      * @var array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
-    protected $quarter;
+    protected $quarters;
 
 }
