@@ -1,0 +1,4 @@
+monmiel_api:
+    resource: "@MonmielMonmielApiBundle/Resources/config/routing.yml"
+    prefix:   /api
+
