@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Monmiel\TransformersBundle\MonmielTransformersBundle(),
             new Monmiel\MonmielApiModelBundle\MonmielMonmielApiModelBundle(),
             new Monmiel\MonmielDaoBundle\MonmielMonmielDaoBundle(),
+            new Monmiel\MixRepartitionBundle\MonmielMixRepartitionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
