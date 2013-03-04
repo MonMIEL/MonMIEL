@@ -1,0 +1,3 @@
+monmiel_transformers_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: MonmielTransformersBundle:Default:index }

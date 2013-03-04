@@ -1,0 +1,7 @@
+parameters:
+#    monmiel_monmiel_dao.example.class: Monmiel\MonmielDaoBundle\Example
+
+services:
+#    monmiel_monmiel_dao.example:
+#        class: %monmiel_monmiel_dao.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
