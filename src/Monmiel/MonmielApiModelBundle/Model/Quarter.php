@@ -70,7 +70,6 @@ class Quarter
         $this->hydraulique = $hydraulique;
         $this->nucleaire = $nucleaire;
         $this->photovoltaique = $photovoltaique;
-        $this->solde = $solde;
     }
 
     /**
