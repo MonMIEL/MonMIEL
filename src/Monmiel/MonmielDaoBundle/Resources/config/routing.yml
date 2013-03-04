@@ -1,3 +1,0 @@
-monmiel_monmiel_dao_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: MonmielMonmielDaoBundle:Default:index }
