@@ -2,6 +2,8 @@
 
 namespace Monmiel\MonmielApiBundle\Dao;
 
+use JMS\DiExtraBundle\Annotation as DI;
+
 /**
  * @DI\Service("monmiel.dao.riak")
  */

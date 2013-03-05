@@ -19,10 +19,7 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Monmiel\TransformersBundle\MonmielTransformersBundle(),
             new Monmiel\MonmielApiModelBundle\MonmielMonmielApiModelBundle(),
-            new Monmiel\MonmielDaoBundle\MonmielMonmielDaoBundle(),
-            new Monmiel\MixRepartitionBundle\MonmielMixRepartitionBundle(),
             new Monmiel\MonmielApiBundle\MonmielMonmielApiBundle(),
         );
 

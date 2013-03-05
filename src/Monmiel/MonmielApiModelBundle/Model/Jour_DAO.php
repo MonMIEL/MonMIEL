@@ -47,13 +47,4 @@ class Jour_DAO
     {
         return $this->quarters;
     }
-
-    /**
-     * add quarter parameter in the quarters of this
-     * @param $quarter
-     */
-    public function addQuarter($quarter){
-        array_push($this->quarters,$quarter);
-    }
-
 }
