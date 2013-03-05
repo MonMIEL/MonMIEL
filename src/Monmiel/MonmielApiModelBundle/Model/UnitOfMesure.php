@@ -43,7 +43,7 @@ class UnitOfMesure
      * return the unit of
      * @return string
      */
-    public function getTerraWatt(){
+    public function geUnityTerraWatt(){
         return UnitOfMesure::MESURE_TERAWATT;
     }
 
@@ -51,13 +51,15 @@ class UnitOfMesure
      * return the unity Gigawatt
      * @return string
      */
-    public function  getGigaWatt(){
+    public function  getUnityGigaWatt(){
         return UnitOfMesure::MESURE_GIGAWATT;
     }
 
-
-    public  function  getGigaWattHour(){
-
+    /**
+     * the unity of mesure for consommation per hour
+     * @return string
+     */
+    public  function  getUnityGigaWattHour(){
         return UnitOfMesure::MESURE_GIGAWATT_HOUR;
     }
 
