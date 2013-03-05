@@ -20,6 +20,6 @@ class ComputeFacilityServiceTest extends WebTestCase
      */
     public function testMax()
     {
-
+        echo "salut";
     }
 }

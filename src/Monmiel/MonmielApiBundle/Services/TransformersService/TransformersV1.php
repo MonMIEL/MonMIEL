@@ -41,7 +41,7 @@ class TransformersV1
         // Parcourir la liste et transformer chaque conso en conso theorique
         foreach ($listQuarter as $value) {
             // Appliquer la formule de calcul
-            $tmpVal= this->transformeTotalCalcul($value->getConsoTotal(),$consoAct,$consoUser);
+            $tmpVal= $this->transformeTotalCalcul($value->getConsoTotal(),$consoAct,$consoUser);
             // Remplacer la valeur par la nouvelle valeur
             $value->setConsoTotal($tmpVal);
         }
