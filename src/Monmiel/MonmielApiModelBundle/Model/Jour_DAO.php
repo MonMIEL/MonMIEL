@@ -47,4 +47,12 @@ class Jour_DAO
     {
         return $this->quarters;
     }
+
+
+
+
+
+
+
+
 }
