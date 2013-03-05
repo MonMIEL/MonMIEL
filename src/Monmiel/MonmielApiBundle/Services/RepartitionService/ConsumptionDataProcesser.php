@@ -22,6 +22,10 @@
 
  */
 
+//NEVER_USED
+namespace Monmiel\MonmielApiBundle\Services\RepartitionService;
+
+
 /**
  * Gets data from reference year
  * and computes estimated value for year given
@@ -31,11 +35,12 @@
 class ConsumptionDataProcesser
 {
 
-    private $consumptionRetrieved; //array of values
+    public $consumptionRetrieved = Array(); //array of values retrieved from DAO
+    public $consumptionComputedTargetYear = Array();
+    public $targetYearTotalConsumption; // amount of energy need for the year given in parameter
+    public $referenceYearTotalConsumption; // amount of energy need for the year given in parameter
 
-    private $targetYearTotalConsumption;// amount of energy need for the year given in parameter
-
-    private $repartitionGivenByEnergy;//rates for each energy given in parameter
+    public $repartitionGivenByEnergy; //rates for each energy given in parameter
 
 
     /**Makes an extrapolation of reference's year
@@ -44,21 +49,52 @@ class ConsumptionDataProcesser
      */
     private function  computesConsumptionForTargetYear()
 
-{
+    {
+        $coeffToUse = $this->computesRatesByEnergy();
+
+        for ($i = 0; $i < sizeof($this->consumptionRetrieved); $i++) {
+            //i retrieve a day
+            $currentDay = $this->consumptionRetrieved[$i];
+
+            $current = $currentDay;
+            $current->setQuarters(array());
+            $currentDayQuarters = $currentDay->getgetQuarters();
+
+            for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
+
+                $currentQuarter = $currentDayQuarters[$j];
+                $currentQuarter = $this->updateQuarter($currentQuarter, $coeffToUse);
+                array_push($current, $currentQuarter);
+            }
 
 
+            array_push($consumptionComputedTargetYear, $current);
+
+        }
 
 
-    return null;
-}
+    }
 
     /**
+     *Computes rates between year reference and target year
      *
-      */
-    private function computesRatesByEnergy()
-  {
+     */
+    public function computesRatesByEnergy()
+    {
+        $coeff = $this->targetYearTotalConsumption / $this->referenceYearTotalConsumption;
 
-  }
+        return $coeff;
+    }
 
+
+    private function updateQuarter($quarter, $coeff)
+
+    {
+        $updatedValue = $quarter->coeffMuliplication($coeff);
+
+
+        return $updatedValue;
+
+    }
 
 }
