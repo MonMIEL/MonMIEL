@@ -8,20 +8,21 @@ use Monmiel\MonmielApiModelBundle\Event\NewDayEvent;
 /**
  * @DI\Service("monmiel.facility.service")
  */
-class ComputeFacilityService
+class ComputeFacilityService implements FacilityServiceInterface
 {
-    function __construct()
+    /**
+     * @param Quarter $quarter
+     */
+    public function submitQuarters($quarter)
     {
+        // TODO: Implement submitQuarters() method.
     }
 
     /**
-     * @param \Monmiel\MonmielApiModelBundle\Event\NewDayEvent $event
-     * @DI\Observe("monmiel.new.simulated.day")
+     * @return
      */
-    public function computeFacilities($event)
+    public function getSimulatedParc()
     {
-        $day = $event->getDay();
-
+        // TODO: Implement getSimulatedParc() method.
     }
-
 }
