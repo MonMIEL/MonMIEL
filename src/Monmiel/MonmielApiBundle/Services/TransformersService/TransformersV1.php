@@ -33,7 +33,7 @@ class TransformersV1
      * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
 
-    public function transformeTotalToConsoTher(array $listQuarter,$consoAct,$consoUser){
+     function transformeTotalToConsoTher(array $listQuarter,$consoAct,$consoUser){
 
 
 
