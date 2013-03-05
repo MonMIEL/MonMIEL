@@ -22,6 +22,12 @@ class Day
         $this->quarters = $quarters;
     }
 
+    public function getKey()
+    {
+        $format = "Y-m-d";
+        return date_format($this->dateTime, $format);
+    }
+
     /**
      * @param $quarter Quarter
      */
