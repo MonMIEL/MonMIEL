@@ -93,7 +93,7 @@ class Quarter
      */
     public function getConsoTotal()
     {
-        return ($this->getFuel() + $this->getEolien() + $this->getCharbon() + $this->getGaz() + $this->getHydraulique() + $this->getNucleaire());
+        return ($this->getFuel() + $this->getEolien() + $this->getCharbon() + $this->getGaz() + $this->getHydraulique() + $this->getNucleaire() + $this->getPhotovoltaique());
     }
 
     /**

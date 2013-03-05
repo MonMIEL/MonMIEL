@@ -28,6 +28,7 @@ class UnitOfMesure
      * @var string
      */
     protected  $name;
+
     /**
      * description of the unit of mesure
      * @var string
@@ -42,18 +43,50 @@ class UnitOfMesure
     }
 
     /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * the TerraWatt Unity
      * @return UnitOfMesure
      */
-    public function geUnityTerraWatt(){
-        return new UnitOfMesure(UnitOfMesure::MESURE_TERAWATT, "TerraWatt");
+    static public function createUnityTerraWatt(){
+        return new UnitOfMesure(UnitOfMesure::MESURE_TERAWATT, "teraWatt");
     }
 
     /**
      * the GigaWatt Unity
      * @return UnitOfMesure
      */
-    public function  getUnityGigaWatt(){
+    static public function  createUnityGigaWatt(){
         return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT, "Gigawatt");
     }
 
@@ -61,7 +94,7 @@ class UnitOfMesure
      * the unity of mesure for consommation per hour
      * @return UnitOfMesure
      */
-    public  function  getUnityGigaWattHour(){
+    static public  function  getUnityGigaWattHour(){
         return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
     }
 
