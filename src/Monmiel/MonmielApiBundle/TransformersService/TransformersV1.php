@@ -2,6 +2,8 @@
 
 namespace Monmiel\MonmielApiBundle\TransformersService;
 
+use JMS\DiExtraBundle\Annotation as DI;
+
 /**
  * @DI\Service("monmiel.transformers")
  */
@@ -9,7 +11,7 @@ class TransformersV1
 {
 
     public function test() {
-        $this->daoService->getDayConso("2");
+        $jour = $this->daoService->getDayConso(2);
     }
 
     /**
