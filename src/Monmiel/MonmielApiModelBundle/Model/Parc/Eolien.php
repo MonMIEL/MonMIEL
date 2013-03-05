@@ -1,4 +1,6 @@
 <?php
+
+namespace Monmiel\MonmielApiModelBundle\Model\Parc;
 /**
  * Created by JetBrains PhpStorm.
  * User: Miage
@@ -13,12 +15,30 @@ class Eolien
     private $td_eolien;
 
     public function setMaxEolien($maxEolien){
-        if(is_int($maxEolien) && $maxEolien> $this->max_eolien){
+        if($maxEolien> $this->max_eolien){
             $this->max_eolien=$maxEolien;
         }
     }
 
     public function getMaxEolien(){
         return $this->max_eolien;
+    }
+
+    public function setFacteurChargeEolien($fcEolien){
+            $this->fc_eolien=$fcEolien;
+
+    }
+
+    public function getFacteurChargeEolien(){
+        return $this->fc_eolien;
+    }
+
+    public function setTauxDisponibiliteEolien($tdEolien){
+        $this->td_eolien=$tdEolien;
+
+    }
+
+    public function getTauxDisponibiliteEolien(){
+        return $this->td_eolien;
     }
 }

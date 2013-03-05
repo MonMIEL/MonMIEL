@@ -1,4 +1,6 @@
 <?php
+
+namespace Monmiel\MonmielApiModelBundle\Model\Parc;
 /**
  * Created by JetBrains PhpStorm.
  * User: Miage
