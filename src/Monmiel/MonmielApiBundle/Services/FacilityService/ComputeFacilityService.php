@@ -10,6 +10,9 @@ use Monmiel\MonmielApiModelBundle\Event\NewDayEvent;
  */
 class ComputeFacilityService
 {
+    function __construct()
+    {
+    }
 
     /**
      * @param \Monmiel\MonmielApiModelBundle\Event\NewDayEvent $event
