@@ -22,6 +22,9 @@
 
  */
 
+namespace Monmiel\MonmielApiBundle\Services\FacilityService;
+
+
 /**
  * Gets data from reference year
  * and computes estimated value for year given
