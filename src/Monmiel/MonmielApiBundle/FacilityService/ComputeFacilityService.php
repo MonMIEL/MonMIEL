@@ -10,4 +10,12 @@ use JMS\DiExtraBundle\Annotation as DI;
 class ComputeFacilityService
 {
 
+    /**
+     * @DI\Observe("monmiel.new.simulated.day")
+     */
+    public function computeFacilities($event)
+    {
+
+    }
+
 }
