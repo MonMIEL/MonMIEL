@@ -3,7 +3,7 @@
 namespace Monmiel\MonmielApiModelBundle\Model;
 
 
-class Jour_DAO
+class Day
 {
 
     /**
