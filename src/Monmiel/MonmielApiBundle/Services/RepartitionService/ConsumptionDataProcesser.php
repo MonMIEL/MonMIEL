@@ -22,6 +22,7 @@
 
  */
 
+//NEVER_USED
 namespace Monmiel\MonmielApiBundle\Services\FacilityService;
 
 
