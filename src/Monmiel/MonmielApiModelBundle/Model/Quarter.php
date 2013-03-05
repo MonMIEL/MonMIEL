@@ -247,4 +247,19 @@ class Quarter
     {
         $this->solde = $solde;
     }
+
+    /**
+     * Updates values by setting multiplicity coefficient
+     * @param $coeff
+     */
+    public function coeffMultiplication($coeff)
+    {
+
+        $this->eolien = $this->eolien*$coeff;
+     //   $this->fuel = $fuel;
+       // $this->gaz = $gaz;
+       $this->hydraulique = $this->hydraulique*$coeff;
+        $this->nucleaire = $this->nucleaire*$coeff;
+        $this->photovoltaique = $this->photovoltaique*$coeff;
+    }
 }
