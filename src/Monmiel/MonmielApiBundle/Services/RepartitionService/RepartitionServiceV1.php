@@ -8,8 +8,9 @@ use Monmiel\MonmielApiModelBundle\Event\NewDayEvent;
 /**
  * @DI\Service("monmiel.repartition.service")
  */
-class RepartitionServiceV1
+class RepartitionServiceV1 implements RepartitionServiceInterface
 {
+
 
     /**
      * @DI\Inject("monmiel.transformers.service")
@@ -18,45 +19,55 @@ class RepartitionServiceV1
     public $transformers;
 
     /**
-     * @var \Monmiel\MonmielApiModelBundle\Model\Jour_DAO
+     * @var \Monmiel\MonmielApiModelBundle\Model\Day
      */
     public $dayRetrieved;
 
-    public function setup()
+    public function getReferenceDay($dayNumber)
     {
-       $this->dayRetrieved =  $this->transformers->get(1);
+        $this->dayRetrieved = $this->transformers->get($dayNumber);
     }
 
 
     /**
+     * Computes and updates a day value using
+     * same repartition as reference year
      * @param $dayNumber
-     * @
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
 
     private function  computeEstimateTedTargetDailyConsumption($dayNumber)
 
     {
-        $coeffToUse =  2; //given
+        $this->getReferenceDay($dayNumber);
+        $coeffToUse = 2; //given
 
 
-            //i retrieve a day
-            $currentDay =$this->dayRetrieved;
-            $current = $currentDay;
-            $current->setQuarters(array());
-            $currentDayQuarters = $currentDay->getgetQuarters();
+        //i retrieve a day
+        $currentDay = $this->dayRetrieved;
+        $current = $currentDay;
+        $current->setQuarters(array());
+        $currentDayQuarters = $currentDay->getgetQuarters();
 
-            for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
+        for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
 
-                $currentQuarter = $currentDayQuarters[$j];
-                $currentQuarter = $this->updateQuarter($currentQuarter, $coeffToUse);
-                array_push($current, $currentQuarter);
-            }
-
-
+            $currentQuarter = $currentDayQuarters[$j];
+            $currentQuarter = $this->updateQuarter($currentQuarter, $coeffToUse);
+            array_push($current, $currentQuarter);
+        }
 
 
+        return current;
 
-return current;
+    }
 
+    /**
+     * @param $day integer
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function get($day)
+    {
+
+        return $this->computeEstimateTedTargetDailyConsumption($day);
     }
 }

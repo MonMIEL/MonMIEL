@@ -261,5 +261,18 @@ class Quarter
        $this->hydraulique = $this->hydraulique*$coeff;
         $this->nucleaire = $this->nucleaire*$coeff;
         $this->photovoltaique = $this->photovoltaique*$coeff;
+        $this->consoTotal= $this->consoTotal*$coeff;
+
+       $this->updatesAjustValues();
+    }
+
+    /**
+     * Check if capacity available is below
+     * consumption need, and then ajust
+     * values for completion variables
+     */
+    private function updatesAjustableValues( )
+    {
+        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
     }
 }
