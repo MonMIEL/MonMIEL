@@ -24,7 +24,14 @@ class RteDataToRiakCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln($input->getArgument("csv"));
-        ;
+
+            $handle = fopen($input->getArgument("csv"), "r");
+        $row = 1;
+        while ($line = fgetcsv($handle)) {
+            if($row == 1){ $row++; continue; }
+            var_dump($line);
+        }
+
+        //Heure; fioul pointe; charbon; gaz; nucléaire; eolien; hydrolique; autre; solde; mois; jours; heure; minute; pv;
     }
 }

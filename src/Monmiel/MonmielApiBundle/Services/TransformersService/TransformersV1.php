@@ -8,19 +8,21 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 /**
  * @DI\Service("monmiel.transformers.service")
  */
-class TransformersV1
+class TransformersV1 implements TransformersInterface
 {
+
+    /**
+     * @param $day integer
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day $day
+     */
+    public function get($day)
+    {
+        // TODO: Implement get() method.
+    }
 
     public function test() {
         $jour = $this->daoService->getDayConso(2);
     }
-
-    /**
-     * @DI\Inject("monmiel.dao.riak")
-     * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
-     */
-    public $daoService;
-
 
     /**
      * Transformer le total de la consommation donnee au total de la consommation theorique
@@ -31,7 +33,8 @@ class TransformersV1
      * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
 
-     function transformeTotalToConsoTher($listQuarter,$consoAct,$consoUser){
+     function transformeTotalToConsoTher($listQuarter,$consoAct,$consoUser)
+     {
 
         // Definir une liste temporaire
         $tmp = array();
@@ -70,4 +73,10 @@ class TransformersV1
     public function transformeLQuarterToLJourDAO($listQuarter){
 
     }
+
+    /**
+     * @DI\Inject("monmiel.dao.riak")
+     * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
+     */
+    public $daoService;
 }
