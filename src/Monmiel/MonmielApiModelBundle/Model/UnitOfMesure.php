@@ -46,7 +46,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     public function geUnityTerraWatt(){
-        return new UnitOfMesure(MESURE_TERAWATT, "TerraWatt");
+        return new UnitOfMesure(UnitOfMesure::MESURE_TERAWATT, "TerraWatt");
     }
 
     /**
@@ -54,8 +54,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     public function  getUnityGigaWatt(){
-        //return UnitOfMesure::MESURE_GIGAWATT;
-        return new UnitOfMesure(MESURE_GIGAWATT, "Gigawatt");
+        return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT, "Gigawatt");
     }
 
     /**
@@ -63,8 +62,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     public  function  getUnityGigaWattHour(){
-        return UnitOfMesure::MESURE_GIGAWATT_HOUR;
-        new UnitOfMesure(MESURE_GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
+        return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
     }
 
     /**
