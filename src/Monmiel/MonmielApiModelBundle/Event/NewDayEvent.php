@@ -1,6 +1,6 @@
 <?php
 
-namespace Monmiel\MonmielApiBundle\Event;
+namespace Monmiel\MonmielApiModelBundle\Event;
 
 use JMS\Serializer\EventDispatcher\Event;
 use JMS\DiExtraBundle\Annotation as DI;

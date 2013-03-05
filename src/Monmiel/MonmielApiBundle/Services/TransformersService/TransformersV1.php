@@ -1,11 +1,11 @@
 <?php
 
-namespace Monmiel\MonmielApiBundle\TransformersService;
+namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
 /**
- * @DI\Service("monmiel.transformers")
+ * @DI\Service("monmiel.transformers.service")
  */
 class TransformersV1
 {
