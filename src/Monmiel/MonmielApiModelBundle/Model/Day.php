@@ -16,6 +16,27 @@ class Day
      */
     protected $quarters;
 
+    function __construct($dateTime, $quarters = array())
+    {
+        $this->dateTime = $dateTime;
+        $this->quarters = $quarters;
+    }
+
+    /**
+     * @param $quarter Quarter
+     */
+    public function addQuarters($quarter) {
+        $this->quarters[] = $quarter;
+    }
+
+    /**
+     * @param $quaterNb integer Le quarter à récupérer de 0 à 39
+     */
+    public function getQuarter($quarterNb)
+    {
+        return $this->quarters[$quarterNb];
+    }
+
     /**
      * @param \DateTime $dateTime
      */
