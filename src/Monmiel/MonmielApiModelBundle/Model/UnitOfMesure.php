@@ -1,26 +1,25 @@
 <?php
 namespace Monmiel\MonmielApiModelBundle\Model;
+
 /**
- * Created by JetBrains PhpStorm.
- * User: patrice
- * Date: 05/03/13
- * Time: 09:26
- * To change this template use File | Settings | File Templates.
+ * unity of mesure
+ * @author Patrice
  */
+
 class UnitOfMesure
 {
     /**
-     * terawatt unit
+     * terawatt unity
      */
     const MESURE_TERAWATT = 'TW';
 
     /**
-     * terawatt unit
+     * terawatt unity
      */
     const MESURE_GIGAWATT ='GW';
 
     /**
-     * terawatt unit
+     * terawatt unity
      */
     const MESURE_GIGAWATT_HOUR ='GWH';
 
@@ -29,38 +28,56 @@ class UnitOfMesure
      * @var string
      */
     protected  $name;
-
     /**
      * description of the unit of mesure
      * @var string
      */
     protected  $description;
 
-    function __construct(){
 
+    function __construct($name, $description)
+    {
+        $this->name = $name;
+        $this->description = $description;
     }
+
     /**
-     * return the unit of
-     * @return string
+     * the TerraWatt Unity
+     * @return UnitOfMesure
      */
     public function geUnityTerraWatt(){
-        return UnitOfMesure::MESURE_TERAWATT;
+        return new UnitOfMesure(MESURE_TERAWATT, "TerraWatt");
     }
 
     /**
-     * return the unity Gigawatt
-     * @return string
+     * the GigaWatt Unity
+     * @return UnitOfMesure
      */
     public function  getUnityGigaWatt(){
-        return UnitOfMesure::MESURE_GIGAWATT;
+        //return UnitOfMesure::MESURE_GIGAWATT;
+        return new UnitOfMesure(MESURE_GIGAWATT, "Gigawatt");
     }
 
     /**
      * the unity of mesure for consommation per hour
-     * @return string
+     * @return UnitOfMesure
      */
     public  function  getUnityGigaWattHour(){
         return UnitOfMesure::MESURE_GIGAWATT_HOUR;
+        new UnitOfMesure(MESURE_GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
     }
 
+    /**
+     * @return bool , true, if the current unity is a TerraWatt
+     */
+    public function isTerraWatt(){
+        return $this->name == UnitOfMesure::MESURE_TERAWATT;
+    }
+
+    /**
+     * @return bool , true if the current unity is a Gigawatt
+     */
+    public function isGigaWatt(){
+        return $this->name == UnitOfMesure::MESURE_GIGAWATT;
+    }
 }

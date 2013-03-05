@@ -9,13 +9,11 @@ namespace Monmiel\MonmielApiModelBundle\Model;
  */
 class Mesure
 {
-
     /**
      * the quantity of the mesure
-     * @var double
+     * @var float
      */
     protected $value;
-
 
     /**
      * the unity of mesure
@@ -23,6 +21,12 @@ class Mesure
      */
     protected $unitOfMesure;
 
+
+    function __construct($value, $unitOfMesure)
+    {
+        $this->unitOfMesure = $unitOfMesure;
+        $this->value = $value;
+    }
 
     /**
      * @param \Monmiel\MonmielApiModelBundle\Model\UnitOfMesure $unitOfMesure
@@ -41,7 +45,7 @@ class Mesure
     }
 
     /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\double $value
+     * @param float $value
      */
     public function setValue($value)
     {
@@ -49,7 +53,7 @@ class Mesure
     }
 
     /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\double
+     * @return float
      */
     public function getValue()
     {

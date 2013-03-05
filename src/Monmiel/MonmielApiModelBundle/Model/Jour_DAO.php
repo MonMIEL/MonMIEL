@@ -5,30 +5,31 @@ namespace Monmiel\MonmielApiModelBundle\Model;
 
 class Jour_DAO
 {
+
     /**
      * @var \DateTime
      */
-    protected $jour;
+    protected $dateTime;
 
     /**
      * @var array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
     protected $quarters;
 
-
-
-    function __construct($jour, $quarters)
+    /**
+     * @param \DateTime $dateTime
+     */
+    public function setDateTime($dateTime)
     {
-        $this->jour = $jour;
-        $this->quarters = $quarters;
+        $this->dateTime = $dateTime;
     }
 
     /**
-     * @param \DateTime $jour
+     * @return \DateTime
      */
-    public function setJour($jour)
+    public function getDateTime()
     {
-        $this->jour = $jour;
+        return $this->dateTime;
     }
 
     /**
@@ -40,14 +41,6 @@ class Jour_DAO
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getJour()
-    {
-        return $this->jour;
-    }
-
-    /**
      * @return array
      */
     public function getQuarters()
@@ -55,6 +48,12 @@ class Jour_DAO
         return $this->quarters;
     }
 
-
+    /**
+     * add quarter parameter in the quarters of this
+     * @param $quarter
+     */
+    public function addQuarter($quarter){
+        array_push($this->quarters,$quarter);
+    }
 
 }
