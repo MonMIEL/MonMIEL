@@ -69,3 +69,15 @@ jms_di_extra:
     all_bundles: false
     directories:
       - "%kernel.root_dir%/../src"
+      - "%kernel.root_dir%/../vendor/kbrw"
+
+riak:
+  clusters:
+    monmiel:
+      domain: "127.0.0.1"
+      port: "8098"
+      client_id: "monmiel"
+      buckets:
+        rte_index:
+          fqcn: 'Monmiel\MonmielApiModelBundle\Model\Day'
+          format: json

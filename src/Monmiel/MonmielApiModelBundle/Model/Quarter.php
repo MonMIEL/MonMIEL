@@ -2,162 +2,108 @@
 
 namespace Monmiel\MonmielApiModelBundle\Model;
 
+use JMS\Serializer\Annotation as Ser;
+
+/**
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("quarter")
+ */
 class Quarter
 {
     /**
      * @var \DateTime
+     * @Ser\Type("DateTime")
      */
     protected $date;
 
     /**
      * @var integer
+     * @Ser\Type("integer")
      */
-    protected $fuel;
+    protected $flamme;
 
     /**
      * @var integer
-     */
-    protected $charbon;
-
-    /**
-     * @var integer
-     */
-    protected $gaz;
-
-    /**
-     * @var integer
+     * @Ser\Type("integer")
      */
     protected $nucleaire;
 
     /**
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $eolien;
 
     /**
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $hydraulique;
 
     /***
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $photovoltaique;
 
     /***
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $autre;
 
     /**
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $solde;
 
     /**
      * @var integer
+     * @Ser\Type("integer")
      */
     protected $consoTotal;
 
-
-    function __construct($charbon, $date, $eolien, $fuel, $gaz, $hydraulique, $nucleaire, $photovoltaique)
+    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde)
     {
-        $this->charbon = $charbon;
+        $this->autre = $autre;
+        $this->consoTotal = $consoTotal;
         $this->date = $date;
         $this->eolien = $eolien;
-        $this->fuel = $fuel;
-        $this->gaz = $gaz;
+        $this->flamme = $flamme;
         $this->hydraulique = $hydraulique;
         $this->nucleaire = $nucleaire;
         $this->photovoltaique = $photovoltaique;
+        $this->solde = $solde;
+    }
+
+
+    /**
+     * Updates values by setting multiplicity coefficient
+     * @param $coeff
+     */
+    public function coeffMultiplication($coeff)
+    {
+
+        $this->eolien = $this->eolien*$coeff;
+        //   $this->fuel = $fuel;
+        // $this->gaz = $gaz;
+        $this->hydraulique = $this->hydraulique*$coeff;
+        $this->nucleaire = $this->nucleaire*$coeff;
+        $this->photovoltaique = $this->photovoltaique*$coeff;
+        $this->consoTotal= $this->consoTotal*$coeff;
+
+        $this->updatesAjustValues();
     }
 
     /**
-     * @return int
+     * Check if capacity available is below
+     * consumption need, and then ajust
+     * values for completion variables
      */
-    public function getAutre()
+    private function updatesAjustableValues( )
     {
-        return $this->autre;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCharbon()
-    {
-        return $this->charbon;
-    }
-
-    /**
-     * @return int
-     */
-    public function getConsoTotal()
-    {
-        return ($this->getFuel() + $this->getEolien() + $this->getCharbon() + $this->getGaz() + $this->getHydraulique() + $this->getNucleaire() + $this->getPhotovoltaique());
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEolien()
-    {
-        return $this->eolien;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFuel()
-    {
-        return $this->fuel;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGaz()
-    {
-        return $this->gaz;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHydraulique()
-    {
-        return $this->hydraulique;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNucleaire()
-    {
-        return $this->nucleaire;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPhotovoltaique()
-    {
-        return $this->photovoltaique;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSolde()
-    {
-        return $this->solde;
+        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
     }
 
     /**
@@ -169,11 +115,11 @@ class Quarter
     }
 
     /**
-     * @param int $charbon
+     * @return int
      */
-    public function setCharbon($charbon)
+    public function getAutre()
     {
-        $this->charbon = $charbon;
+        return $this->autre;
     }
 
     /**
@@ -185,11 +131,27 @@ class Quarter
     }
 
     /**
+     * @return int
+     */
+    public function getConsoTotal()
+    {
+        return $this->consoTotal;
+    }
+
+    /**
      * @param \DateTime $date
      */
     public function setDate($date)
     {
         $this->date = $date;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 
     /**
@@ -201,19 +163,27 @@ class Quarter
     }
 
     /**
-     * @param int $fuel
+     * @return int
      */
-    public function setFuel($fuel)
+    public function getEolien()
     {
-        $this->fuel = $fuel;
+        return $this->eolien;
     }
 
     /**
-     * @param int $gaz
+     * @param int $flamme
      */
-    public function setGaz($gaz)
+    public function setFlamme($flamme)
     {
-        $this->gaz = $gaz;
+        $this->flamme = $flamme;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFlamme()
+    {
+        return $this->flamme;
     }
 
     /**
@@ -225,11 +195,27 @@ class Quarter
     }
 
     /**
+     * @return int
+     */
+    public function getHydraulique()
+    {
+        return $this->hydraulique;
+    }
+
+    /**
      * @param int $nucleaire
      */
     public function setNucleaire($nucleaire)
     {
         $this->nucleaire = $nucleaire;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNucleaire()
+    {
+        return $this->nucleaire;
     }
 
     /**
@@ -241,6 +227,14 @@ class Quarter
     }
 
     /**
+     * @return int
+     */
+    public function getPhotovoltaique()
+    {
+        return $this->photovoltaique;
+    }
+
+    /**
      * @param int $solde
      */
     public function setSolde($solde)
@@ -249,30 +243,10 @@ class Quarter
     }
 
     /**
-     * Updates values by setting multiplicity coefficient
-     * @param $coeff
+     * @return int
      */
-    public function coeffMultiplication($coeff)
+    public function getSolde()
     {
-
-        $this->eolien = $this->eolien*$coeff;
-     //   $this->fuel = $fuel;
-       // $this->gaz = $gaz;
-       $this->hydraulique = $this->hydraulique*$coeff;
-        $this->nucleaire = $this->nucleaire*$coeff;
-        $this->photovoltaique = $this->photovoltaique*$coeff;
-        $this->consoTotal= $this->consoTotal*$coeff;
-
-       $this->updatesAjustValues();
-    }
-
-    /**
-     * Check if capacity available is below
-     * consumption need, and then ajust
-     * values for completion variables
-     */
-    private function updatesAjustableValues( )
-    {
-        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
+        return $this->solde;
     }
 }

@@ -9,4 +9,11 @@ interface TransformersInterface
      * @return \Monmiel\MonmielApiModelBundle\Model\Day $day
      */
     public function get($day);
+
+    /**
+     * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function UpdateConsoTotal($day);
+
 }
