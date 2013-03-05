@@ -2,17 +2,24 @@
 
 namespace Monmiel\MonmielApiModelBundle\Model;
 
+use JMS\Serializer\Annotation as Ser;
 
+/**
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("day")
+ */
 class Day
 {
-
     /**
      * @var \DateTime
+     * @Ser\Type("DateTime")
      */
     protected $dateTime;
 
     /**
      * @var array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
+     * @Ser\Type("array<Monmiel\MonmielApiModelBundle\Model\Quarter>")
+     * @Ser\SerializedName("quarters")
      */
     protected $quarters;
 
