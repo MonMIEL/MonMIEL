@@ -13,6 +13,7 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Eolien;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulique;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Pv;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Autres;
+use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
 
 
@@ -54,6 +55,24 @@ class Parc{
         $this->eolien->setTauxDisponibiliteEolien($mixFinal);
         $this->pv->setTauxDisponibilitePv($mixFinal);
         $this->hydraulique->setTauxDisponibiliteHydraulique($mixFinal);
+    }
+
+    //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
+    public function getParc($mixFinal){
+
+        //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
+        $this->DefineRate($mixFinal);
+
+        //On recupere l'energie nécessaire pour chaque énergie
+        $nuc=$this->nucleaire->getValueNucleaire();
+        $eol=$this->eolien->getValueEolien();
+        $hyd=$this->hydraulique->getValueHydraulique();
+        $pv=$this->pv->getValuePv();
+        $aut=$this->autres->getValueAutre();
+
+        //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
+        $newParc=new ParcFinal($nuc,$eol,$hyd,$pv,$aut);
+        return $newParc;
     }
 
 

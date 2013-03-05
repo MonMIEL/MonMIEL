@@ -14,6 +14,13 @@ class Nucleaire
     private $fc_nucleaire;
     private $td_nucleaire;
 
+    //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
+    public function __construct(){
+        $this->fc_nucleaire=1;
+        $this->td_nucleaire=1;
+        $this->max_nucleaire=0;
+    }
+
     public function setMaxNucleaire($maxNuc){
         if($maxNuc> $this->max_nucleaire){
             $this->max_nucleaire=$maxNuc;
@@ -25,19 +32,29 @@ class Nucleaire
     }
 
     public function setFacteurChargeNucleaire($fcNucleaire){
-        $this->fc_nucleaire=$fcNucleaire;
+        if(isset($fcNucleaire)){
+            $this->fc_nucleaire=$fcNucleaire;
+        }
     }
 
     public function getFacteurChargeNucleaire(){
         return $this->fc_nucleaire;
     }
 
-    public function setTauxDisponibiliteNucleaire($tdNucleaire){
-        $this->td_nucleaire=$tdNucleaire;
+    public function setTauxDisponibiliteNucleaire($mix){
+        if(isset($mix)){
+            $this->td_nucleaire=$mix;
+        }
     }
 
     public function getTauxDisponibiliteNucleaire(){
         return $this->td_nucleaire;
+    }
+
+    //Retourne la valeur finale après prise en compte du facteur de charge et du taux de disponibilité
+    // (Valeur Max / tx de dispo) / facteur de charge
+    public function getValueNucleaire(){
+        return (($this->getMaxNucleaire()/$this->getTauxDisponibiliteNucleaire())/$this->getFacteurChargeNucleaire());
     }
 }
 

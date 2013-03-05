@@ -14,6 +14,13 @@ class Pv
     private $fc_pv;
     private $td_pv;
 
+    //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
+    public function __construct(){
+        $this->fc_pv=1;
+        $this->td_pv=1;
+        $this->max_pv=0;
+    }
+
     public function setMaxPv($maxPv){
         if($maxPv> $this->max_pv){
             $this->max_pv=$maxPv;
@@ -25,7 +32,9 @@ class Pv
     }
 
     public function setFacteurChargePv($fcPv){
-        $this->fc_pv=$fcPv;
+        if(isset($fcPv)){
+            $this->fc_pv=$fcPv;
+        }
     }
 
     public function getFacteurChargePv(){
@@ -33,10 +42,16 @@ class Pv
     }
 
     public function setTauxDisponibilitePv($tdPv){
-        $this->td_pv=$tdPv;
+        if(isset($tdPv)){
+            $this->td_pv=$tdPv;
+        }
     }
 
     public function getTauxDisponibilitePv(){
         return $this->td_pv;
+    }
+
+    public function getValuePv(){
+        return (($this->getMaxPv()/$this->getTauxDisponibilitePv())/$this->getFacteurChargePv());
     }
 }
