@@ -2,6 +2,8 @@
 
 namespace Monmiel\MonmielApiBundle\TransformersService;
 
+use JMS\DiExtraBundle\Annotation as DI;
+
 /**
  * @DI\Service("monmiel.transformers")
  */
