@@ -23,7 +23,7 @@
  */
 
 //NEVER_USED
-namespace Monmiel\MonmielApiBundle\Services\FacilityService;
+namespace Monmiel\MonmielApiBundle\Services\RepartitionService;
 
 
 /**

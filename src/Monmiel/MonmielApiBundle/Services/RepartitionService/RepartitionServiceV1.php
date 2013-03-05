@@ -1,6 +1,6 @@
 <?php
 
-namespace Monmiel\MonmielApiBundle\Services\FacilityService;
+namespace Monmiel\MonmielApiBundle\Services\RepartitionService;
 
 use JMS\DiExtraBundle\Annotation as DI;
 use Monmiel\MonmielApiModelBundle\Event\NewDayEvent;
