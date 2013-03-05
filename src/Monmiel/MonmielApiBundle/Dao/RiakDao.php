@@ -7,7 +7,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 /**
  * @DI\Service("monmiel.dao.riak")
  */
-class RiakDao
+class RiakDao implements DaoInterface
 {
     /**
      * @param $jour integer
