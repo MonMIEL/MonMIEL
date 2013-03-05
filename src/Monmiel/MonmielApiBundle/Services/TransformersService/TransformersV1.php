@@ -25,8 +25,8 @@ class TransformersV1
      * <code>
      * @include \Monmiel\MonmielApiModelBundle\Model\Quarter.php
      * </code>
-     *
-     * @param $listQuarter  list des quarters à traiter
+     * Transformer le total de la consommation donnee au total de la consommation theorique
+     * @param array|\Monmiel\MonmielApiBundle\TransformersService\array $listQuarter list des quarters à traiter
      * @param $consoAct     la consommation actuelle
      * @param $consoUser    la consommation saisie par utilisateur
      *
@@ -35,18 +35,35 @@ class TransformersV1
 
      function transformeTotalToConsoTher(array $listQuarter,$consoAct,$consoUser){
 
+        // Definir une liste temporaire
+        $tmp = array();
 
-
+        // Parcourir la liste et transformer chaque conso en conso theorique
         foreach ($listQuarter as $value) {
-
-
-
-
+            // Appliquer la formule de calcul
+            $tmpVal= this->transformeTotalCalcul($value->getConsoTotal(),$consoAct,$consoUser);
+            // Remplacer la valeur par la nouvelle valeur
+            $value->setConsoTotal($tmpVal);
         }
+        // Affectation de la liste
+        $tmp = $listQuarter;
 
-
+        return $listQuarter;
     }
 
+
+    /**
+     * La methode utilisee pour calculer la transformation totale theorique
+     * @param $totalActQuart  la consommation totale actuelle par quarter
+     * @param $consoAct     la consommation actuelle
+     * @param $consoUser    la consommation saisie par utilisateur
+     * @return int
+     */
+    private function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser){
+
+        return ($totalActQuart* $consoUser)/$consoAct;
+
+    }
 
     /**
      * @param $listQuarter
