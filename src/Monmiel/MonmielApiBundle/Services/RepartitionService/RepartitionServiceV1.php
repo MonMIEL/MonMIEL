@@ -21,7 +21,12 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public $dayRetrieved;
+    private $dayRetrieved;
+
+    private $coeffToUseYarly; // for computing theoric consumption
+
+    private $coeffPerEnergy= array(); //for each type of energy a specific value
+
 
     public function getReferenceDay($dayNumber)
     {
@@ -53,6 +58,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
             $currentQuarter = $currentDayQuarters[$j];
             $currentQuarter = $this->updateQuarter($currentQuarter, $coeffToUse);
+            //call aurelien method
             array_push($current, $currentQuarter);
         }
 
