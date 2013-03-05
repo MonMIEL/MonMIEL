@@ -8,7 +8,7 @@ use JMS\DiExtraBundle\Annotation as DI;
 class NewDayEvent extends Event
 {
     /**
-     * @var \Monmiel\MonmielApiModelBundle\Model\Jour_DAO
+     * @var \Monmiel\MonmielApiModelBundle\Model\Day
      */
     protected $day;
 
@@ -21,7 +21,7 @@ class NewDayEvent extends Event
     }
 
     /**
-     * @return \JMS\Serializer\VisitorInterface|\Monmiel\MonmielApiModelBundle\Model\Jour_DAO
+     * @return \JMS\Serializer\VisitorInterface|\Monmiel\MonmielApiModelBundle\Model\Day
      */
     public function getDay()
     {
