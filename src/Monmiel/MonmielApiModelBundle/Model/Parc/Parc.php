@@ -1,4 +1,6 @@
 <?php
+
+namespace Monmiel\MonmielApiModelBundle\Model\Parc;
 /**
  * Created by JetBrains PhpStorm.
  * User: Miage
@@ -6,11 +8,12 @@
  * Time: 17:05
  * To change this template use File | Settings | File Templates.
  */
-require_once('Nucleaire.php');
-require_once('Eolien.php');
-require_once('Hydraulique.php');
-require_once('Pv.php');
-require_once('Autres.php');
+use Monmiel\MonmielApiModelBundle\Model\Parc\Nucleaire;
+use Monmiel\MonmielApiModelBundle\Model\Parc\Eolien;
+use Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulique;
+use Monmiel\MonmielApiModelBundle\Model\Parc\Pv;
+use Monmiel\MonmielApiModelBundle\Model\Parc\Autres;
+use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
 
 
@@ -28,6 +31,7 @@ class Parc{
         $this->pv=new Pv();
         $this->hydraulique=new Hydraulique();
         $this->autres=new Autres();
+
     }
 
     //Méthode permettant de vérifier si les valeurs en paramètre sont les max
@@ -39,8 +43,41 @@ class Parc{
         $this->autres->setMaxAutre($valeurAutre);
     }
 
+
+    //Met a jour le facteur de charge et le taux de disponibilité pour le nucléaire, l'éolien, le pv et l'hydrolique en fonction du mix final
+    public function DefineRate($mixFinal){
+        $this->nucleaire->setFacteurChargeNucleaire($mixFinal);
+        $this->eolien->setFacteurChargeEolien($mixFinal);
+        $this->pv->setFacteurChargePv($mixFinal);
+        $this->hydraulique->setFacteurChargeHydraulique($mixFinal);
+
+        $this->nucleaire->setTauxDisponibiliteNucleaire($mixFinal);
+        $this->eolien->setTauxDisponibiliteEolien($mixFinal);
+        $this->pv->setTauxDisponibilitePv($mixFinal);
+        $this->hydraulique->setTauxDisponibiliteHydraulique($mixFinal);
+    }
+
+    //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
+    public function getParc($mixFinal){
+
+        //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
+        $this->DefineRate($mixFinal);
+
+        //On recupere l'energie nécessaire pour chaque énergie
+        $nuc=$this->nucleaire->getValueNucleaire();
+        $eol=$this->eolien->getValueEolien();
+        $hyd=$this->hydraulique->getValueHydraulique();
+        $pv=$this->pv->getValuePv();
+        $aut=$this->autres->getValueAutre();
+
+        //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
+        $newParc=new ParcFinal($nuc,$eol,$hyd,$pv,$aut);
+        return $newParc;
+    }
+
+
+
+
 }
-$parc= new Parc();
-$parc->setMaxNucleaire('5');
-echo $parc->getMaxNucleaire();
+
 
