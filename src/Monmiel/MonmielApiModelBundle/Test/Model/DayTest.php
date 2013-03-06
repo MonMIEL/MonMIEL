@@ -4,15 +4,14 @@ namespace Monmiel\MonmielApiModelBundle\Test\Model;
 
 use Kbrw\RiakBundle\Tests\Model\ModelTestCase;
 
-class QuarterTest extends ModelTestCase
+class DayTest extends ModelTestCase
 {
-
     protected $serializarionMethod          = "json";
-    protected $systemUnderTestFullClassName = "Monmiel\MonmielApiModelBundle\Model\Quarter";
+    protected $systemUnderTestFullClassName = "Monmiel\MonmielApiModelBundle\Model\Day";
     protected $testedModels                 = array("regular");
 
     protected function getTestFileBasePath()
     {
-        return dirname(__FILE__) . "/../../Resources/test/model/quarter";
+        return dirname(__FILE__) . "/../../Resources/test/model/day";
     }
 }

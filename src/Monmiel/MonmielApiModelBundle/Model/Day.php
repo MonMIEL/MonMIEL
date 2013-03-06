@@ -12,7 +12,7 @@ class Day
 {
     /**
      * @var \DateTime
-     * @Ser\Type("DateTime")
+     * @Ser\Type("DateTime<'Y-m-d H:i:s', 'Europe/Paris'>")
      * @Ser\SerializedName("date")
      */
     protected $dateTime;
