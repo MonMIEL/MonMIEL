@@ -11,6 +11,15 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
  */
 class TransformersV1 implements TransformersInterface
 {
+
+    /**
+     * Injection of the RiakDao
+     * @DI\Inject("monmiel.dao.riak")
+     * @var \Monmiel\MonmielApiBundle\Dao\DaoInterface
+     */
+    public $riakDao;
+
+
     /**
      * the consommation in 2050
      * @var \Monmiel\MonmielApiModelBundle\Model\Mesure
@@ -23,11 +32,6 @@ class TransformersV1 implements TransformersInterface
      */
     protected  $consoActual;
 
-    /**
-     * @DI\Inject("monmiel.dao.riak")
-     * @var \Monmiel\MonmielApiBundle\Dao\DaoInterface
-     */
-    public $riakDao;
 
     /**
      * @param $day integer
@@ -38,13 +42,40 @@ class TransformersV1 implements TransformersInterface
         $consoDay = $this->riakDao->getDayConso($day);
         return $this->getTotalUpdated($consoDay);
     }
+    /**
+     * update the conso total for the Quarters of the Day in parameter with the actual conso and the input Coson
+     * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
+     * @param $actualConso \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function updateConsoTotalForDayWithActualConsoAndInputConso($day, $actualConso, $inputConso){
+        $this->setConsoActual($actualConso);
+        $this->setConsoInput($inputConso);
+        return $this->getTotalUpdated($day);
+    }
+
+
+    /**
+     * get the Day with the Quarters updated by Day Id,actual conso and the input Conso
+     * @param $dayId integer
+     * @param $actualConso \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function getDayUpdatedByDayIdActualConsoAndInputConso($dayId, $actualConso, $inputConso){
+        $this->setConsoActual($actualConso);
+        $this->setConsoInput($inputConso);
+        $dayTemp = $this->riakDao->getDayConso($dayId);
+        return $this->getTotalUpdated($dayTemp);
+    }
 
     /**
      * update sum of the list of Quarter of Day  by the current consommation and the new consommation
      * @param $consoDay \Monmiel\MonmielApiModelBundle\Model\Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getTotalUpdated($consoDay)
+    private function getTotalUpdated($consoDay)
     {
         $retour = new \Monmiel\MonmielApiModelBundle\Model\Day($consoDay->getDateTime());
         if(isset($consoDay)){
@@ -92,10 +123,10 @@ class TransformersV1 implements TransformersInterface
 
     /**
      * La methode utilisee pour calculer la transformation totale theorique
-     * @param $totalActQuart double
+     * @param $totalActQuart float
      * @param $consoAct float
      * @param $consoUser float
-     * @return double
+     * @return float
      */
     private function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser)
     {
@@ -133,5 +164,13 @@ class TransformersV1 implements TransformersInterface
     public function getConsoActual()
     {
         return $this->consoActual;
+    }
+
+    /**
+     * @param \Monmiel\MonmielApiBundle\Dao\DaoInterface $riakDao
+     */
+    public function setRiakDao($riakDao)
+    {
+        $this->riakDao = $riakDao;
     }
 }
