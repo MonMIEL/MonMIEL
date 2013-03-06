@@ -58,7 +58,7 @@ class Eolien
         return $this->td_eolien;
     }
 
-    public function getPuissanceEolien(){
+    public function getValueEolien(){
         $this->puissance_eolien=((($this->getMaxEolien()*4)/$this->getTauxDisponibiliteEolien())/$this->getFacteurChargeEolien());
         return $this->puissance_eolien;
     }
