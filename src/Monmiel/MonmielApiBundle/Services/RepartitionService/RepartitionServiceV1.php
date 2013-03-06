@@ -18,6 +18,12 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public $transformers;
 
+        /**
+     * @DI\Inject("monmiel.facility.service")
+     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     */
+    public $facilityService;
+
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Day
      */
@@ -27,9 +33,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
     private $coeffPerEnergy= array(); //for each type of energy a specific value
 
-    private $totalNuclearReferenceYear = 720;
 
-    private $totalEolienReferenceYear = 133;
+    /**
+     * Toutes ces informations sont fournies par ?
+     *
+     */
+    private $totalNuclearReferenceYear = 720;  //data given
+
+    private $totalEolienReferenceYear = 133; //data given
 
     private $totalHydraulicReferenceYear = 120;
 
@@ -57,9 +68,11 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
 
-    private function  computeEstimateTedTargetDailyConsumption($dayNumber)
+ /*   private function  computeEstimateTedTargetDailyConsumption($dayNumber)
 
     {
+
+        //TO UNDO
         $this->getReferenceDay($dayNumber);
 
 
@@ -76,20 +89,22 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
             $currentQuarter = $currentDayQuarters[$j];
             $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
-            //call aurelien method
+
+
+
             array_push($current->getQuarters(), $currentQuarter);
         }
 
 
         return current;
 
-    }
+    }*/
     private function  computeMixedTargetDailyConsumption($dayNumber)
 
     {
         $this->getReferenceDay($dayNumber);
 
-        $this->computeCoeffDailyMix();
+        $this->computeCoeffDailyMix(); //to do once
         $coeffToUse = $this->coeffPerEnergy; //given
 
 
@@ -103,7 +118,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
             $currentQuarter = $currentDayQuarters[$j];
             $currentQuarter = $this->updateQuarter($currentQuarter);
-            //call aurelien method
+            $this->facilityService->submitQuarters($currentQuarter); //callback to facility service for each quarter
             array_push($current->getQuarters(), $currentQuarter);
         }
 
@@ -113,12 +128,16 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     }
 
     /**
+     * Updates quarter with values for each coefficient
      * @param $quarter
      * @param $coeff
      * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
      */
     public function updateQuarter($quarter){
-        $quarterUpdated = $quarter;
+        /**
+         * @var \Monmiel\MonmielApiModelBundle\Model\Quarter
+         */
+        $quarterUpdated  = $quarter;
 
         $oldConsoNuclear = $quarter->getNucleaire();
         $coeffNucleaire = $this->coeffPerEnergy[0];
@@ -135,6 +154,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $oldConsoPhotovoltaique = $quarter->getPhotovoltaique();
         $coeffPhotovoltaique = $this->coeffPerEnergy[3];
         $quarterUpdated->setPhotovoltaique($coeffPhotovoltaique * $oldConsoPhotovoltaique);
+
+        $flammeValue=$quarterUpdated->getTotal()-($coeffPhotovoltaique * $oldConsoPhotovoltaique+$coeffHydraulique * $oldConsoHydraulique+$coeffEolien * $oldConsoEolien+$coeffNucleaire * $oldConsoNuclear);
+        $quarterUpdated->setFlamme($flammeValue);
 
         return quarterUpdated;
     }
@@ -159,7 +181,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     public function get($day)
     {
 
-        return $this->computeEstimateTedTargetDailyConsumption($day);
+        return $this->computeMixedTargetDailyConsumption($day);
     }
 
 
