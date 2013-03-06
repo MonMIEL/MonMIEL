@@ -13,6 +13,7 @@ class Day
     /**
      * @var \DateTime
      * @Ser\Type("DateTime")
+     * @Ser\SerializedName("date")
      */
     protected $dateTime;
 
