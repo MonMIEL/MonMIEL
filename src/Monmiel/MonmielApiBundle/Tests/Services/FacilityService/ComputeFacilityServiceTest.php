@@ -3,9 +3,9 @@
 namespace Monmiel\MonmielApiBundle\Tests\Services\FacilityService;
 
 use Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Monmiel\MonmielApiBundle\Tests\BaseTestCase;
 
-class ComputeFacilityServiceTest extends WebTestCase
+class ComputeFacilityServiceTest extends BaseTestCase
 {
 
     protected $facilityService;
