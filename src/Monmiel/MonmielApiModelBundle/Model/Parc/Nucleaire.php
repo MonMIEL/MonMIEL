@@ -65,7 +65,7 @@ class Nucleaire
     }
 
     public function getParcNucleaire(){
-        $this->parc_Nucleaire=( $this->puissance_Nucleaire/ PUISSANCEUNITAIRE );
+        $this->parc_Nucleaire=( $this->puissance_Nucleaire/ self::PUISSANCEUNITAIRE );
         return $this->parc_Nucleaire;
     }
 

@@ -18,7 +18,7 @@ class Hydraulique
     private $parc_hydraulique;
 
     //Represente la puissance unitaire de l'hydaulique en MW
-    const PUISSANCEUNITAIRE=0;
+    const PUISSANCEUNITAIRE=1;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
@@ -64,7 +64,7 @@ class Hydraulique
     }
 
     public function getParcHydraulique(){
-        $this->parc_hydraulique=( $this->puissance_hydraulique/ PUISSANCEUNITAIRE );
+        $this->parc_hydraulique=( $this->puissance_hydraulique/ self::PUISSANCEUNITAIRE );
         return $this->parc_hydraulique;
     }
 

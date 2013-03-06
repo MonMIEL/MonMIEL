@@ -64,7 +64,7 @@ class Eolien
     }
 
     public function getParcEolien(){
-        $this->parc_eolien=( $this->puissance_eolien/ PUISSANCEUNITAIRE );
+        $this->parc_eolien=( $this->puissance_eolien/ self::PUISSANCEUNITAIRE );
         return $this->parc_eolien;
     }
 }

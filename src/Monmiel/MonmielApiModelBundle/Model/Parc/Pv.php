@@ -63,7 +63,7 @@ class Pv
     }
 
     public function getParcPv(){
-        $this->parc_Pv=( $this->puissance_Pv/ PUISSANCEUNITAIRE );
+        $this->parc_Pv=( $this->puissance_Pv/ self::PUISSANCEUNITAIRE );
         return $this->parc_Pv;
     }
 }
