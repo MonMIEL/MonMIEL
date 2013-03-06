@@ -14,6 +14,9 @@ class Pv
     private $fc_pv;
     private $td_pv;
 
+    private $puissance_Pv;
+    private $parc_Pv;
+
     //Represente la puissance unitaire d'un panneau photovoltaique par M² en MW
     const PUISSANCEUNITAIRE=0.001;
 
@@ -55,6 +58,12 @@ class Pv
     }
 
     public function getValuePv(){
-        return (($this->getMaxPv()/$this->getTauxDisponibilitePv())/$this->getFacteurChargePv());
+        $this->puissance_Pv=((($this->getMaxPv()*4)/$this->getTauxDisponibilitePv())/$this->getFacteurChargePv());
+        return $this->puissance_Pv;
+    }
+
+    public function getParcPv(){
+        $this->parc_Pv=( $this->puissance_Pv/ PUISSANCEUNITAIRE );
+        return $this->parc_Pv;
     }
 }

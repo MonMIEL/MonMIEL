@@ -13,6 +13,10 @@ class Hydraulique
     private $max_hydraulique;
     private $fc_hydraulique;
     private $td_hydraulique;
+
+    private $puissance_hydraulique;
+    private $parc_hydraulique;
+
     //Represente la puissance unitaire de l'hydaulique en MW
     const PUISSANCEUNITAIRE=0;
 
@@ -53,7 +57,15 @@ class Hydraulique
         return $this->td_hydraulique;
     }
 
+
     public function getValueHydraulique(){
-        return (($this->getMaxHydraulique()/$this->getTauxDisponibiliteHydraulique())/$this->getFacteurChargeHydraulique());
+        $this->puissance_hydraulique=((($this->getMaxHydraulique()*4)/$this->getTauxDisponibiliteHydraulique())/$this->getFacteurChargeHydraulique());
+        return $this->puissance_hydraulique;
     }
+
+    public function getParcHydraulique(){
+        $this->parc_hydraulique=( $this->puissance_hydraulique/ PUISSANCEUNITAIRE );
+        return $this->parc_hydraulique;
+    }
+
 }

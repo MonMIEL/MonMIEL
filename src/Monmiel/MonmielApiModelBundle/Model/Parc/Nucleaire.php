@@ -13,6 +13,9 @@ class Nucleaire
     private $max_nucleaire;
     private $fc_nucleaire;
     private $td_nucleaire;
+    private $puissance_Nucleaire;
+    private $parc_Nucleaire;
+    
     //Represente la puissance unitaire d'un réacteur en MW
     const PUISSANCEUNITAIRE=1090;
 
@@ -55,8 +58,16 @@ class Nucleaire
 
     //Retourne la valeur finale après prise en compte du facteur de charge et du taux de disponibilité
     // (Valeur Max * 4 / tx de dispo) / facteur de charge
+
     public function getValueNucleaire(){
-        return ((($this->getMaxNucleaire()*4)/$this->getTauxDisponibiliteNucleaire())/$this->getFacteurChargeNucleaire());
+        $this->puissance_Nucleaire=((($this->getMaxNucleaire()*4)/$this->getTauxDisponibiliteNucleaire())/$this->getFacteurChargeNucleaire());
+        return $this->puissance_Nucleaire;
     }
+
+    public function getParcNucleaire(){
+        $this->parc_Nucleaire=( $this->puissance_Nucleaire/ PUISSANCEUNITAIRE );
+        return $this->parc_Nucleaire;
+    }
+
 }
 

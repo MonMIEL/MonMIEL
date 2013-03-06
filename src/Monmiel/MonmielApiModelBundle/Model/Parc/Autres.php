@@ -16,6 +16,10 @@ class Autres
 
     private $td_autre;
 
+    private $parc_autre;
+
+    private $puissance_autre;
+
     //Represente la puissance unitaire d'une centrale à flamme en MW
     const PUISSANCEUNITAIRE=500;
 
@@ -58,6 +62,13 @@ class Autres
 
 
     public function getValueAutre(){
-        return ((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
+        $this->puissance_autre=((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
+        return $this->puissance_autre;
+    }
+
+    public function getParcAutre(){
+        $this->parc_autre=( $this->puissance_autre/ PUISSANCEUNITAIRE );
+        return $this->parc_autre;
     }
 }
+
