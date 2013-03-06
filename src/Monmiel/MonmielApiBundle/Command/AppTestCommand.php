@@ -8,9 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1;
-use Monmiel\MonmielApiModelBundle\Model\Mesure;
-
+use Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1;
 class AppTestCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -22,16 +20,21 @@ class AppTestCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var $transformersService TransformersV1
-         */
-        $transformersService = $this->getContainer()->get("monmiel.transformers.service");
-        $transformersService->setConsoActuel(new Mesure(700));
-        $transformersService->setConsoTotalDefinedByUser(new Mesure(800));
+        /** @var $repartitionService RepartitionServiceV1 */
+        $repartitionService = $this->getContainer()->get("monmiel.repartition.service");
+        /** @var $dao \Monmiel\MonmielApiBundle\Dao\RiakDao */
+        $dao = $this->getContainer()->get("monmiel.dao.riak");
+        /** @var $parcService \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService */
+        $parcService = $this->getContainer()->get("monmiel.facility.service");
+        $currentDay = $dao->getDayConso(1);
+        $day = $repartitionService->get(1);
+
         $days = array();
         for ($i = 1; $i <= 365; $i++) {
-            $day = $transformersService->get($i);
-            $days[] = $day;
+            $days[] = $repartitionService->get($i);
         }
+        $parc = $parcService->getSimulatedParc();
+        var_dump($parc);
+        echo " who let's the dog out whoa !";
     }
 }
