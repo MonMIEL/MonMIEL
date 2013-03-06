@@ -12,13 +12,11 @@ interface FacilityServiceInterface
      *
      */
 
-    public function initParc();
-
     public function submitQuarters($quarter);
 
     /**
      * @return
      */
 
-    public function getSimulatedParc();
+    public function getSimulatedParc($mixFinal);
 }
