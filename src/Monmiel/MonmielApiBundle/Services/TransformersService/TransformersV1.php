@@ -3,8 +3,8 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
+use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
 
 /**
  * @DI\Service("monmiel.transformers.service")
@@ -96,42 +96,44 @@ class TransformersV1 implements TransformersInterface
     }
 
     /**
-     * Transformer le total de la consommation donnee au total de la consommation theorique
+     * Transformer the total of consumption given to total of consumption in theories
      * @param $listQuarter array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
-     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure
-     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure
-     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
+     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure       the actual consumption
+     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure      the consumption typed by user
+     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>        array of Quarter
      */
-
      private function transformeTotalToConsoTher($listQuarter,$consoAct,$consoUser)
      {
-        // Definir une liste temporaire
-        $tmp = array();
-        // Parcourir la liste et transformer chaque conso en conso theorique
-        foreach ($listQuarter as $value) {
-            // Appliquer la formule de calcul
-            $tmpVal= $this->transformeTotalCalcul($value->getConsoTotal(),$consoAct->getValue(),$consoUser->getValue());
-            // Remplacer la valeur par la nouvelle valeur
-            $value->setConsoTotal($tmpVal);
-        }
-        // Affectation de la liste
-        $tmp = $listQuarter;
-
-        return $tmp;
+       // Define a temporal list
+       $tmp = array();
+       // Go through the list and transformer each consumption to theoretical consumption
+       foreach ($listQuarter as $value) {
+         // Call the method for the transformation calculate
+         $tmpVal= $this->transformeTotalCalcul($value->getConsoTotal(),$consoAct->getValue(),$consoUser->getValue());
+         //Replace the old value of consumption by a new one
+         $value->setConsoTotal($tmpVal);
+         $tmpValeur = $value;
+         //Put the value modified in the array list tmp
+         array_push($tmp,$tmpValeur);
+       }
+       // Return the list transformed
+       return $tmp;
     }
 
 
     /**
-     * La methode utilisee pour calculer la transformation totale theorique
-     * @param $totalActQuart float
-     * @param $consoAct float
-     * @param $consoUser float
-     * @return float
+     * This method used for the calculate of transformation, transformer actual
+     * total consumption to theoretical total consumption
+     * @param $totalActQuart float    the actual total consumption of this quarter
+     * @param $consoAct float         the actual total consumption
+     * @param $consoUser float        the total consumption typed by user
+     * @return float                  value calculated
      */
     private function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser)
     {
-        $ret = ($totalActQuart* $consoUser)/$consoAct;
-        return $ret;
+      // Calculate
+      $ret = ($totalActQuart* $consoUser)/$consoAct;
+      return $ret;
     }
 
     /**
