@@ -13,6 +13,11 @@ class Eolien
     private $max_eolien;
     private $fc_eolien;
     private $td_eolien;
+    private $puissance_eolien;
+    private $parc_eolien;
+
+    //Represente la puissance unitaire d'une éolienne en MW
+    const PUISSANCEUNITAIRE=1.5;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
@@ -54,7 +59,12 @@ class Eolien
     }
 
     public function getValueEolien(){
-        return ((($this->getMaxEolien()*4)/$this->getTauxDisponibiliteEolien())/$this->getFacteurChargeEolien());
+        $this->puissance_eolien=((($this->getMaxEolien()*4)/$this->getTauxDisponibiliteEolien())/$this->getFacteurChargeEolien());
+        return $this->puissance_eolien;
+    }
 
+    public function getParcEolien(){
+        $this->parc_eolien=( $this->puissance_eolien/ self::PUISSANCEUNITAIRE );
+        return $this->parc_eolien;
     }
 }

@@ -16,6 +16,13 @@ class Autres
 
     private $td_autre;
 
+    private $parc_autre;
+
+    private $puissance_autre;
+
+    //Represente la puissance unitaire d'une centrale à flamme en MW
+    const PUISSANCEUNITAIRE=500;
+
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
         $this->fc_autre=1;
@@ -55,6 +62,13 @@ class Autres
 
 
     public function getValueAutre(){
-        return ((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
+        $this->puissance_autre=((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
+        return $this->puissance_autre;
+    }
+
+    public function getParcAutre(){
+        $this->parc_autre=( $this->puissance_autre/ self::PUISSANCEUNITAIRE );
+        return $this->parc_autre;
     }
 }
+

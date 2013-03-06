@@ -14,6 +14,12 @@ class Hydraulique
     private $fc_hydraulique;
     private $td_hydraulique;
 
+    private $puissance_hydraulique;
+    private $parc_hydraulique;
+
+    //Represente la puissance unitaire de l'hydaulique en MW
+    const PUISSANCEUNITAIRE=1;
+
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
         $this->fc_hydraulique=1;
@@ -51,7 +57,15 @@ class Hydraulique
         return $this->td_hydraulique;
     }
 
+
     public function getValueHydraulique(){
-        return (($this->getMaxHydraulique()/$this->getTauxDisponibiliteHydraulique())/$this->getFacteurChargeHydraulique());
+        $this->puissance_hydraulique=((($this->getMaxHydraulique()*4)/$this->getTauxDisponibiliteHydraulique())/$this->getFacteurChargeHydraulique());
+        return $this->puissance_hydraulique;
     }
+
+    public function getParcHydraulique(){
+        $this->parc_hydraulique=( $this->puissance_hydraulique/ self::PUISSANCEUNITAIRE );
+        return $this->parc_hydraulique;
+    }
+
 }
