@@ -52,9 +52,9 @@ class Nucleaire
     }
 
     //Retourne la valeur finale après prise en compte du facteur de charge et du taux de disponibilité
-    // (Valeur Max / tx de dispo) / facteur de charge
+    // (Valeur Max * 4 / tx de dispo) / facteur de charge
     public function getValueNucleaire(){
-        return (($this->getMaxNucleaire()/$this->getTauxDisponibiliteNucleaire())/$this->getFacteurChargeNucleaire());
+        return ((($this->getMaxNucleaire()*4)/$this->getTauxDisponibiliteNucleaire())/$this->getFacteurChargeNucleaire());
     }
 }
 

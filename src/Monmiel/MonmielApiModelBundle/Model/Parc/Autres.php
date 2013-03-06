@@ -55,6 +55,6 @@ class Autres
 
 
     public function getValueAutre(){
-        return (($this->getMaxAutre()/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
+        return ((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
     }
 }
