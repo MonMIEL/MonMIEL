@@ -62,6 +62,33 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     {
         $this->getReferenceDay($dayNumber);
 
+
+        $coeffToUse =  2;//given
+
+
+        //i retrieve a day
+        $currentDay = $this->dayRetrieved;
+        $current = $currentDay;
+        $current->setQuarters(array());
+        $currentDayQuarters = $currentDay->getgetQuarters();
+
+        for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
+
+            $currentQuarter = $currentDayQuarters[$j];
+            $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
+            //call aurelien method
+            array_push($current->getQuarters(), $currentQuarter);
+        }
+
+
+        return current;
+
+    }
+    private function  computeMixedTargetDailyConsumption($dayNumber)
+
+    {
+        $this->getReferenceDay($dayNumber);
+
         $this->computeCoeffDailyMix();
         $coeffToUse = $this->coeffPerEnergy; //given
 
@@ -75,16 +102,15 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
 
             $currentQuarter = $currentDayQuarters[$j];
-            $currentQuarter = $this->updateQuarter($currentQuarter, $coeffToUse);
+            $currentQuarter = $this->updateQuarter($currentQuarter);
             //call aurelien method
-            array_push($current, $currentQuarter);
+            array_push($current->getQuarters(), $currentQuarter);
         }
 
 
         return current;
 
     }
-
 
     /**
      * @param $quarter
