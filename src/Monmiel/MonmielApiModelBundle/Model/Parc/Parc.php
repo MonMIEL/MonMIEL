@@ -19,19 +19,29 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
 class Parc{
 
+    private static $instance =null;
+
     private $nucleaire;
     private $eolien;
     private $pv;
     private $hydraulique;
     private $autres;
 
-    public function __construct(){
+    private function __construct(){
         $this->nucleaire= new Nucleaire();
         $this->eolien= new Eolien();
         $this->pv=new Pv();
         $this->hydraulique=new Hydraulique();
         $this->autres=new Autres();
+    }
 
+
+    //Pattern singleton, pour ne créer qu'une seule fois le parc afin de ne pas remettre à zéro les attributs chaque jour
+    public static function getInstance() {
+        if(is_null(self::$instance)) {
+            self::$instance = new Parc();
+        }
+        return self::$instance;
     }
 
     //Méthode permettant de vérifier si les valeurs en paramètre sont les max
@@ -44,8 +54,8 @@ class Parc{
     }
 
 
-    //Met a jour le facteur de charge et le taux de disponibilité pour le nucléaire, l'éolien, le pv et l'hydrolique en fonction du mix final
-    public function DefineRate($mixFinal){
+    //Met a jour le facteur de charge et le taux de disponibilité pour le nucléaire, l'éolien, le pv et l'hydraulique en fonction du mix final
+    protected function DefineRate($mixFinal){
         $this->nucleaire->setFacteurChargeNucleaire($mixFinal);
         $this->eolien->setFacteurChargeEolien($mixFinal);
         $this->pv->setFacteurChargePv($mixFinal);
@@ -59,7 +69,6 @@ class Parc{
 
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
     public function getParc($mixFinal){
-
         //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
         $this->DefineRate($mixFinal);
 
