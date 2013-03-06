@@ -8,11 +8,15 @@ interface FacilityServiceInterface
 {
     /**
      * @param Quarter $quarter
+     *
+     *
      */
+
     public function submitQuarters($quarter);
 
     /**
      * @return
      */
-    public function getSimulatedParc();
+
+    public function getSimulatedParc($mixFinal);
 }
