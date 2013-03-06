@@ -82,4 +82,12 @@ class Day
     {
         return $this->quarters;
     }
+
+
+
+
+
+
+
+
 }
