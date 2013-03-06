@@ -108,9 +108,9 @@ class TransformersV1 implements TransformersInterface
     /**
      * Transformer the total of consumption given to total of consumption in theories
      * @param $listQuarter array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
-     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure
-     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure
-     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
+     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure       the actual consumption
+     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure      the consumption typed by user
+     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>        array of Quarter
      */
 
      protected function transformeTotalToConsoTher($listQuarter, $consoAct, $consoUser)
