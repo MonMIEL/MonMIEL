@@ -3,7 +3,6 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-require_once("Hamcrest/Hamcrest.php");
 
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
 use Monmiel\MonmielApiModelBundle\Model\Day;

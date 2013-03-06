@@ -1,9 +1,9 @@
 <?php
 
 namespace Monmiel\MonmielApiBundle\Tests\Services\TransformersService;
+require_once("Hamcrest/Hamcrest.php");
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1;
 
 class TransformersServicesV1Test extends WebTestCase
