@@ -99,14 +99,16 @@ class UnitOfMesure
     }
 
     /**
-     * @return bool , true, if the current unity is a TerraWatt
+     * this method return true if the current unity is a Gigawatt
+     * @return bool
      */
     public function isTerraWatt(){
         return $this->name == UnitOfMesure::MESURE_TERAWATT;
     }
 
     /**
-     * @return bool , true if the current unity is a Gigawatt
+     * this method return true if the current unity is a Gigawatt
+     * @return bool
      */
     public function isGigaWatt(){
         return $this->name == UnitOfMesure::MESURE_GIGAWATT;
