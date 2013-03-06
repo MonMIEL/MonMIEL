@@ -17,4 +17,28 @@ class RiakDao implements DaoInterface
     {
         return "toto";
     }
+
+    /**
+     * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
+     * @return mixed bool
+     */
+    public function put($day)
+    {
+        $this->rteIndexBucket->put(array($day->getKey() => $day));
+    }
+
+    /**
+     * @DI\InjectParams({
+     *     "riakCluster" = @DI\Inject("riak.cluster.monmiel")
+     * })
+     */
+    public function __construct($riakCluster)
+    {
+        $this->rteIndexBucket = $riakCluster->getBucket("rte_index");
+    }
+
+    /**
+     * @var \Kbrw\RiakBundle\Model\Bucket\Bucket
+     */
+    public $rteIndexBucket;
 }
