@@ -13,6 +13,7 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Eolien;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulique;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Pv;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Autres;
+use Monmiel\MonmielApiModelBundle\Model\Parc\Flamme;
 use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
 
@@ -25,6 +26,7 @@ class Parc{
     private $eolien;
     private $pv;
     private $hydraulique;
+    private $flamme;
     private $autres;
 
     private function __construct(){
@@ -32,7 +34,9 @@ class Parc{
         $this->eolien= new Eolien();
         $this->pv=new Pv();
         $this->hydraulique=new Hydraulique();
+        $this->flamme=new Flamme();
         $this->autres=new Autres();
+
     }
 
 
@@ -46,11 +50,12 @@ class Parc{
     }
 
     //Méthode permettant de vérifier si les valeurs en paramètre sont les max
-    public function setMaxValue($valeurNucleaire, $valeurEolien, $valeurPv, $valeurHydraulique, $valeurAutre){
+    public function setMaxValue($valeurNucleaire, $valeurEolien, $valeurPv, $valeurHydraulique, $valeurFlamme, $valeurAutre){
         $this->nucleaire->setMaxNucleaire($valeurNucleaire);
         $this->eolien->setMaxEolien($valeurEolien);
         $this->pv->setMaxPv($valeurPv);
         $this->hydraulique->setMaxHydraulique($valeurHydraulique);
+        $this->flamme->setMaxFlamme($valeurFlamme);
         $this->autres->setMaxAutre($valeurAutre);
     }
 
@@ -61,11 +66,13 @@ class Parc{
         $this->eolien->setFacteurChargeEolien($mixFinal);
         $this->pv->setFacteurChargePv($mixFinal);
         $this->hydraulique->setFacteurChargeHydraulique($mixFinal);
+        $this->flamme->setFacteurChargeFlamme($mixFinal);
 
         $this->nucleaire->setTauxDisponibiliteNucleaire($mixFinal);
         $this->eolien->setTauxDisponibiliteEolien($mixFinal);
         $this->pv->setTauxDisponibilitePv($mixFinal);
         $this->hydraulique->setTauxDisponibiliteHydraulique($mixFinal);
+        $this->flamme->setTauxDisponibiliteFlamme($mixFinal);
     }
 
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
@@ -78,6 +85,7 @@ class Parc{
         $PuisEol=$this->eolien->getValueEolien();
         $PuisHyd=$this->hydraulique->getValueHydraulique();
         $PuisPv=$this->pv->getValuePv();
+        $PuisFlamme=$this->flamme->getValueFlamme();
         $PuisAut=$this->autres->getValueAutre();
 
         //On recupere l'energie nécessaire pour chaque énergie
@@ -85,10 +93,11 @@ class Parc{
         $ParcEol=$this->eolien->getParcEolien();
         $ParcHyd=$this->hydraulique->getParcHydraulique();
         $ParcPv=$this->pv->getParcPv();
+        $ParcFlamme=$this->flamme->getParcFlamme();
         $ParcAut=$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
-        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcAut);
+        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisFlamme,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
         return $newParc;
     }
 
