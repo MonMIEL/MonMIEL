@@ -24,7 +24,7 @@ class ComputeFacilityService implements FacilityServiceInterface
         }
     }
 
-    public function getSimulatedParc($mixFinal)
+    public function getSimulatedParc($mixFinal = null)
     {
         $parc=Parc::getInstance();
         $parcFinal=$parc->getParc(null);
