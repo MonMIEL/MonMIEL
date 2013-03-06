@@ -20,10 +20,13 @@ class Mesure
      */
     protected $unitOfMesure;
 
-
-    function __construct($value, $unitOfMesure)
+    /**
+     * constructor using the default unitOfMesure
+     * @param $value float
+     */
+    function __construct($value)
     {
-        $this->unitOfMesure = $unitOfMesure;
+        $this->unitOfMesure = $this->getDefaultUnitOfMesure();
         $this->value = $value;
     }
 
@@ -78,5 +81,13 @@ class Mesure
      */
     static function convertMesureByOtherUnitOfMesure($mesure, $unitOfMesure){
         //TODO à faire
+    }
+
+    /**
+     * return the default unitOfMesure
+     * @var UnitOfMesure
+     */
+    private function getDefaultUnitOfMesure(){
+        return UnitOfMesure::createUnityGigaWatt();
     }
 }
