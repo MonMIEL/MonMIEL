@@ -3,8 +3,8 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
+use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
 
 /**
  * @DI\Service("monmiel.transformers.service")
@@ -110,12 +110,17 @@ class TransformersV1 implements TransformersInterface
         // Parcourir la liste et transformer chaque conso en conso theorique
         foreach ($listQuarter as $value) {
             // Appliquer la formule de calcul
+
             $tmpVal= $this->transformeTotalCalcul($value->getConsoTotal(),$consoAct->getValue(),$consoUser->getValue());
+
             // Remplacer la valeur par la nouvelle valeur
+
             $value->setConsoTotal($tmpVal);
+
+            $tmpValeur = $value;
+            array_push($tmp,$tmpValeur);
+
         }
-        // Affectation de la liste
-        $tmp = $listQuarter;
 
         return $tmp;
     }
