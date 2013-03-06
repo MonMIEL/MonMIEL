@@ -20,8 +20,8 @@ class Autres
 
     private $puissance_autre;
 
-    //Represente la puissance unitaire d'une centrale à flamme en MW
-    const PUISSANCEUNITAIRE=500;
+    //Represente la puissance unitaire d'autre en MW, par défaut à 1 en attendant des precisions
+    const PUISSANCEUNITAIRE=1;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){

@@ -3,8 +3,10 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-use Monmiel\MonmielApiModelBundle\Model\Quarter;
+
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
+use Monmiel\MonmielApiModelBundle\Model\Day;
+use Monmiel\MonmielApiModelBundle\Model\Mesure;
 
 /**
  * @DI\Service("monmiel.transformers.service")
@@ -24,13 +26,13 @@ class TransformersV1 implements TransformersInterface
      * the consommation in 2050
      * @var \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    protected $consoInput;
+    protected  $consoTotalDefinedByUser;
 
     /**
      * the actual consommation
      * @var \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    protected $consoActual;
+    protected  $consoActuel;
 
 
     /**
@@ -40,9 +42,9 @@ class TransformersV1 implements TransformersInterface
     public function get($day)
     {
         $consoDay = $this->riakDao->getDayConso($day);
+
         return $this->getTotalUpdated($consoDay);
     }
-
     /**
      * update the conso total for the Quarters of the Day in parameter with the actual conso and the input Coson
      * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
@@ -52,8 +54,9 @@ class TransformersV1 implements TransformersInterface
      */
     public function updateConsoTotalForDayWithActualConsoAndInputConso($day, $actualConso, $inputConso)
     {
-        $this->setConsoActual($actualConso);
-        $this->setConsoInput($inputConso);
+        $this->setConsoActuel($actualConso);
+        $this->setConsoTotalDefinedByUser($inputConso);
+
         return $this->getTotalUpdated($day);
     }
 
@@ -67,8 +70,8 @@ class TransformersV1 implements TransformersInterface
      */
     public function getDayUpdatedByDayIdActualConsoAndInputConso($dayId, $actualConso, $inputConso)
     {
-        $this->setConsoActual($actualConso);
-        $this->setConsoInput($inputConso);
+        $this->setConsoActuel($actualConso);
+        $this->setConsoTotalDefinedByUser($inputConso);
         $dayTemp = $this->riakDao->getDayConso($dayId);
         return $this->getTotalUpdated($dayTemp);
     }
@@ -78,96 +81,102 @@ class TransformersV1 implements TransformersInterface
      * @param $consoDay \Monmiel\MonmielApiModelBundle\Model\Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    private function getTotalUpdated($consoDay)
+    protected function getTotalUpdated($consoDay)
     {
-        $retour = new \Monmiel\MonmielApiModelBundle\Model\Day($consoDay->getDateTime());
+        $updatedDay = new Day($consoDay->getDateTime());
         if (isset($consoDay)) {
-            $cActuel = $this->getConsoActual();
-            $cInput = $this->getConsoInput();
-            if (\Monmiel\MonmielApiModelBundle\Model\Mesure::isEqualsMesure($cActuel, $cInput)) {
-                $array = $this->transformeTotalToConsoTher($consoDay->getQuarters(), $cActuel, $cInput);
-                $retour->setQuarters($array);
-            } else {
-                $consoInputConverted = \Monmiel\MonmielApiModelBundle\Model\Mesure::convertMesureByOtherUnitOfMesure($cInput, $cActuel->getUnitOfMesure());
-                $array = $this->transformeTotalToConsoTher($consoDay->getQuarters(), $this->getConsoActual(), $consoInputConverted);
-                $retour->setQuarters($array);
-                echo "------ different mesure \n -------";
-            }
+            $consoActuel = $this->getConsoActuel();
+            $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
+            $newQuartersArray =  $this->transformeTotalToConsoTher($consoDay->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
+            $updatedDay->setQuarters($newQuartersArray);
+
+//            if(Mesure::isEqualsMesure($consoActuel,$consoTotalDefinedByUser)){
+//                $array =  $this->transformeTotalToConsoTher($consoDay->getQuarters(),$consoActuel,$consoTotalDefinedByUser);
+//                $retour->setQuarters($array);
+//            }
+//            else{
+//                $consoInputConverted = Mesure::convertMesureByOtherUnitOfMesure($consoTotalDefinedByUser,$consoActuel->getUnitOfMesure());
+//                $array =  $this->transformeTotalToConsoTher($consoDay->getQuarters(),$this->getConsoActuel(), $consoInputConverted);
+//                $retour->setQuarters($array);
+//                echo "------ different mesure \n -------";
+//            }
         }
-        return $retour;
+
+        return $updatedDay;
     }
 
     /**
-     * Transformer the total of consumption given to total of consumption in theories
+     * Transformer le total de la consommation donnee au total de la consommation theorique
      * @param $listQuarter array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
-     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure       the actual consumption
-     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure      the consumption typed by user
-     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>        array of Quarter
+     * @param $consoAct \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @param $consoUser \Monmiel\MonmielApiModelBundle\Model\Mesure
+     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
-    private function transformeTotalToConsoTher($listQuarter, $consoAct, $consoUser)
-    {
-        // Define a temporal list
+
+     protected function transformeTotalToConsoTher($listQuarter, $consoAct, $consoUser)
+     {
+        // Definir une liste temporaire
         $tmp = array();
-        // Go through the list and transformer each consumption to theoretical consumption
-        foreach ($listQuarter as $value) {
-            // Call the method for the transformation calculate
-            $tmpVal = $this->transformeTotalCalcul($value->getConsoTotal(), $consoAct->getValue(), $consoUser->getValue());
-            //Replace the old value of consumption by a new one
-            $value->setConsoTotal($tmpVal);
-            $tmpValeur = $value;
-            //Put the value modified in the array list tmp
-            array_push($tmp, $tmpValeur);
+        // Parcourir la liste et transformer chaque conso en conso theorique
+        /** @var $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter */
+        foreach ($listQuarter as $quarter) {
+            // Appliquer la formule de calcul
+
+            $tmpVal= $this->transformeTotalCalcul($quarter->getConsoTotal(),$consoAct->getValue(),$consoUser->getValue());
+
+            // Remplacer la valeur par la nouvelle valeur
+            $quarter->setConsoTotal($tmpVal);
+            $tmpValeur = $quarter;
+            array_push($tmp,$tmpValeur);
         }
-        // Return the list transformed
+
         return $tmp;
     }
 
 
     /**
-     * This method used for the calculate of transformation, transformer actual
-     * total consumption to theoretical total consumption
-     * @param $totalActQuart float    the actual total consumption of this quarter
-     * @param $consoAct float         the actual total consumption
-     * @param $consoUser float        the total consumption typed by user
-     * @return float                  value calculated
+     * La methode utilisee pour calculer la transformation totale theorique
+     * @param $totalActQuart float
+     * @param $consoAct float
+     * @param $consoUser float
+     * @return float
      */
-    private function transformeTotalCalcul($totalActQuart, $consoAct, $consoUser)
+    public function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser)
     {
-        // Calculate
-        $ret = ($totalActQuart * $consoUser) / $consoAct;
+        $ret = ($totalActQuart* $consoUser)/$consoAct;
         return $ret;
     }
 
     /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Mesure $consoInput
+     * @param \Monmiel\MonmielApiModelBundle\Model\Mesure $consoTotalDefinedByUser
      */
-    public function setConsoInput($consoInput)
+    public function setConsoTotalDefinedByUser($consoTotalDefinedByUser)
     {
-        $this->consoInput = $consoInput;
+        $this->consoTotalDefinedByUser = $consoTotalDefinedByUser;
     }
 
     /**
      * @return \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    public function getConsoInput()
+    public function getConsoTotalDefinedByUser()
     {
-        return $this->consoInput;
+        return $this->consoTotalDefinedByUser;
     }
 
     /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Mesure $consoActual
+     * @param \Monmiel\MonmielApiModelBundle\Model\Mesure $consoActuel
      */
-    public function setConsoActual($consoActual)
+    public function setConsoActuel($consoActuel)
     {
-        $this->consoActual = $consoActual;
+        $this->consoActuel = $consoActuel;
     }
 
     /**
      * @return \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    public function getConsoActual()
+    public function getConsoActuel()
     {
-        return $this->consoActual;
+        return $this->consoActuel;
     }
 
     /**
