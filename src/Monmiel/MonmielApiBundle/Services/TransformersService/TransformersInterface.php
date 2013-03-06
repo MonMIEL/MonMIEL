@@ -17,7 +17,7 @@ interface TransformersInterface
      * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function updateConsoTotalForDayWithActualConsoAndInputConso($day, $actualConso, $inputConso);
+    public function updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($day, $actualConso, $inputConso);
 
 
     /**
@@ -27,7 +27,7 @@ interface TransformersInterface
      * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getDayUpdatedByDayIdActualConsoAndInputConso($dayId, $actualConso, $inputConso);
+    public function getUpdatedDayByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso);
 
 
 }

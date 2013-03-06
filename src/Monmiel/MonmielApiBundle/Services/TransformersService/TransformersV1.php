@@ -32,7 +32,7 @@ class TransformersV1 implements TransformersInterface
      * the actual consommation
      * @var \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    protected  $consoActuel;
+    protected  $consoTotalActuel;
 
 
     /**
@@ -52,9 +52,9 @@ class TransformersV1 implements TransformersInterface
      * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function updateConsoTotalForDayWithActualConsoAndInputConso($day, $actualConso, $inputConso)
+    public function updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($day, $actualConso, $inputConso)
     {
-        $this->setConsoActuel($actualConso);
+        $this->setConsoTotalActuel($actualConso);
         $this->setConsoTotalDefinedByUser($inputConso);
 
         return $this->getTotalUpdated($day);
@@ -68,9 +68,9 @@ class TransformersV1 implements TransformersInterface
      * @param $inputConso \Monmiel\MonmielApiModelBundle\Model\Mesure
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getDayUpdatedByDayIdActualConsoAndInputConso($dayId, $actualConso, $inputConso)
+    public function getUpdatedDayByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso)
     {
-        $this->setConsoActuel($actualConso);
+        $this->setConsoTotalActuel($actualConso);
         $this->setConsoTotalDefinedByUser($inputConso);
         $dayTemp = $this->riakDao->getDayConso($dayId);
         return $this->getTotalUpdated($dayTemp);
@@ -85,21 +85,18 @@ class TransformersV1 implements TransformersInterface
     {
         $updatedDay = new Day($consoDay->getDateTime());
         if (isset($consoDay)) {
-            $consoActuel = $this->getConsoActuel();
+            $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
-            $newQuartersArray =  $this->transformeTotalToConsoTher($consoDay->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
-            $updatedDay->setQuarters($newQuartersArray);
 
-//            if(Mesure::isEqualsMesure($consoActuel,$consoTotalDefinedByUser)){
-//                $array =  $this->transformeTotalToConsoTher($consoDay->getQuarters(),$consoActuel,$consoTotalDefinedByUser);
-//                $retour->setQuarters($array);
-//            }
-//            else{
-//                $consoInputConverted = Mesure::convertMesureByOtherUnitOfMesure($consoTotalDefinedByUser,$consoActuel->getUnitOfMesure());
-//                $array =  $this->transformeTotalToConsoTher($consoDay->getQuarters(),$this->getConsoActuel(), $consoInputConverted);
-//                $retour->setQuarters($array);
-//                echo "------ different mesure \n -------";
-//            }
+            if(Mesure::isEqualsMesure($consoActuel,$consoTotalDefinedByUser)){
+                $newQuartersArray =  $this->transformeTotalToConsoTher($consoDay->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
+            }
+            else{
+                //convert the mesure $consoTotalDefinedByUser
+                $consoInputConverted = Mesure::convertMesureByOtherUnitOfMesure($consoTotalDefinedByUser,$consoActuel->getUnitOfMesure());
+                $newQuartersArray =  $this->transformeTotalToConsoTher($consoDay->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
+            }
+            $updatedDay->setQuarters($newQuartersArray);
         }
 
         return $updatedDay;
@@ -166,17 +163,17 @@ class TransformersV1 implements TransformersInterface
     /**
      * @param \Monmiel\MonmielApiModelBundle\Model\Mesure $consoActuel
      */
-    public function setConsoActuel($consoActuel)
+    public function setConsoTotalActuel($consoActuel)
     {
-        $this->consoActuel = $consoActuel;
+        $this->consoTotalActuel = $consoActuel;
     }
 
     /**
      * @return \Monmiel\MonmielApiModelBundle\Model\Mesure
      */
-    public function getConsoActuel()
+    public function getConsoTotalActuel()
     {
-        return $this->consoActuel;
+        return $this->consoTotalActuel;
     }
 
     /**
