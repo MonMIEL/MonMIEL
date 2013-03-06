@@ -13,6 +13,8 @@ class Hydraulique
     private $max_hydraulique;
     private $fc_hydraulique;
     private $td_hydraulique;
+    //Represente la puissance unitaire de l'hydaulique en MW
+    const PUISSANCEUNITAIRE=0;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){

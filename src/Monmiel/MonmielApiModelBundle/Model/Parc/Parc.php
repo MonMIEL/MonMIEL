@@ -40,6 +40,7 @@ class Parc{
     public static function getInstance() {
         if(is_null(self::$instance)) {
             self::$instance = new Parc();
+            echo 'Création du parc initial';
         }
         return self::$instance;
     }
@@ -73,14 +74,21 @@ class Parc{
         $this->DefineRate($mixFinal);
 
         //On recupere l'energie nécessaire pour chaque énergie
-        $nuc=$this->nucleaire->getValueNucleaire();
-        $eol=$this->eolien->getValueEolien();
-        $hyd=$this->hydraulique->getValueHydraulique();
-        $pv=$this->pv->getValuePv();
-        $aut=$this->autres->getValueAutre();
+        $PuisNuc=$this->nucleaire->getValueNucleaire();
+        $PuisEol=$this->eolien->getValueEolien();
+        $PuisHyd=$this->hydraulique->getValueHydraulique();
+        $PuisPv=$this->pv->getValuePv();
+        $PuisAut=$this->autres->getValueAutre();
+
+        //On recupere l'energie nécessaire pour chaque énergie
+        $ParcNuc=$this->nucleaire->getParcNucleaire();
+        $ParcEol=$this->eolien->getParcEolien();
+        $ParcHyd=$this->hydraulique->getParcHydraulique();
+        $ParcPv=$this->pv->getParcPv();
+        $ParcAut=$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
-        $newParc=new ParcFinal($nuc,$eol,$hyd,$pv,$aut);
+        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcAut);
         return $newParc;
     }
 

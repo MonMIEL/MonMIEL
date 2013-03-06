@@ -13,6 +13,8 @@ class Nucleaire
     private $max_nucleaire;
     private $fc_nucleaire;
     private $td_nucleaire;
+    //Represente la puissance unitaire d'un réacteur en MW
+    const PUISSANCEUNITAIRE=1090;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){

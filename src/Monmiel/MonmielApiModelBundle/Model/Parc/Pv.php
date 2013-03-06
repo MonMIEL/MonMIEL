@@ -14,6 +14,9 @@ class Pv
     private $fc_pv;
     private $td_pv;
 
+    //Represente la puissance unitaire d'un panneau photovoltaique par M² en MW
+    const PUISSANCEUNITAIRE=0.001;
+
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
         $this->fc_pv=1;
