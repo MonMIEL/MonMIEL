@@ -40,13 +40,13 @@ class Quarter
      */
     protected $hydraulique;
 
-    /***
+    /**
      * @var integer
      * @Ser\Type("integer")
      */
     protected $photovoltaique;
 
-    /***
+    /**
      * @var integer
      * @Ser\Type("integer")
      */
@@ -86,14 +86,13 @@ class Quarter
     {
 
         $this->eolien = $this->eolien*$coeff;
-     //   $this->fuel = $fuel;
-       // $this->gaz = $gaz;
-       $this->hydraulique = $this->hydraulique*$coeff;
+        //   $this->fuel = $fuel;
+        // $this->gaz = $gaz;
+        $this->hydraulique = $this->hydraulique*$coeff;
         $this->nucleaire = $this->nucleaire*$coeff;
         $this->photovoltaique = $this->photovoltaique*$coeff;
-        $this->consoTotal= $this->consoTotal*$coeff;
 
-       $this->updatesAjustValues();
+//        $this->updatesAjustValues();
     }
 
     /**
@@ -101,10 +100,10 @@ class Quarter
      * consumption need, and then ajust
      * values for completion variables
      */
-    private function updatesAjustableValues( )
-    {
-        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
-    }
+//    private function updatesAjustableValues( )
+//    {
+//        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
+//    }
 
     /**
      * @param int $autre
