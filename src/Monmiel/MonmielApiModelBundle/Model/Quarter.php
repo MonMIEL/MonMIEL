@@ -40,13 +40,13 @@ class Quarter
      */
     protected $hydraulique;
 
-    /***
+    /**
      * @var integer
      * @Ser\Type("integer")
      */
     protected $photovoltaique;
 
-    /***
+    /**
      * @var integer
      * @Ser\Type("integer")
      */
