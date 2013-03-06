@@ -2,7 +2,6 @@
 
 namespace Monmiel\MonmielApiModelBundle\Model;
 /**
- * Created by JetBrains PhpStorm.
  * User: patrice
  * Date: 05/03/13
  * Time: 09:26
@@ -26,6 +25,16 @@ class Mesure
     {
         $this->unitOfMesure = $unitOfMesure;
         $this->value = $value;
+    }
+
+    /**
+     * method to compare the UnitOfMesure  $mesureA and $mesureB
+     * @param $mesureA Mesure
+     * @param $mesureB Mesure
+     * @return bol
+     */
+    static function isEqualsMesure($mesureA, $mesureB){
+        return $mesureA->getUnitOfMesure()->getName() == $mesureB->getUnitOfMesure()->getName();
     }
 
     /**
@@ -58,5 +67,16 @@ class Mesure
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * convert mesure $from using the UnitOfMesure $unitOfMesure
+     * for example: $mesure = (100 TerraWatt) and $unitOfMesure = GW, then this function return 100*1000 GW
+     * @param $mesure Mesure
+     * @param $unitOfMesure UnitOfMesure
+     * @return Mesure
+     */
+    static function convertMesureByOtherUnitOfMesure($mesure, $unitOfMesure){
+        //TODO à faire
     }
 }
