@@ -16,8 +16,8 @@ class ComputeFacilityService implements FacilityServiceInterface
     {
         $parc=Parc::getInstance();
         if(isset($parc) && isset($quarter)){
-            //$parc->setMaxValue($quarter->getNucleaire(),$,$quarter[2],$quarter[3],$quarter[4]);
-            $this->parc->setMaxValue($quarter->getNucleaire(), $quarter->getEolien(), $quarter->getPhotovoltaique(), $quarter->getHydraulique(), $quarter->getAutre());
+            //$parc->setMaxValue($quarter[0],$quarter[1],$quarter[2],$quarter[3],$quarter[4]);
+            $parc->setMaxValue($quarter->getNucleaire(), $quarter->getEolien(), $quarter->getPhotovoltaique(), $quarter->getHydraulique(), $quarter->getAutre());
         }
         else{
             echo "Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable";
