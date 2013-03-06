@@ -12,6 +12,10 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Parc;
 class ComputeFacilityService implements FacilityServiceInterface
 {
 
+    //For each quarter, verify if the actual value of each energy is greather than max
+    /**
+     * @param \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter
+     */
     public function submitQuarters($quarter)
     {
         $parc=Parc::getInstance();
@@ -24,6 +28,11 @@ class ComputeFacilityService implements FacilityServiceInterface
         }
     }
 
+    //Return an Objet Parc which represent the necessary parc
+    /**
+     * @param $mixFinal repartition of final mix in %
+     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal
+     */
     public function getSimulatedParc($mixFinal)
     {
         $parc=Parc::getInstance();
