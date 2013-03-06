@@ -156,7 +156,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $quarterUpdated->setPhotovoltaique($coeffPhotovoltaique * $oldConsoPhotovoltaique);
 
         $flammeValue=$quarterUpdated->getTotal()-($coeffPhotovoltaique * $oldConsoPhotovoltaique+$coeffHydraulique * $oldConsoHydraulique+$coeffEolien * $oldConsoEolien+$coeffNucleaire * $oldConsoNuclear);
-        $quarterUpdated->setFlamme($flammeValue);
+        $quarterUpdated->setFlamme($flammeValue); //updating ajustment value;
 
         return quarterUpdated;
     }
