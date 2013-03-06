@@ -1,5 +1,5 @@
 {
-    "hash": "e8252edd26969412451361a8c573942f",
+    "hash": "848755d1031cafc62e2b60fccb262956",
     "packages": [
         {
             "name": "doctrine/common",
@@ -365,6 +365,28 @@
                 "web service"
             ],
             "time": "2013-03-04 00:41:45"
+        },
+        {
+            "name": "hamcrest/hamcrest",
+            "version": "1.1.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://hamcrest.googlecode.com/files/hamcrest-php-1.1.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hamcrest_": "Hamcrest-1.1.0/"
+                },
+                "files": [
+                    "Hamcrest-1.1.0/Hamcrest/Hamcrest.php"
+                ]
+            },
+            "include-path": [
+                "Hamcrest-1.1.0/"
+            ]
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1388,16 +1410,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.15",
+            "version": "3.7.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.15"
+                "reference": "3.7.16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.15",
-                "reference": "3.7.15",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.16",
+                "reference": "3.7.16",
                 "shasum": ""
             },
             "require": {
@@ -1458,7 +1480,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-03-01 11:55:06"
+            "time": "2013-03-06 11:07:01"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
