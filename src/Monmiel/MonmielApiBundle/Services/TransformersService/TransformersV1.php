@@ -4,6 +4,7 @@ namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
+use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
 
 /**
  * @DI\Service("monmiel.transformers.service")
@@ -43,13 +44,25 @@ class TransformersV1 implements TransformersInterface
         foreach ($listQuarter as $value) {
             // Appliquer la formule de calcul
             $tmpVal= $this->transformeTotalCalcul($value->getConsoTotal(),$consoAct,$consoUser);
+
+            echo "Test avant calcul" . "\n";
+            echo $value->getConsoTotal() . "\n";
+
             // Remplacer la valeur par la nouvelle valeur
+
+            echo "Test apres calcul" . "\n";
+            echo $tmpVal . "\n";
+
             $value->setConsoTotal($tmpVal);
+
+            $tmpValeur = $value;
+            array_push($tmp,$tmpValeur);
+
         }
         // Affectation de la liste
-        $tmp = $listQuarter;
 
-        return $listQuarter;
+
+        return $tmp;
     }
 
 
@@ -60,7 +73,7 @@ class TransformersV1 implements TransformersInterface
      * @param $consoUser    la consommation saisie par utilisateur
      * @return int
      */
-    private function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser){
+    public function transformeTotalCalcul($totalActQuart,$consoAct,$consoUser){
 
         return ($totalActQuart* $consoUser)/$consoAct;
 
@@ -68,7 +81,7 @@ class TransformersV1 implements TransformersInterface
 
     /**
      * @param $listQuarter
-     * @return array<\Monmiel\MonmielApiModelBundle\Model\Qu>
+     * @return array<\Monmiel\MonmielApiModelBundle\Model\Quarter>
      */
     public function transformeLQuarterToLJourDAO($listQuarter){
 
