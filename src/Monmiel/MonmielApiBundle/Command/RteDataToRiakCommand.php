@@ -39,7 +39,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
             $q = $this->extractQuarterFromLine($line[0]);
             $day->addQuarters($q);
             if ((($row-1) % 96) == 0) {
-               $this->dao->put($day);
+                $this->dao->put($day);
                $day = new Day($dateTime->modify('+1 day'));
 //               $json = $this->serializer->serialize($day, "json");
 //               var_dump($json);
