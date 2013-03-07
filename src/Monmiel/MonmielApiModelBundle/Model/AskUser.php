@@ -3,10 +3,10 @@
  * Created by JetBrains PhpStorm.
  * User: qiaob
  * Date: 07/03/13
- * Time: 15:21
+ * Time: 15:48
  * To change this template use File | Settings | File Templates.
  */
-class Power
+class AskUser
 {
     /**
      * @var float
@@ -60,6 +60,13 @@ class Power
 
 
     /**
+     * @var float
+     * @Ser\Type("float")
+     */
+    protected $total;
+
+
+    /**
      * @param $flame
      * @param $hydraulic
      * @param $import
@@ -67,9 +74,10 @@ class Power
      * @param $other
      * @param $photovoltaic
      * @param $step
+     * @param $total
      * @param $wind
      */
-    function __construct($flame, $hydraulic, $import, $nuclear, $other, $photovoltaic, $step, $wind)
+    function __construct($flame, $hydraulic, $import, $nuclear, $other, $photovoltaic, $step, $total, $wind)
     {
         $this->flame = $flame;
         $this->hydraulic = $hydraulic;
@@ -78,9 +86,9 @@ class Power
         $this->other = $other;
         $this->photovoltaic = $photovoltaic;
         $this->step = $step;
+        $this->total = $total;
         $this->wind = $wind;
     }
-
 
     /**
      * @param float $flame
@@ -195,6 +203,22 @@ class Power
     }
 
     /**
+     * @param float $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
      * @param float $wind
      */
     public function setWind($wind)
@@ -209,7 +233,6 @@ class Power
     {
         return $this->wind;
     }
-
 
 
 
