@@ -170,15 +170,20 @@ public   $nb=0;
     }
 
     /**
+     * Compute the production capacity quarter by quarter for target year
+     * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeProductionCapacity($quarter){
+        
+
+    }
+
+    /**
      * @param $day integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
     public function get($day)
     {
-
         return $this->computeMixedTargetDailyConsumption($day);
     }
-
-
-
 }

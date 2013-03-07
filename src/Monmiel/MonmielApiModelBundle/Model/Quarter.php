@@ -64,7 +64,19 @@ class Quarter
      */
     protected $consoTotal;
 
-    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde)
+    /**
+     * @var integer
+     * @Ser\Type("integer")
+     */
+    protected $CapaciteProductionEolian;
+
+    /**
+     * @var integer
+     * @Ser\Type("integer")
+     */
+    protected $CapaciteProductionPhotovoltaic;
+
+    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde, $CapaciteProductionEolian,$CapaciteProductionPhotovoltaic)
     {
         $this->autre = $autre;
         $this->consoTotal = $consoTotal;
@@ -75,6 +87,8 @@ class Quarter
         $this->nucleaire = $nucleaire;
         $this->photovoltaique = $photovoltaique;
         $this->solde = $solde;
+        $this->CapaciteProductionEolian = $CapaciteProductionEolian;
+        $this->CapaciteProductionPhotovoltaic = $CapaciteProductionPhotovoltaic;
     }
 
 
@@ -247,5 +261,37 @@ class Quarter
     public function getSolde()
     {
         return $this->solde;
+    }
+
+    /**
+     * @param int $solde
+     */
+    public function setCapactiteProductionEolian($capaciteProduction)
+    {
+        $this->CapaciteProductionEolian = $capaciteProduction;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCapaciteProductionEolian()
+    {
+        return $this->CapaciteProductionEolian;
+    }
+
+    /**
+     * @param int $solde
+     */
+    public function setCapactiteProductionPhotovoltaic($capaciteProduction)
+    {
+        $this->CapaciteProductionPhotovoltaic = $capaciteProduction;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCapaciteProductionPhotovoltaic()
+    {
+        return $this->CapaciteProductionPhotovoltaic;
     }
 }
