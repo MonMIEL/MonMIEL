@@ -1,6 +1,10 @@
 <?php
+
 namespace Monmiel\MonmielApiModelBundle\Model;
 
+/**
+ * Modeling of consummation of on Year for the different type of Energy
+ */
 class Year
 {
     /**
@@ -9,35 +13,54 @@ class Year
     protected  $yearIdentifiant;
 
     /**
+     * sum consummation for the nucleaire of Year
      * @var float
      */
-    protected $consoTotalflamme;
-
-    /**
-     * @var float
-     */
-    protected $consoTotalnucleaire;
+    protected $consoTotalNucleaire;
 
 
     /**
+     * sum consummation for the Eolien of Year
      * @var float
      */
     protected $consoTotalEolien;
 
     /**
+     * sum consummation for the hydro of Year
      * @var float
      */
     protected $consoTotalHydraulique;
 
+
     /**
+     * sum consummation for the pv of Year
      * @var float
      */
     protected $consoTotalPhotovoltaique;
 
     /**
+     * sum consummation for the Central flam of Year
+     * @var float
+     */
+    protected $consoTotalFlamme;
+
+
+    /**
+     * sold of year
      * @var float
      */
     protected $solde;
+
+    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
+    {
+        $this->consoTotalEolien = $consoTotalEolien;
+        $this->consoTotalFlamme = $consoTotalFlamme;
+        $this->consoTotalHydraulique = $consoTotalHydraulique;
+        $this->consoTotalNucleaire = $consoTotalNucleaire;
+        $this->consoTotalPhotovoltaique = $consoTotalPhotovoltaique;
+        $this->solde = $solde;
+        $this->yearIdentifiant = $yearIdentifiant;
+    }
 
     /**
      * @param float $consoTotalEolien
@@ -90,33 +113,33 @@ class Year
     /**
      * @param float $consoTotalflamme
      */
-    public function setConsoTotalflamme($consoTotalflamme)
+    public function setConsoTotalFlamme($consoTotalflamme)
     {
-        $this->consoTotalflamme = $consoTotalflamme;
+        $this->consoTotalFlamme = $consoTotalflamme;
     }
 
     /**
      * @return float
      */
-    public function getConsoTotalflamme()
+    public function getConsoTotalFlamme()
     {
-        return $this->consoTotalflamme;
+        return $this->consoTotalFlamme;
     }
 
     /**
      * @param float $consoTotalnucleaire
      */
-    public function setConsoTotalnucleaire($consoTotalnucleaire)
+    public function setConsoTotalNucleaire($consoTotalnucleaire)
     {
-        $this->consoTotalnucleaire = $consoTotalnucleaire;
+        $this->consoTotalNucleaire = $consoTotalnucleaire;
     }
 
     /**
      * @return float
      */
-    public function getConsoTotalnucleaire()
+    public function getConsoTotalNucleaire()
     {
-        return $this->consoTotalnucleaire;
+        return $this->consoTotalNucleaire;
     }
 
     /**

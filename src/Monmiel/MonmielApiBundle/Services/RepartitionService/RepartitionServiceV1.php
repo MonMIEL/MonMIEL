@@ -11,7 +11,7 @@ use Monmiel\MonmielApiModelBundle\Model\Mesure;
  */
 class RepartitionServiceV1 implements RepartitionServiceInterface
 {
-    public $nb = 0;
+public   $nb=0;
 
     /**
      * @DI\Inject("monmiel.transformers.service")
@@ -19,7 +19,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public $transformers;
 
-    /**
+        /**
      * @DI\Inject("monmiel.facility.service")
      * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
      */
@@ -34,7 +34,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * Toutes ces informations sont fournies par ?
      *
      */
-    private $totalNuclearReferenceYear = 720; //data given
+    private $totalNuclearReferenceYear = 720;  //data given
 
     private $totalEolienReferenceYear = 133; //data given
 
@@ -66,37 +66,37 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
 
-    /*   private function  computeEstimateTedTargetDailyConsumption($dayNumber)
+ /*   private function  computeEstimateTedTargetDailyConsumption($dayNumber)
 
-       {
+    {
 
-           //TO UNDO
-           $this->getReferenceDay($dayNumber);
-
-
-           $coeffToUse =  2;//given
+        //TO UNDO
+        $this->getReferenceDay($dayNumber);
 
 
-           //i retrieve a day
-           $currentDay = $this->dayRetrieved;
-           $current = $currentDay;
-           $current->setQuarters(array());
-           $currentDayQuarters = $currentDay->getgetQuarters();
-
-           for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
-
-               $currentQuarter = $currentDayQuarters[$j];
-               $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
+        $coeffToUse =  2;//given
 
 
+        //i retrieve a day
+        $currentDay = $this->dayRetrieved;
+        $current = $currentDay;
+        $current->setQuarters(array());
+        $currentDayQuarters = $currentDay->getgetQuarters();
 
-               array_push($current->getQuarters(), $currentQuarter);
-           }
+        for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
+
+            $currentQuarter = $currentDayQuarters[$j];
+            $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
 
 
-           return current;
 
-       }*/
+            array_push($current->getQuarters(), $currentQuarter);
+        }
+
+
+        return current;
+
+    }*/
     private function  computeMixedTargetDailyConsumption($dayNumber)
 
     {
@@ -115,6 +115,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
         foreach ($currentDayQuarters as $quarter) {
             $computedQuarter = $this->updateQuarter($quarter);
+            $capacityQuarter = $this->computeProductionCapacity($quarter);
             $computedDayQuarters[] = $computedQuarter;
             $this->facilityService->submitQuarters($computedQuarter); //callback to parc method
         }
@@ -128,8 +129,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
      * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
      */
-    public function updateQuarter($quarter)
-    {
+    public function updateQuarter($quarter){
 
         $oldConsoNuclear = $quarter->getNucleaire();
         $coeffNucleaire = $this->coeffPerEnergy["nuclear"];
@@ -147,15 +147,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $coeffPhotovoltaique = $this->coeffPerEnergy["photovoltaic"];
         $quarter->setPhotovoltaique($coeffPhotovoltaique * $oldConsoPhotovoltaique);
 
-        $flammeValue = $quarter->getConsoTotal() - ($coeffPhotovoltaique * $oldConsoPhotovoltaique + $coeffHydraulique * $oldConsoHydraulique + $coeffEolien * $oldConsoEolien + $coeffNucleaire * $oldConsoNuclear);
+        $flammeValue = $quarter->getConsoTotal()-($coeffPhotovoltaique * $oldConsoPhotovoltaique+$coeffHydraulique * $oldConsoHydraulique+$coeffEolien * $oldConsoEolien+$coeffNucleaire * $oldConsoNuclear);
         $quarter->setFlamme($flammeValue); //updating ajustment value;
 
         return $quarter;
     }
 
 
-    private function computeCoeffDailyMix()
-    {
+    private function computeCoeffDailyMix(){
         $coeffNuclear = $this->totalNuclearTargetYear / $this->totalNuclearReferenceYear;
         $coeffEolien = $this->totalEolienTargetYear / $this->totalEolienReferenceYear;
         $coeffHydraulique = $this->totalHydraulicTargeteYear / $this->totalHydraulicReferenceYear;
@@ -188,8 +187,6 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
 
     /**
-     * @ensure simulated not null
-     * @ensure capacity not null
      * Compares values simulated to maximum capacity for each
      * quarter and updates adjustment values flamm or import needed to ensure consumption
      *
@@ -258,5 +255,29 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $quarterToCopy->setHydraulique(0);
 
         return $quarterToCopy;
+    }
+
+    /**
+     * Compute the production capacity quarter by quarter for target year
+     * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeProductionCapacity($quarter){
+        $quarterUpdated = $quarter;
+
+        $powerTargetYear = $this->transformers->getPowerTargetYear();
+        $powerReferencedYear = $this->transformers->getPowerReferencedYear();
+
+        $aeolianProductionCapacity = ($powerTargetYear->getWind() * $quarterUpdated->getEolien()) / $powerReferencedYear->getWind();
+        $photovoltaicProductionCapacity = ($powerTargetYear->getPhotovoltaic() * $quarterUpdated->getPhotovoltaique()) / $powerReferencedYear->getPhotovoltaic();
+        $nuclearProductionCapacity = ($powerTargetYear->getNuclear());
+        $hydraulicProductionCapacity = ($powerTargetYear->getHydraulic());
+
+        $quarterUpdated->setProductionCapacityAeolian($aeolianProductionCapacity);
+        $quarterUpdated->setProductionCapacityPhotovoltaic($photovoltaicProductionCapacity);
+        $quarterUpdated->setProductionCapacityNuclear($nuclearProductionCapacity);
+        $quarterUpdated->setProductionCapacityHydraulic($hydraulicProductionCapacity);
+
+        return $quarterUpdated;
     }
 }
