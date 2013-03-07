@@ -180,5 +180,56 @@ public   $nb=0;
     }
 
 
+/**
+ * TODO
+ * calcul de la capacite ensuite deduire ce qui s'est passe reellement
+ */
+
+    /**
+     * @ensure simulated not null
+     * @ensure capacity not null
+     * Compares values simulated to maximum capacity for each
+     * quarter and updates adjustment values flamm or import needed to ensure consumption
+     *
+     * @param $simulated \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * @param $capacity \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeDifferenceBetweenSimulatedAndCapacity($simulated, $capacity)
+    {
+        $quartResult=$capacity;
+
+
+    $soldeEol= $capacity->getEolien()- $simulated->getConsoTotal();
+
+        if ($soldeEol>=0) //eolian able to cover consumption
+        {
+            //set others to 0
+        }
+        else
+        { //need more power
+            $soldePV= $capacity->getPhotovoltaique()+$soldeEol;
+
+
+            if ($soldePV>=0)
+            {
+                //set others to 0
+            }
+            else
+            {
+                $soldeHydro=$capacity->getHydraulique()+$soldePV;
+
+                 if ($soldeHydro>=0)
+                 {
+                     //set the others to 0
+                 }
+                else
+                {
+                    $flamme=0- $soldeHydro; //carency in capacity
+                }
+            }
+        }
+
+
+    }
 
 }
