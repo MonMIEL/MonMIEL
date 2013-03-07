@@ -1,4 +1,5 @@
 <?php
+namespace Monmiel\MonmielApiModelBundle\Model;
 /**
  * Created by JetBrains PhpStorm.
  * User: qiaob
