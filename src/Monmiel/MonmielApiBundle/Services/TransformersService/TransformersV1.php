@@ -4,14 +4,14 @@ namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
+use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 
 /**
  * @DI\Service("monmiel.transformers.service")
  */
-class TransformersV1 implements TransformersInterface
+class TransformersV1 implements TransformersInterfaceV1
 {
 
     /**
@@ -183,4 +183,22 @@ class TransformersV1 implements TransformersInterface
     {
         $this->riakDao = $riakDao;
     }
-}
+
+    /**
+     *  Get the power of each type energy for reference year
+     *
+     * @return  \Monmiel\MonmielApiModelBundle\Model\Power
+     */
+    public function getPowerRef()
+    {
+        // TODO: Implement getPowerRef() method.
+    }
+
+    /**
+     *  Get the power of each type energy for target year
+     * @return \Monmiel\MonmielApiModelBundle\Model\Power
+     */
+    public function getPowerTarget()
+    {
+        // TODO: Implement getPowerTarget() method.
+    }}
