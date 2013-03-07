@@ -115,6 +115,7 @@ public   $nb=0;
         /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
         foreach ($currentDayQuarters as $quarter) {
             $computedQuarter = $this->updateQuarter($quarter);
+            $capacityQuarter = $this->computeProductionCapacity($quarter);
             $computedDayQuarters[] = $computedQuarter;
             $this->facilityService->submitQuarters($computedQuarter); //callback to parc method
         }
@@ -170,20 +171,115 @@ public   $nb=0;
     }
 
     /**
-     * Compute the production capacity quarter by quarter for target year
-     * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
-     */
-    private function computeProductionCapacity($quarter){
-        
-
-    }
-
-    /**
      * @param $day integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
     public function get($day)
     {
+
         return $this->computeMixedTargetDailyConsumption($day);
+    }
+
+
+    /**
+     * TODO
+     * calcul de la capacite ensuite deduire ce qui s'est passe reellement
+     */
+
+    /**
+     * @ensure simulated not null
+     * @ensure capacity not null
+     * Compares values simulated to maximum capacity for each
+     * quarter and updates adjustment values flamm or import needed to ensure consumption
+     *
+     * @param $simulated \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * @param $capacity \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeDifferenceBetweenSimulatedAndCapacity($simulated, $capacity)
+    {
+        /**
+         * @var \Monmiel\MonmielApiModelBundle\Model\Quarter
+         */
+        $quartResult = $this->copyQuarter($simulated);
+
+
+        $soldeEol = $capacity->getEolien() - $simulated->getConsoTotal();
+
+
+        if ($soldeEol >= 0) //eolian able to cover consumption
+        {
+
+            $quartResult->setEolien($simulated->getConsoTotal());
+
+            return $quartResult;
+        } else { //need more power that means another type of energy is used
+            $soldePV = $capacity->getPhotovoltaique() + $soldeEol;
+
+
+            if ($soldePV >= 0) {
+                $quartResult->getPhotovoltaique(-$soldeEol);
+                return $quartResult;
+            } else {
+                $soldeHydro = $capacity->getHydraulique() + $soldePV;
+
+                if ($soldeHydro >= 0) {
+                    $quartResult->setHydraulique(-$soldePV);
+                    return $quartResult;
+                } else {
+                    $nucl = $capacity->getHydraulique() + $soldeHydro;
+
+                    if ($nucl >= 0) {
+                        $quartResult->setNucleaire(-$soldeHydro);
+                        return $quartResult;
+                    } else {
+                        $flamme = 0 - $soldeHydro; //carency in capacity
+                        $quartResult->setFlamme($flamme);
+                        return $quartResult;
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     * @param $quarterToCopy \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * return \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function copyQuarter($quarterToCopy)
+    {
+        $quarterToCopy->setEolien(0);
+        $quarterToCopy->setFlamme(0);
+        $quarterToCopy->setNucleaire(0);
+        $quarterToCopy->setPhotovoltaique(0);
+        $quarterToCopy->setHydraulique(0);
+
+        return $quarterToCopy;
+    }
+
+    /**
+     * Compute the production capacity quarter by quarter for target year
+     * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeProductionCapacity($quarter){
+        $quarterUpdated = $quarter;
+
+        $powerTargetYear = $this->transformers->getPowerTargetYear();
+        $powerReferencedYear = $this->transformers->getPowerReferencedYear();
+
+        $aeolianProductionCapacity = ($powerTargetYear->getWind() * $quarterUpdated->getEolien()) / $powerReferencedYear->getWind();
+        $photovoltaicProductionCapacity = ($powerTargetYear->getPhotovoltaic() * $quarterUpdated->getPhotovoltaique()) / $powerReferencedYear->getPhotovoltaic();
+        $nuclearProductionCapacity = ($powerTargetYear->getNuclear());
+        $hydraulicProductionCapacity = ($powerTargetYear->getHydraulic());
+
+        $quarterUpdated->setProductionCapacityAeolian($aeolianProductionCapacity);
+        $quarterUpdated->setProductionCapacityPhotovoltaic($photovoltaicProductionCapacity);
+        $quarterUpdated->setProductionCapacityNuclear($nuclearProductionCapacity);
+        $quarterUpdated->setProductionCapacityHydraulic($hydraulicProductionCapacity);
+
+        return $quarterUpdated;
     }
 }

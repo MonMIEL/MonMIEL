@@ -68,15 +68,28 @@ class Quarter
      * @var integer
      * @Ser\Type("integer")
      */
-    protected $CapaciteProductionEolian;
+    protected $productionCapacityAeolian;
 
     /**
      * @var integer
      * @Ser\Type("integer")
      */
-    protected $CapaciteProductionPhotovoltaic;
+    protected $productionCapacityPhotovoltaic;
 
-    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde, $CapaciteProductionEolian,$CapaciteProductionPhotovoltaic)
+    /**
+     * @var integer
+     * @Ser\Type("integer")
+     */
+    protected $productionCapacityNuclear;
+
+    /**
+     * @var integer
+     * @Ser\Type("integer")
+     */
+    protected $productionCapacityHydraulic;
+
+
+    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde, $productionCapacityAeolian,$productionCapacityPhotovoltaic,$productionCapacityNuclear,$productionCapacityHydraulic)
     {
         $this->autre = $autre;
         $this->consoTotal = $consoTotal;
@@ -87,8 +100,10 @@ class Quarter
         $this->nucleaire = $nucleaire;
         $this->photovoltaique = $photovoltaique;
         $this->solde = $solde;
-        $this->CapaciteProductionEolian = $CapaciteProductionEolian;
-        $this->CapaciteProductionPhotovoltaic = $CapaciteProductionPhotovoltaic;
+        $this->ProductionCapacityEolian = $productionCapacityAeolian;
+        $this->ProductionCapacityPhotovoltaic = $productionCapacityPhotovoltaic;
+        $this->productionCapacityNuclear = $productionCapacityNuclear;
+        $this->productionCapacityHydraulic = $productionCapacityHydraulic;
     }
 
 
@@ -264,34 +279,66 @@ class Quarter
     }
 
     /**
-     * @param int $solde
+     * @param int $productionCapacity
      */
-    public function setCapactiteProductionEolian($capaciteProduction)
+    public function setProductionCapacityAeolian($productionCapacity)
     {
-        $this->CapaciteProductionEolian = $capaciteProduction;
+        $this->productionCapacityAeolian = $productionCapacity;
     }
 
     /**
      * @return int
      */
-    public function getCapaciteProductionEolian()
+    public function getProductionCapacityAeolian()
     {
-        return $this->CapaciteProductionEolian;
+        return $this->productionCapacityAeolian;
     }
 
     /**
-     * @param int $solde
+     * @param int $productionCapacity
      */
-    public function setCapactiteProductionPhotovoltaic($capaciteProduction)
+    public function setProductionCapacityPhotovoltaic($productionCapacity)
     {
-        $this->CapaciteProductionPhotovoltaic = $capaciteProduction;
+        $this->productionCapacityPhotovoltaic = $productionCapacity;
     }
 
     /**
      * @return int
      */
-    public function getCapaciteProductionPhotovoltaic()
+    public function getProductionCapacityPhotovoltaic()
     {
-        return $this->CapaciteProductionPhotovoltaic;
+        return $this->productionCapacityPhotovoltaic;
+    }
+
+    /**
+     * @param int $productionCapacity
+     */
+    public function setProductionCapacityNuclear($productionCapacity)
+    {
+        $this->productionCapacityNuclear = $productionCapacity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductionCapacityNuclear()
+    {
+        return $this->productionCapacityNuclear;
+    }
+
+    /**
+     * @param int $productionCapacity
+     */
+    public function setProductionCapacityHydraulic($productionCapacity)
+    {
+        $this->productionCapacityHydraulic= $productionCapacity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductionCapacityHydraulic()
+    {
+        return $this->productionCapacityHydraulic;
     }
 }
