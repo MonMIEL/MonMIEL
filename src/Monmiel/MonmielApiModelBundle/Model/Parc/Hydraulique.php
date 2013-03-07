@@ -8,38 +8,37 @@ namespace Monmiel\MonmielApiModelBundle\Model\Parc;
  * Time: 17:53
  * To change this template use File | Settings | File Templates.
  */
-class Hydraulique
+class Hydraulic
 {
-    private $max_hydraulique;
-    private $fc_hydraulique;
-    private $td_hydraulique;
+    private $fc_hydraulic;
+    private $td_hydraulic;
 
-    private $puissance_hydraulique;
-    private $parc_hydraulique;
+    private $power_hydraulic;
+    private $parc_hydraulic;
 
     //Represente la puissance unitaire de l'hydaulique en MW
     const PUISSANCEUNITAIRE=1;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
     public function __construct(){
-        $this->fc_hydraulique=1;
-        $this->td_hydraulique=1;
-        $this->max_hydraulique=0;
+        $this->fc_hydraulic=1;
+        $this->td_hydraulic=1;
+        $this->max_hydraulic=0;
     }
 
-    public function setMaxHydraulique($maxHydro){
-        if($maxHydro> $this->max_hydraulique){
-            $this->max_hydraulique=$maxHydro;
+    public function setPowerHydraulic($powerHydro){
+        if(isset($powerHydro)){
+            $this->power_hydraulic=((($powerHydro*4)/$this->td_hydraulic)/$this->fc_hydraulic);
         }
     }
 
-    public function getMaxHydraulique(){
-        return $this->max_hydraulique;
+    public function getPowerHydraulic(){
+        return $this->power_hydraulic;
     }
 
     public function setFacteurChargeHydraulique($fcHydraulique){
         if(isset($fcHydraulique)){
-            $this->fc_hydraulique=$fcHydraulique;
+            $this->fc_hydraulic=$fcHydraulique;
         }
     }
 
@@ -57,15 +56,9 @@ class Hydraulique
         return $this->td_hydraulique;
     }
 
-
-    public function getValueHydraulique(){
-        $this->puissance_hydraulique=((($this->getMaxHydraulique()*4)/$this->getTauxDisponibiliteHydraulique())/$this->getFacteurChargeHydraulique());
-        return $this->puissance_hydraulique;
-    }
-
-    public function getParcHydraulique(){
-        $this->parc_hydraulique=( $this->puissance_hydraulique/ self::PUISSANCEUNITAIRE );
-        return $this->parc_hydraulique;
+    public function getParcHydraulic(){
+        $this->parc_hydraulic=( $this->power_hydraulic/ self::PUISSANCEUNITAIRE );
+        return $this->parc_hydraulic;
     }
 
 }

@@ -187,8 +187,6 @@ public   $nb=0;
      */
 
     /**
-     * @ensure simulated not null
-     * @ensure capacity not null
      * Compares values simulated to maximum capacity for each
      * quarter and updates adjustment values flamm or import needed to ensure consumption
      *

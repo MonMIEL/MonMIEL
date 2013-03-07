@@ -10,11 +10,11 @@ namespace Monmiel\MonmielApiModelBundle\Model\Parc;
  */
 class Pv
 {
-    private $max_pv;
+
     private $fc_pv;
     private $td_pv;
 
-    private $puissance_Pv;
+    private $power_Pv;
     private $parc_Pv;
 
     //Represente la puissance unitaire d'un panneau photovoltaique par M² en MW
@@ -24,17 +24,17 @@ class Pv
     public function __construct(){
         $this->fc_pv=1;
         $this->td_pv=1;
-        $this->max_pv=0;
+        $this->power_Pv=0;
     }
 
-    public function setMaxPv($maxPv){
-        if($maxPv> $this->max_pv){
-            $this->max_pv=$maxPv;
+    public function setPowerPv($PowerPv){
+        if(isset($PowerPv)){
+            $this->power_Pv=(($PowerPv*4)/$this->td_pv /$this->fc_pv);
         }
     }
 
-    public function getMaxPv(){
-        return $this->max_pv;
+    public function getPowerPv(){
+        return $this->power_Pv;
     }
 
     public function setFacteurChargePv($fcPv){
@@ -57,13 +57,8 @@ class Pv
         return $this->td_pv;
     }
 
-    public function getValuePv(){
-        $this->puissance_Pv=((($this->getMaxPv()*4)/$this->getTauxDisponibilitePv())/$this->getFacteurChargePv());
-        return $this->puissance_Pv;
-    }
-
     public function getParcPv(){
-        $this->parc_Pv=( $this->puissance_Pv/ self::PUISSANCEUNITAIRE );
+        $this->parc_Pv=( $this->power_Pv/ self::PUISSANCEUNITAIRE );
         return $this->parc_Pv;
     }
 }
