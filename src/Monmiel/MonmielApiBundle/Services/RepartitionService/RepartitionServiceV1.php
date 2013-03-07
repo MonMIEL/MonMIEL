@@ -11,7 +11,7 @@ use Monmiel\MonmielApiModelBundle\Model\Mesure;
  */
 class RepartitionServiceV1 implements RepartitionServiceInterface
 {
-public   $nb=0;
+    public $nb = 0;
 
     /**
      * @DI\Inject("monmiel.transformers.service")
@@ -19,7 +19,7 @@ public   $nb=0;
      */
     public $transformers;
 
-        /**
+    /**
      * @DI\Inject("monmiel.facility.service")
      * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
      */
@@ -34,7 +34,7 @@ public   $nb=0;
      * Toutes ces informations sont fournies par ?
      *
      */
-    private $totalNuclearReferenceYear = 720;  //data given
+    private $totalNuclearReferenceYear = 720; //data given
 
     private $totalEolienReferenceYear = 133; //data given
 
@@ -66,37 +66,37 @@ public   $nb=0;
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
 
- /*   private function  computeEstimateTedTargetDailyConsumption($dayNumber)
+    /*   private function  computeEstimateTedTargetDailyConsumption($dayNumber)
 
-    {
+       {
 
-        //TO UNDO
-        $this->getReferenceDay($dayNumber);
-
-
-        $coeffToUse =  2;//given
+           //TO UNDO
+           $this->getReferenceDay($dayNumber);
 
 
-        //i retrieve a day
-        $currentDay = $this->dayRetrieved;
-        $current = $currentDay;
-        $current->setQuarters(array());
-        $currentDayQuarters = $currentDay->getgetQuarters();
-
-        for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
-
-            $currentQuarter = $currentDayQuarters[$j];
-            $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
+           $coeffToUse =  2;//given
 
 
+           //i retrieve a day
+           $currentDay = $this->dayRetrieved;
+           $current = $currentDay;
+           $current->setQuarters(array());
+           $currentDayQuarters = $currentDay->getgetQuarters();
 
-            array_push($current->getQuarters(), $currentQuarter);
-        }
+           for ($j = 0; $j < sizeof($currentDayQuarters); $j++) {
+
+               $currentQuarter = $currentDayQuarters[$j];
+               $currentQuarter = $currentQuarter->coeffMulitiplication($coeffToUse); //$this->updateQuarter($currentQuarter, $coeffToUse);
 
 
-        return current;
 
-    }*/
+               array_push($current->getQuarters(), $currentQuarter);
+           }
+
+
+           return current;
+
+       }*/
     private function  computeMixedTargetDailyConsumption($dayNumber)
 
     {
@@ -128,7 +128,8 @@ public   $nb=0;
      * @param $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
      * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
      */
-    public function updateQuarter($quarter){
+    public function updateQuarter($quarter)
+    {
 
         $oldConsoNuclear = $quarter->getNucleaire();
         $coeffNucleaire = $this->coeffPerEnergy["nuclear"];
@@ -146,14 +147,15 @@ public   $nb=0;
         $coeffPhotovoltaique = $this->coeffPerEnergy["photovoltaic"];
         $quarter->setPhotovoltaique($coeffPhotovoltaique * $oldConsoPhotovoltaique);
 
-        $flammeValue = $quarter->getConsoTotal()-($coeffPhotovoltaique * $oldConsoPhotovoltaique+$coeffHydraulique * $oldConsoHydraulique+$coeffEolien * $oldConsoEolien+$coeffNucleaire * $oldConsoNuclear);
+        $flammeValue = $quarter->getConsoTotal() - ($coeffPhotovoltaique * $oldConsoPhotovoltaique + $coeffHydraulique * $oldConsoHydraulique + $coeffEolien * $oldConsoEolien + $coeffNucleaire * $oldConsoNuclear);
         $quarter->setFlamme($flammeValue); //updating ajustment value;
 
         return $quarter;
     }
 
 
-    private function computeCoeffDailyMix(){
+    private function computeCoeffDailyMix()
+    {
         $coeffNuclear = $this->totalNuclearTargetYear / $this->totalNuclearReferenceYear;
         $coeffEolien = $this->totalEolienTargetYear / $this->totalEolienReferenceYear;
         $coeffHydraulique = $this->totalHydraulicTargeteYear / $this->totalHydraulicReferenceYear;
@@ -180,5 +182,81 @@ public   $nb=0;
     }
 
 
+    /**
+     * TODO
+     * calcul de la capacite ensuite deduire ce qui s'est passe reellement
+     */
 
+    /**
+     * @ensure simulated not null
+     * @ensure capacity not null
+     * Compares values simulated to maximum capacity for each
+     * quarter and updates adjustment values flamm or import needed to ensure consumption
+     *
+     * @param $simulated \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * @param $capacity \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function computeDifferenceBetweenSimulatedAndCapacity($simulated, $capacity)
+    {
+        /**
+         * @var \Monmiel\MonmielApiModelBundle\Model\Quarter
+         */
+        $quartResult = $this->copyQuarter($simulated);
+
+
+        $soldeEol = $capacity->getEolien() - $simulated->getConsoTotal();
+
+
+        if ($soldeEol >= 0) //eolian able to cover consumption
+        {
+
+            $quartResult->setEolien($simulated->getConsoTotal());
+
+            return $quartResult;
+        } else { //need more power that means another type of energy is used
+            $soldePV = $capacity->getPhotovoltaique() + $soldeEol;
+
+
+            if ($soldePV >= 0) {
+                $quartResult->getPhotovoltaique(-$soldeEol);
+                return $quartResult;
+            } else {
+                $soldeHydro = $capacity->getHydraulique() + $soldePV;
+
+                if ($soldeHydro >= 0) {
+                    $quartResult->setHydraulique(-$soldePV);
+                    return $quartResult;
+                } else {
+                    $nucl = $capacity->getHydraulique() + $soldeHydro;
+
+                    if ($nucl >= 0) {
+                        $quartResult->setNucleaire(-$soldeHydro);
+                        return $quartResult;
+                    } else {
+                        $flamme = 0 - $soldeHydro; //carency in capacity
+                        $quartResult->setFlamme($flamme);
+                        return $quartResult;
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     * @param $quarterToCopy \Monmiel\MonmielApiModelBundle\Model\Quarter
+     * return \Monmiel\MonmielApiModelBundle\Model\Quarter
+     */
+    private function copyQuarter($quarterToCopy)
+    {
+        $quarterToCopy->setEolien(0);
+        $quarterToCopy->setFlamme(0);
+        $quarterToCopy->setNucleaire(0);
+        $quarterToCopy->setPhotovoltaique(0);
+        $quarterToCopy->setHydraulique(0);
+
+        return $quarterToCopy;
+    }
 }

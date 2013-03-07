@@ -75,12 +75,43 @@ class Mesure
     /**
      * convert mesure $from using the UnitOfMesure $unitOfMesure
      * for example: $mesure = (100 TerraWatt) and $unitOfMesure = GW, then this function return 100*1000 GW
-     * @param $mesure Mesure
-     * @param $unitOfMesure UnitOfMesure
+     * @param $mesureToConvert Mesure
+     * @param $newUnitOfMesure UnitOfMesure
      * @return Mesure
      */
-    static function convertMesureByOtherUnitOfMesure($mesure, $unitOfMesure){
-        //TODO à faire
+    static function convertMesureByOtherUnitOfMesure($mesureToConvert, $newUnitOfMesure){
+        $mesureConverted = $mesureToConvert;
+        //if they parameters is not null
+        if (isset($mesureToConvert) && isset($newUnitOfMesure)){
+            /**
+             * @var $unitOfMesureOld UnitOfMesure
+             */
+            $unitOfMesureOld = $mesureToConvert->getUnitOfMesure();
+            /**
+             * @var $coeff float
+             */
+            $coeff = 1;//default value
+            if($unitOfMesureOld != $newUnitOfMesure){
+               if($unitOfMesureOld->isGigaWatt() && $newUnitOfMesure->isTerraWatt()){
+                   //convert gigawatt to terrawatt
+                    $coeff = 1/1000;
+
+               }
+               else if($unitOfMesureOld->isTerraWatt() && $newUnitOfMesure->isGigaWatt()){
+                    //convert Terrawatt to Gigawatt
+                   $coeff = 1000;
+               }
+               else{
+                   //Not implemented code Exception
+               }
+            }
+
+            $valueConverted = ($mesureToConvert->getValue())*$coeff;
+            var_dump($valueConverted);
+            $mesureConverted->setUnitOfMesure($newUnitOfMesure);
+            $mesureConverted->setValue($valueConverted);
+        }
+        return $mesureConverted;
     }
 
     /**
