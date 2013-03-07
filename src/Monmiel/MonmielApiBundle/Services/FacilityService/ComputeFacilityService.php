@@ -12,22 +12,25 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Parc;
 class ComputeFacilityService implements FacilityServiceInterface
 {
 
-    public function submitQuarters($quarter)
+    public function submitQuarters($solde)
     {
         $parc=Parc::getInstance();
         if(isset($parc) && isset($quarter)){
             //$parc->setMaxValue($quarter[0],$quarter[1],$quarter[2],$quarter[3],$quarter[4]);
-            $parc->setMaxValue($quarter->getNucleaire(), $quarter->getEolien(), $quarter->getPhotovoltaique(), $quarter->getHydraulique(), $quarter->getAutre());
+            $parc->setMaxValueFlamme($solde);
         }
         else{
             echo "Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable";
         }
     }
+    /*
+     *
+     */
 
-    public function getSimulatedParc($mixFinal = null)
+    public function getSimulatedParc($mixFinal = null, $power=null)
     {
         $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc(null);
+        $parcFinal=$parc->getParc($mixFinal,$power);
         return $parcFinal;
     }
 }

@@ -18,7 +18,7 @@ class Autres
 
     private $parc_autre;
 
-    private $puissance_autre;
+    private $power_autre;
 
     //Represente la puissance unitaire d'autre en MW, par défaut à 1 en attendant des precisions
     const PUISSANCEUNITAIRE=1;
@@ -27,17 +27,17 @@ class Autres
     public function __construct(){
         $this->fc_autre=1;
         $this->td_autre=1;
-        $this->max_autre=0;
+        $this->power_autre=0;
     }
 
-    public function setMaxAutre($maxAutre){
-        if($maxAutre> $this->max_autre){
-            $this->max_autre=$maxAutre;
+    public function setPowerAutre($PowerOther){
+        if(isset($PowerOther)){
+            $this->power_autre=((($PowerOther*4)/$this->td_autre)/$this->fc_autre);;
         }
     }
 
-    public function getMaxAutre(){
-        return $this->max_autre;
+    public function getPowerAutre(){
+        return $this->power_autre;
     }
 
     public function setFacteurChargeAutre($fcAutre){
@@ -61,13 +61,8 @@ class Autres
     }
 
 
-    public function getValueAutre(){
-        $this->puissance_autre=((($this->getMaxAutre()*4)/$this->getTauxDisponibiliteAutre())/$this->getFacteurChargeAutre());
-        return $this->puissance_autre;
-    }
-
     public function getParcAutre(){
-        $this->parc_autre=( $this->puissance_autre/ self::PUISSANCEUNITAIRE );
+        $this->parc_autre=( $this->power_autre/ self::PUISSANCEUNITAIRE );
         return $this->parc_autre;
     }
 }

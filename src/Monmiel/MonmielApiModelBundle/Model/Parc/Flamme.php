@@ -13,7 +13,7 @@ class Flamme
     private $max_Flamme;
     private $fc_Flamme;
     private $td_Flamme;
-    private $puissance_Flamme;
+    private $power_Flamme;
     private $parc_Flamme;
 
     //Represente la puissance unitaire d'une éolienne en MW
@@ -24,6 +24,7 @@ class Flamme
         $this->fc_Flamme=1;
         $this->td_Flamme=1;
         $this->max_Flamme=0;
+        $this->power_Flamme=0;
     }
 
     public function setMaxFlamme($maxFlamme){
@@ -58,9 +59,19 @@ class Flamme
         return $this->td_Flamme;
     }
 
-    public function getValueFlamme(){
-        $this->puissance_Flamme=((($this->getMaxFlamme()*4)/$this->getTauxDisponibiliteFlamme())/$this->getFacteurChargeFlamme());
-        return $this->puissance_Flamme;
+    public function setPowerFlamme(){
+        $this->power_Flamme=((($this->max_Flamme*4)/$this->td_Flamme)/$this->fc_Flamme);
+    }
+
+    public function getPowerFlamme(){
+        if(isset($this->power_Flamme)){
+            return $this->power_Flamme;
+        }
+        else{
+            $this->setPowerFlamme();
+            return $this->power_Flamme;
+        }
+
     }
 
     public function getParcFlamme(){
