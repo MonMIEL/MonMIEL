@@ -58,8 +58,10 @@ class Nuclear
             }
             elseif(($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)){
                 //ex:
-
-                $facteur=(($upper_percent-$lower_percent)*100)/(($lower_value-$upper_percent)*100);
+                /**
+                 * @var $facteur Float
+                 */
+                $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
                 $this->td_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
 
             }
