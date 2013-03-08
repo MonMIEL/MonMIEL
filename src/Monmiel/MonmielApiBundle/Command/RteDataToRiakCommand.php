@@ -13,6 +13,12 @@ use Monmiel\MonmielApiModelBundle\Model\Day;
 
 class RteDataToRiakCommand extends ContainerAwareCommand
 {
+    /**
+     * L'année des données Rte (2011 ou 2012)
+     * @var integer $year
+     */
+    protected $year;
+
     protected function configure()
     {
         $this
@@ -22,17 +28,23 @@ class RteDataToRiakCommand extends ContainerAwareCommand
             "csv",
             InputArgument::REQUIRED,
             "File path of RTE data with CSV Format"
-            );
+            )
+            ->addArgument(
+            "year",
+            InputArgument::REQUIRED,
+            "L'année des data Rte"
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->serializer = $this->getContainer()->get("serializer");
         $this->dao = $this->getContainer()->get("monmiel.dao.riak");
+        $this->year = $input->getArgument("year");
 
         $handle = fopen($input->getArgument("csv"), "r");
         $row = 1;
-        $dateTime = \DateTime::createFromFormat('j-M-Y H:i:s', '01-Jan-2011 00:00:00');
+        $dateTime = \DateTime::createFromFormat('j-M-Y H:i:s', '01-Jan-'.$this->year.' 00:00:00');
         $day = new Day($dateTime);
         while ($line = fgetcsv($handle)) {
             if($row == 1){ $row++; continue; }
@@ -41,8 +53,6 @@ class RteDataToRiakCommand extends ContainerAwareCommand
             if ((($row-1) % 96) == 0) {
                 $this->dao->put($day);
                $day = new Day($dateTime->modify('+1 day'));
-//               $json = $this->serializer->serialize($day, "json");
-//               var_dump($json);
             }
             $row ++;
         }
@@ -55,7 +65,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
     {
         $line = explode(";", $line);
         $format = 'Y-m-d H:i';
-        $date = date_create_from_format($format, "2011-$line[9]-$line[10]"." ".$line[0]);
+        $date = date_create_from_format($format, "$this->year-$line[9]-$line[10]"." ".$line[0]);
         $flame = $line[1]+$line[2]+$line[3];
         $nucleaire = $line[4];
         $eolien = $line[5];
