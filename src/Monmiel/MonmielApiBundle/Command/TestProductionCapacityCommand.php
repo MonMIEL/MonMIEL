@@ -30,17 +30,20 @@ class TestProductionCapacityCommand extends ContainerAwareCommand
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
-        echo ("==================== Debut ====================");
+        echo ("==================== Debut ====================\n");
 
         $quarter = new quarter("21/03/2012",100,5,5,10,60,20,0,0,0,0,0,0);
+        $powerTarget = new Power(0,5,0,20,0,5,0,10);
+        $powertRef = new Power(0,2,0,15,0,2,0,5);
 
         $repartitionService = new \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1();
-        $quarterupdated = $repartitionService->updateQuarterForProductionCapacity($quarter);
+        $quarterupdated = $repartitionService->updateQuarterForProductionCapacity($quarter,$powerTarget,$powertRef);
+
         echo("Capacite de production de l'eolien :".$quarterupdated->getEolien()."\n");
         echo("Capacite de production du photovoltaique :".$quarterupdated->getPhotovoltaique()."\n");
         echo("Capacite de production du nucleaire :".$quarterupdated->getNucleaire()."\n");
         echo("Capacite de production de l'hydraulique :".$quarterupdated->getHydraulique()."\n");
 
-        echo ("==================== Fin ====================");
+        echo ("==================== Fin ====================\n");
     }
 }
