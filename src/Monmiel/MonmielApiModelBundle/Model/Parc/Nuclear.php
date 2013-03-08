@@ -19,10 +19,10 @@ class Nuclear
     const PUISSANCEUNITAIRE=1090;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct(){
-        $this->fc_nuclear=1;
-        $this->td_nuclear=1;
-        $this->power_Nuclear=0;
+    public function __construct($loadFactor=1, $uptimeRate=0.807,$power=0){
+        $this->fc_nuclear=$loadFactor;
+        $this->td_nuclear=$uptimeRate;
+        $this->power_Nuclear=$power;
     }
 
     public function setPowerNuclear($PowerNuclear){
@@ -62,6 +62,7 @@ class Nuclear
                  * @var $facteur Float
                  */
                 $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
+
                 $this->td_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
 
             }

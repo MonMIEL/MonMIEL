@@ -85,7 +85,8 @@ class Parc{
         $PuisHyd=$this->hydraulique->getPowerHydraulic();
         $PuisPv=$this->pv->getPowerPv();
         $PuisFlamme=$this->flamme->getPowerFlamme();
-        $PuisAut=$this->autres->getValueAutre();
+        $PuisAut=null;
+            //$this->autres->getValueAutre();
 
         //On recupere l'energie nécessaire pour chaque énergie
         $ParcNuc=$this->nucleaire->getParcNuclear();
@@ -93,7 +94,8 @@ class Parc{
         $ParcHyd=$this->hydraulique->getParcHydraulic();
         $ParcPv=$this->pv->getParcPv();
         $ParcFlamme=$this->flamme->getParcFlamme();
-        $ParcAut=$this->autres->getParcAutre();
+        $ParcAut=null;
+            //$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
         $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisFlamme,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
@@ -111,7 +113,7 @@ class Parc{
         $this->pv->setPowerPv($power->getPhotovoltaic());
         $this->hydraulique->setPowerHydraulic($power->getHydraulic());
         $this->flamme->setPowerFlamme();
-        $this->autres->setPowerAutre($power->getOther());
+        //$this->autres->setPowerAutre($power->getOther());
 
     }
 

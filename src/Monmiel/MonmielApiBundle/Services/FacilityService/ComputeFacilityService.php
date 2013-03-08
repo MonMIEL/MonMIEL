@@ -15,7 +15,7 @@ class ComputeFacilityService implements FacilityServiceInterface
     public function submitQuarters($solde)
     {
         $parc=Parc::getInstance();
-        if(isset($parc) && isset($quarter)){
+        if(isset($parc) && isset($solde)){
             //$parc->setMaxValue($quarter[0],$quarter[1],$quarter[2],$quarter[3],$quarter[4]);
             $parc->setMaxValueFlamme($solde);
         }
