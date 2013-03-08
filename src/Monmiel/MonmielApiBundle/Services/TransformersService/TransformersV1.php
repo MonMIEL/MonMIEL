@@ -254,5 +254,15 @@ class TransformersV1 implements TransformersServiceInterfaceV1
       return $wattHour/(365*24);
     }
 
+    /**
+     * @param \Monmiel\MonmielApiModelBundle\Model\AskUser $askUser
+     */
+    public function setAskUser($askUser)
+    {
+        $this->askUser = $askUser;
+    }
+
+
+
 
 }

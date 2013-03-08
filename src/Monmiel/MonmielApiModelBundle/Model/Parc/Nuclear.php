@@ -19,15 +19,15 @@ class Nuclear
     const PUISSANCEUNITAIRE=1090;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct(){
-        $this->fc_nuclear=1;
-        $this->td_nuclear=1;
-        $this->power_Nuclear=0;
+    public function __construct($loadFactor=1, $uptimeRate=0.807,$power=0){
+        $this->fc_nuclear=$loadFactor;
+        $this->td_nuclear=$uptimeRate;
+        $this->power_Nuclear=$power;
     }
 
     public function setPowerNuclear($PowerNuclear){
         if(isset($PowerNuclear)){
-            $this->power_Nuclear==((($PowerNuclear*4)/$this->td_nuclear)/$this->fc_nuclear);
+            $this->power_Nuclear=((($PowerNuclear*4)/$this->td_nuclear)/$this->fc_nuclear);
         }
     }
 
@@ -47,9 +47,28 @@ class Nuclear
         return $this->fc_nuclear;
     }
 
-    public function setTauxDisponibiliteNuclear($mix){
-        if(isset($mix)){
-            $this->td_nuclear=$mix;
+    public function setTauxDisponibiliteNuclear($percentOfNuclear){
+        $upper_percent=0.75;
+        $upper_value=0.76;
+        $lower_percent=0.25;
+        $lower_value=0.95;
+        if(isset($percentOfNuclear)){
+            if($percentOfNuclear>= $upper_percent){
+                $this->td_nuclear=$upper_value;
+            }
+            elseif(($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)){
+                //ex:
+                /**
+                 * @var $facteur Float
+                 */
+                $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
+
+                $this->td_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
+
+            }
+            elseif($percentOfNuclear <= $lower_percent){
+                $this->td_nuclear=$lower_value;
+            }
         }
     }
 
