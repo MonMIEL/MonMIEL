@@ -2,7 +2,7 @@
 
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
-interface TransformersInterfaceV1
+interface TransformersServiceInterfaceV1
 {
     /**
      * @param $day integer

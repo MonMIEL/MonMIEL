@@ -68,7 +68,7 @@ class Day
     }
 
     /**
-     * @param array $quarters
+     * @param array<Quarter> $quarters
      */
     public function setQuarters($quarters)
     {
@@ -76,7 +76,7 @@ class Day
     }
 
     /**
-     * @return array
+     * @return array<Quarter>
      */
     public function getQuarters()
     {
