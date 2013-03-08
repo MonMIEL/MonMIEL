@@ -10,9 +10,5 @@ interface TransformerServiceInterface
      */
     public function  getConsoTotalForYearReference();
 
-    /**
-     *get the total consummation for the different Energy for year target, eg conso 2050
-     * @return Year
-     */
-    public function getConsoTotalForYearTarget();
+
 }
