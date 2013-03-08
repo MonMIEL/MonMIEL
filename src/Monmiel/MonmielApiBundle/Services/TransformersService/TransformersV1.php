@@ -8,6 +8,7 @@ use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 use Monmiel\MonmielApiModelBundle\Model\AskUser;
+use Monmiel\MonmielApiModelBundle\Model\Year;
 
 /**
  * @DI\Service("monmiel.transformers.service")
@@ -41,6 +42,12 @@ class TransformersV1 implements TransformersInterface
      * @var \Monmiel\MonmielApiModelBundle\Model\AskUser;
      */
     protected $askUser;
+
+    /**
+     * Information of each energy and megawatt hour for year ref
+     * @var \Monmiel\MonmielApiModelBundle\Model\Year;
+     */
+    protected $year;
 
 
     /**
@@ -200,7 +207,17 @@ class TransformersV1 implements TransformersInterface
      */
     public function getPowerRef()
     {
-
+        // return an object power calculated
+        return new \Monmiel\MonmielApiModelBundle\Model\Power(
+            $this->calculateWattHour2Power($this->year->getConsoTotalFlamme()),
+            $this->calculateWattHour2Power($this->year->getConsoTotalHydraulique()),
+            $this->calculateWattHour2Power(0),
+            $this->calculateWattHour2Power($this->year->getConsoTotalNucleaire()),
+            $this->calculateWattHour2Power(0),
+            $this->calculateWattHour2Power($this->year->getConsoTotalPhotovoltaique()),
+            $this->calculateWattHour2Power(0),
+            $this->calculateWattHour2Power($this->year->getConsoTotalEolien())
+        );
 
     }
 
