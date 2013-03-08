@@ -27,7 +27,7 @@ class Nuclear
 
     public function setPowerNuclear($PowerNuclear){
         if(isset($PowerNuclear)){
-            $this->power_Nuclear==((($PowerNuclear*4)/$this->td_nuclear)/$this->fc_nuclear);
+            $this->power_Nuclear=((($PowerNuclear*4)/$this->td_nuclear)/$this->fc_nuclear);
         }
     }
 
@@ -47,9 +47,25 @@ class Nuclear
         return $this->fc_nuclear;
     }
 
-    public function setTauxDisponibiliteNuclear($mix){
-        if(isset($mix)){
-            $this->td_nuclear=$mix;
+    public function setTauxDisponibiliteNuclear($percentOfNuclear){
+        $upper_percent=0.75;
+        $upper_value=0.76;
+        $lower_percent=0.25;
+        $lower_value=0.95;
+        if(isset($percentOfNuclear)){
+            if($percentOfNuclear>= $upper_percent){
+                $this->td_nuclear=$upper_value;
+            }
+            elseif(($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)){
+                //ex:
+
+                $facteur=(($upper_percent-$lower_percent)*100)/(($lower_value-$upper_percent)*100);
+                $this->td_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
+
+            }
+            elseif($percentOfNuclear <= $lower_percent){
+                $this->td_nuclear=$lower_value;
+            }
         }
     }
 
