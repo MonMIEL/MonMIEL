@@ -24,9 +24,24 @@ class Mesure
      * constructor using the default unitOfMesure
      * @param $value float
      */
-    function __construct($value)
+    function __construct($value, $unitOfMesure = null)
     {
-        $this->unitOfMesure = $this->getDefaultUnitOfMesure();
+        if(isset($unitOfMesure)){
+            $this->unitOfMesure = $this->getDefaultUnitOfMesure();
+        }
+        else if($unitOfMesure == \Monmiel\Utils\ConstantUtils::GIGAWATT){
+            $this->$unitOfMesure = UnitOfMesure::createUnityGigaWatt();
+
+        }
+        else if($unitOfMesure == \Monmiel\Utils\ConstantUtils::TERAWATT){
+            $this->$unitOfMesure = UnitOfMesure::createUnityTerraWatt();
+        }
+        else if($unitOfMesure == \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR){
+            $this->$unitOfMesure = UnitOfMesure::createUnityTerraWatt();
+        }
+        else{
+            // TODO non encore implémenter
+        }
         $this->value = $value;
     }
 

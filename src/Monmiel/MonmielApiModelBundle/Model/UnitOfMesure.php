@@ -1,6 +1,6 @@
 <?php
 namespace Monmiel\MonmielApiModelBundle\Model;
-
+use \Monmiel\Utils\ConstantUtils;
 /**
  * unity of mesure
  * @author Patrice
@@ -8,21 +8,6 @@ namespace Monmiel\MonmielApiModelBundle\Model;
 
 class UnitOfMesure
 {
-    /**
-     * terawatt unity
-     */
-    const MESURE_TERAWATT = 'TW';
-
-    /**
-     * terawatt unity
-     */
-    const MESURE_GIGAWATT ='GW';
-
-    /**
-     * terawatt unity
-     */
-    const MESURE_GIGAWATT_HOUR ='GWH';
-
     /**
      * name of unit of mesure
      * @var string
@@ -79,7 +64,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     static public function createUnityTerraWatt(){
-        return new UnitOfMesure(UnitOfMesure::MESURE_TERAWATT, "teraWatt");
+        return new UnitOfMesure(ConstantUtils::TERAWATT, "teraWatt");
     }
 
     /**
@@ -87,7 +72,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     static public function  createUnityGigaWatt(){
-        return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT, "Gigawatt");
+        return new UnitOfMesure(ConstantUtils::GIGAWATT, "Gigawatt");
     }
 
     /**
@@ -95,7 +80,7 @@ class UnitOfMesure
      * @return UnitOfMesure
      */
     static public  function  getUnityGigaWattHour(){
-        return new UnitOfMesure(UnitOfMesure::MESURE_GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
+        return new UnitOfMesure(ConstantUtils::GIGAWATT_HOUR, "La consommation en gigawatt pendant une heure");
     }
 
     /**
@@ -103,7 +88,7 @@ class UnitOfMesure
      * @return bool
      */
     public function isTerraWatt(){
-        return $this->name == UnitOfMesure::MESURE_TERAWATT;
+        return $this->name == ConstantUtils::TERAWATT;
     }
 
     /**
@@ -111,6 +96,6 @@ class UnitOfMesure
      * @return bool
      */
     public function isGigaWatt(){
-        return $this->name == UnitOfMesure::MESURE_GIGAWATT;
+        return $this->name == ConstantUtils::GIGAWATT;
     }
 }
