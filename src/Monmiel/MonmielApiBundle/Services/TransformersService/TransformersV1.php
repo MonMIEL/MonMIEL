@@ -4,7 +4,7 @@ namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
-use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersInterface;
+use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 use Monmiel\MonmielApiModelBundle\Model\AskUser;
@@ -13,7 +13,7 @@ use Monmiel\MonmielApiModelBundle\Model\Year;
 /**
  * @DI\Service("monmiel.transformers.service")
  */
-class TransformersV1 implements TransformersInterface
+class TransformersV1 implements TransformersServiceInterfaceV1
 {
 
     /**
