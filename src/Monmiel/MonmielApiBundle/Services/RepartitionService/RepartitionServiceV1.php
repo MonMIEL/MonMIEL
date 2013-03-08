@@ -17,7 +17,7 @@ public   $nb=0;
      * @DI\Inject("monmiel.transformers.service")
      * @var \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1 $transformers
      */
-    public $transformers;
+   // public $transformers;
 
         /**
      * @DI\Inject("monmiel.facility.service")
@@ -28,7 +28,12 @@ public   $nb=0;
     private $coeffToUseYarly; // for computing theoric consumption
 
     private $coeffPerEnergy; //for each type of energy a specific value
-
+    /**
+     * Injection of the RiakDao
+     * @DI\Inject("monmiel.dao.riak")
+     * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
+     */
+    public $riakDao;
 
     /**
      * Toutes ces informations sont fournies par ?
@@ -56,7 +61,7 @@ public   $nb=0;
      */
     public function getReferenceDay($dayNumber)
     {
-        return $this->transformers->get($dayNumber);
+        return $this->riakDao->getDayConso($dayNumber);
     }
 
     /**
@@ -100,8 +105,8 @@ public   $nb=0;
     private function  computeMixedTargetDailyConsumption($dayNumber)
 
     {
-        $this->transformers->setConsoActuel(new Mesure(700));
-        $this->transformers->setConsoTotalDefinedByUser(new Mesure(800));
+       // $this->transformers->setConsoActuel(new Mesure(700));
+        //$this->transformers->setConsoTotalDefinedByUser(new Mesure(800));
         $dayRetrieved = $this->getReferenceDay($dayNumber);
 
         $this->computeCoeffDailyMix(); //to do once
@@ -117,7 +122,7 @@ public   $nb=0;
             $computedQuarter = $this->updateQuarter($quarter);
             $capacityQuarter = $this->computeProductionCapacity($quarter);
             $computedDayQuarters[] = $computedQuarter;
-            $this->facilityService->submitQuarters($computedQuarter); //callback to parc method
+            $this->facilityService->submitQuarters(123); //callback to parc method
         }
 
         $dayRetrieved->setQuarters($computedDayQuarters);
@@ -193,7 +198,7 @@ public   $nb=0;
      * @param $simulated \Monmiel\MonmielApiModelBundle\Model\Quarter
      * @param $capacity \Monmiel\MonmielApiModelBundle\Model\Quarter
      */
-    private function computeDifferenceBetweenSimulatedAndCapacity($simulated, $capacity)
+    public function computeDifferenceBetweenSimulatedAndCapacity($simulated, $capacity)
     {
         /**
          * @var \Monmiel\MonmielApiModelBundle\Model\Quarter
@@ -263,7 +268,9 @@ public   $nb=0;
      * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
      */
     private function computeProductionCapacity($quarter){
-        $quarterUpdated = $quarter;
+
+        return $quarter;
+        /*$quarterUpdated = $quarter;
 
         $powerTargetYear = $this->transformers->getPowerTargetYear();
         $powerReferencedYear = $this->transformers->getPowerReferencedYear();
@@ -278,6 +285,6 @@ public   $nb=0;
         $quarterUpdated->setProductionCapacityNuclear($nuclearProductionCapacity);
         $quarterUpdated->setProductionCapacityHydraulic($hydraulicProductionCapacity);
 
-        return $quarterUpdated;
+        return $quarterUpdated;*/
     }
 }
