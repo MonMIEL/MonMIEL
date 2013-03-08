@@ -19,9 +19,9 @@ class Eolien
     const PUISSANCEUNITAIRE=1.5;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct($loadFactor=1, $uptimeRate=0.98,$power=0){
+    public function __construct($loadFactor=1, $availabilityRate=0.98,$power=0){
         $this->fc_eolien=$loadFactor;
-        $this->td_eolien=$uptimeRate;
+        $this->td_eolien=$availabilityRate;
         $this->power_eolien=$power;
     }
 
