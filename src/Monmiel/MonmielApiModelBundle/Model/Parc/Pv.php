@@ -21,10 +21,10 @@ class Pv
     const PUISSANCEUNITAIRE=0.001;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct(){
-        $this->fc_pv=1;
-        $this->td_pv=1;
-        $this->power_Pv=0;
+    public function __construct($loadFactor=1, $availabilityRate=1,$power=0){
+        $this->fc_pv=$loadFactor;
+        $this->td_pv=$availabilityRate;
+        $this->power_Pv=$power;
     }
 
     public function setPowerPv($PowerPv){

@@ -10,6 +10,13 @@ namespace Monmiel\MonmielApiModelBundle\Model\Parc;
  */
 class Flamme
 {
+    /**
+     * @var $max_Flamme Float
+     * @var $fc_Flamme Float
+     * @var $td_Flamme Float
+     * @var $power_Flamme Float
+     * @var $parc_Flamme Float
+     */
     private $max_Flamme;
     private $fc_Flamme;
     private $td_Flamme;
@@ -20,11 +27,11 @@ class Flamme
     const PUISSANCEUNITAIRE=500;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct(){
-        $this->fc_Flamme=1;
-        $this->td_Flamme=1;
+    public function __construct($loadFactor=1, $availabilityRate=0.95,$power=0){
+        $this->fc_Flamme=$loadFactor;
+        $this->td_Flamme=$availabilityRate;
         $this->max_Flamme=0;
-        $this->power_Flamme=0;
+        $this->power_Flamme=$power;
     }
 
     public function setMaxFlamme($maxFlamme){
@@ -41,7 +48,6 @@ class Flamme
         if(isset($fcFlamme)){
             $this->fc_Flamme=$fcFlamme;
         }
-
     }
 
     public function getFacteurChargeFlamme(){
@@ -52,7 +58,6 @@ class Flamme
         if(isset($tdFlamme)){
             $this->td_Flamme=$tdFlamme;
         }
-
     }
 
     public function getTauxDisponibiliteFlamme(){
@@ -60,7 +65,7 @@ class Flamme
     }
 
     public function setPowerFlamme(){
-        $this->power_Flamme=((($this->max_Flamme*4)/$this->td_Flamme)/$this->fc_Flamme);
+        $this->power_Flamme=(((($this->max_Flamme) * 4)/$this->td_Flamme)/$this->fc_Flamme);
     }
 
     public function getPowerFlamme(){
@@ -75,7 +80,7 @@ class Flamme
     }
 
     public function getParcFlamme(){
-        $this->parc_Flamme=( $this->puissance_Flamme/ self::PUISSANCEUNITAIRE );
+        $this->parc_Flamme=( $this->power_Flamme/ self::PUISSANCEUNITAIRE );
         return $this->parc_Flamme;
     }
 }
