@@ -1,5 +1,6 @@
 <?php
 namespace Monmiel\Utils;
+
 class ConstantUtils
 {
     /**
@@ -8,18 +9,48 @@ class ConstantUtils
     const TERAWATT = 'TW';
 
     /**
-     * terawatt unity
+     * terawatt hour unity
+     */
+    const TERAWATT_HOUR ='TWH';
+
+    /**
+     * GigaWatt unity
      */
     const GIGAWATT ='GW';
 
     /**
-     * terawatt unity
+     * GigaWatt Hour unity
      */
     const GIGAWATT_HOUR ='GWH';
 
     /**
-     * terawatt unity
+     * MegaWatt
      */
-    const TERAWATT_HOUR ='TWH';
+    const MEGAWATT ='MW';
 
+    /**
+     * MegaWatt Hour unity
+     */
+    const MEGAWATT_HOUR ='MWH';
+
+
+    /**
+     * KILOWatt
+     */
+    const KILOWATT ='KW';
+
+    /**
+     * Watt Hour
+     */
+    const KILOWATT_HOUR ='WH';
+
+    /**
+     * Watt
+     */
+    const WATT ='W';
+
+    /**
+     * Watt Hour
+     */
+    const WATT_HOUR ='WH';
 }

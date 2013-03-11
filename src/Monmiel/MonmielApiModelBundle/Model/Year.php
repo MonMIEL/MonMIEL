@@ -53,7 +53,7 @@ class Year
      */
     protected $solde;
 
-    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde,$consoTotaleGlobale)
+    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
     {
         $this->consoTotalEolien = $consoTotalEolien;
         $this->consoTotalFlamme = $consoTotalFlamme;
@@ -62,7 +62,7 @@ class Year
         $this->consoTotalPhotovoltaique = $consoTotalPhotovoltaique;
         $this->solde = $solde;
         $this->yearIdentifiant = $yearIdentifiant;
-        $this->consoTotalGlobale=$consoTotaleGlobale;
+        $this->consoTotalGlobale=$consoTotalEolien + $consoTotalFlamme + $consoTotalHydraulique + $consoTotalNucleaire + $consoTotalPhotovoltaique;
     }
 
     /**
