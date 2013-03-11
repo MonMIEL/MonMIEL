@@ -1,13 +1,7 @@
 <?php
 
 namespace Monmiel\MonmielApiModelBundle\Model\Parc;
-/**
- * Created by JetBrains PhpStorm.
- * User: Miage
- * Date: 04/03/13
- * Time: 17:05
- * To change this template use File | Settings | File Templates.
- */
+
 use Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Eolien;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic;
@@ -76,10 +70,10 @@ class Parc{
     }
 
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
-    public function getParc($mixFinal, $power){
+    public function getParc(){
+        $this->flamme->setPowerFlamme();
         //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
         //$this->DefineRate($mixFinal);
-        $this->setPowerForEachEnergy($power);
         //On recupere l'energie nécessaire pour chaque énergie
         $PuisNuc=$this->nucleaire->getPowerNuclear();
         $PuisEol=$this->eolien->getPowerEolien();
@@ -95,6 +89,7 @@ class Parc{
         $ParcHyd=$this->hydraulique->getParcHydraulic();
         $ParcPv=$this->pv->getParcPv();
         $ParcFlamme=$this->flamme->getParcFlamme();
+
         $ParcAut=null;
             //$this->autres->getParcAutre();
 

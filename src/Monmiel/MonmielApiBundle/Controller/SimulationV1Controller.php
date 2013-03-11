@@ -43,8 +43,17 @@ class SimulationV1Controller extends Controller
         $this->transformers->setReferenceYear($this->createRefYearObject());
         $this->transformers->setTargetYear($this->createTargetYearObject($request));
 
-        $this->repartition->computeCoeffDailyMix();
+        $targetParcPower = $this->parc->getPower($this->createTargetYearObject($request));
+        $refParcPower = $this->parc->getPower($this->createRefYearObject());
+        var_dump($refParcPower);exit;
+        $this->repartition->setReferenceYear($this->createRefYearObject($request));
+        $this->repartition->setTargetYear($this->createTargetYearObject($request));
+        $this->repartition->setReferenceParcPower($refParcPower);
+        $this->repartition->setTargetParcPower($targetParcPower);
+
         $day = $this->repartition->get(1);
+
+        $finaParc = $this->parc->getSimulatedParc();
 
 
         var_dump($day->getQuarter(1));
@@ -126,4 +135,10 @@ EOF;
      * @DI\Inject("monmiel.repartition.service")
      */
     public $repartition;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
+     * @DI\Inject("monmiel.facility.service")
+     */
+    public $parc;
 }

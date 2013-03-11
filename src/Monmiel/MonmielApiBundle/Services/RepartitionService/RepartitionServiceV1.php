@@ -72,7 +72,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $userMixDay = new Day();
 
         $this->setTargetParcPower($this->transformers->getPowerTarget());
-        $this->setReferenceYear($this->transformers->getPowerRef());
+        $this->setReferenceParcPower($this->transformers->getPowerRef());
 
         /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
         foreach ($referenceQuarters as $quarter) {
@@ -118,7 +118,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         }
 
         $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitQuarters($quarter);
+        $this->facilityService->submitQuarters($quarter->getFlamme());
 
         return $quarter;
     }
@@ -136,8 +136,8 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
-        $nuclearProductionCapacity = ($targetParcPower->getNuclear() / 4);
-        $hydraulicProductionCapacity = ($targetParcPower->getHydraulic() / 4);
+        $nuclearProductionCapacity = ($targetParcPower->getNuclear());
+        $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
         $maxProductionQuarter = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
         $maxProductionQuarter->setEolien($aeolianProductionCapacity);
