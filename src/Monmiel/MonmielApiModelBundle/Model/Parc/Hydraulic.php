@@ -28,7 +28,7 @@ class Hydraulic
 
     public function setPowerHydraulic($powerHydro){
         if(isset($powerHydro)){
-            $this->power_hydraulic=((($powerHydro*4)/$this->td_hydraulic)/$this->fc_hydraulic);
+            $this->power_hydraulic=$powerHydro/$this->fc_hydraulic;
         }
     }
 
@@ -57,7 +57,7 @@ class Hydraulic
     }
 
     public function getParcHydraulic(){
-        $this->parc_hydraulic=( $this->power_hydraulic/ self::PUISSANCEUNITAIRE );
+        $this->parc_hydraulic=( ($this->power_hydraulic/$this->td_hydraulic)/ self::PUISSANCEUNITAIRE );
         return $this->parc_hydraulic;
     }
 

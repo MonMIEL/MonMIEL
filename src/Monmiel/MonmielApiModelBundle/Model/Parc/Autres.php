@@ -62,7 +62,7 @@ class Autres
 
 
     public function getParcAutre(){
-        $this->parc_autre=( $this->power_autre/ self::PUISSANCEUNITAIRE );
+        $this->parc_autre=( ($this->power_autre/$this->td_autre)/ self::PUISSANCEUNITAIRE );
         return $this->parc_autre;
     }
 }

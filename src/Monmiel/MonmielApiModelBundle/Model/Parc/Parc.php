@@ -16,6 +16,7 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Autres;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Flamme;
 use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
+use Monmiel\MonmielApiModelBundle\Model\Year;
 use Monmiel\MonmielApiModelBundle\Model\Power;
 
 
@@ -61,13 +62,13 @@ class Parc{
 
     //Met a jour le facteur de charge et le taux de disponibilité pour le nucléaire, l'éolien, le pv et l'hydraulique en fonction du mix final
     protected function DefineRate($mixFinal){
-        $this->nucleaire->setFacteurChargeNuclear($mixFinal);
+        //$this->nucleaire->setFacteurChargeNuclear($mixFinal);
         $this->eolien->setFacteurChargeEolien($mixFinal);
         $this->pv->setFacteurChargePv($mixFinal);
         $this->hydraulique->setFacteurChargeHydraulique($mixFinal);
         $this->flamme->setFacteurChargeFlamme($mixFinal);
 
-        $this->nucleaire->setTauxDisponibiliteNuclear($mixFinal);
+        //$this->nucleaire->setTauxDisponibiliteNuclear($mixFinal);
         $this->eolien->setTauxDisponibiliteEolien($mixFinal);
         $this->pv->setTauxDisponibilitePv($mixFinal);
         $this->hydraulique->setTauxDisponibiliteHydraulique($mixFinal);
@@ -77,10 +78,10 @@ class Parc{
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
     public function getParc($mixFinal, $power){
         //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
-        $this->DefineRate($mixFinal);
+        //$this->DefineRate($mixFinal);
         $this->setPowerForEachEnergy($power);
         //On recupere l'energie nécessaire pour chaque énergie
-        $PuisNuc=$this->nucleaire->getFacteurChargeNuclear();
+        $PuisNuc=$this->nucleaire->getPowerNuclear();
         $PuisEol=$this->eolien->getPowerEolien();
         $PuisHyd=$this->hydraulique->getPowerHydraulic();
         $PuisPv=$this->pv->getPowerPv();
@@ -98,24 +99,39 @@ class Parc{
             //$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
-        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisFlamme,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
+        $newParc=new ParcFinal(($PuisNuc/$this->nucleaire->getTauxDisponibiliteNuclear()),($PuisEol/$this->eolien->getTauxDisponibiliteEolien()),($PuisHyd/$this->hydraulique->getTauxDisponibiliteHydraulique()),($PuisPv/$this->pv->getTauxDisponibilitePv()),($this->flamme->getTauxDisponibiliteFlamme()),($PuisAut/$this->autres->getTauxDisponibiliteAutre()),$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
         return $newParc;
+    }
+
+    private function calculateWattHour2Power($wattHour){
+
+        return $wattHour/(365*24);
     }
 
 
     //Define the power of Nuclear, PV, Wind, Photovoltaic
     /**
-     * @param $power Power
+     * @param $year Year
      */
-    public function setPowerForEachEnergy($power){
-        $this->nucleaire->setPowerNuclear($power->getNuclear());
-        $this->eolien->setPowerEolien($power->getWind());
-        $this->pv->setPowerPv($power->getPhotovoltaic());
-        $this->hydraulique->setPowerHydraulic($power->getHydraulic());
+    public function setPowerForEachEnergy($year){
+
+        $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire()),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()));
+        $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien()));
+        $this->pv->setPowerPv($this->calculateWattHour2Power($year->getConsoTotalPhotovoltaique()));
+        $this->hydraulique->setPowerHydraulic($this->calculateWattHour2Power($year->getConsoTotalHydraulique()));
         $this->flamme->setPowerFlamme();
         //$this->autres->setPowerAutre($power->getOther());
 
     }
+
+    /**
+     *
+     */
+    public function getPower(){
+        return new Power(0,$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
+    }
+
+
 
 
 

@@ -5,6 +5,7 @@ namespace Monmiel\MonmielApiBundle\Services\FacilityService;
 use JMS\DiExtraBundle\Annotation as DI;
 use Monmiel\MonmielApiModelBundle\Event\NewDayEvent;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Parc;
+use Monmiel\MonmielApiModelBundle\Model\Year;
 
 /**
  * @DI\Service("monmiel.facility.service")
@@ -33,4 +34,19 @@ class ComputeFacilityService implements FacilityServiceInterface
         $parcFinal=$parc->getParc($mixFinal,$power);
         return $parcFinal;
     }
+
+
+/**
+ * @param $year Year
+ * @return \Monmiel\MonmielApiModelBundle\Model\Power
+ */
+
+public function getPower($year)
+{
+    // return an object power calculated
+    $parc=Parc::getInstance();
+    $parc->setPowerForEachEnergy($year);
+    return $parc->getPower();
+}
+
 }
