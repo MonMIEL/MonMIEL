@@ -8,7 +8,7 @@ use \Monmiel\MonmielApiModelBundle\Model\Quarter;
 use \Monmiel\MonmielApiModelBundle\Model\Day;
 
 /**
- * @DI\Service("monmiel.transformers.service")
+ * @DI\Service("monmiel.transformers.serviceV2")
  */
 class TransformersV2 implements TransformerServiceInterface
 {

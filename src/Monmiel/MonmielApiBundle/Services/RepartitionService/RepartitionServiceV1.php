@@ -121,8 +121,10 @@ public   $nb=0;
         foreach ($currentDayQuarters as $quarter) {
             $computedQuarter = $this->updateQuarter($quarter);
             $capacityQuarter = $this->computeProductionCapacity($quarter);
+            $computedQuarter=$this->computeDifferenceBetweenSimulatedAndCapacity($computedQuarter,$capacityQuarter);
+
             $computedDayQuarters[] = $computedQuarter;
-            $this->facilityService->submitQuarters(123); //callback to parc method
+            $this->facilityService->submitQuarters($computedQuarter->getFlamme()); //callback to parc method
         }
 
         $dayRetrieved->setQuarters($computedDayQuarters);
@@ -253,6 +255,8 @@ public   $nb=0;
      */
     private function copyQuarter($quarterToCopy)
     {
+
+    //    echo "copying quarter";
         $quarterToCopy->setEolien(0);
         $quarterToCopy->setFlamme(0);
         $quarterToCopy->setNucleaire(0);
