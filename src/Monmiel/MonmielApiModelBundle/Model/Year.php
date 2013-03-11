@@ -44,6 +44,8 @@ class Year
      */
     protected $consoTotalFlamme;
 
+    protected $consoTotalGlobale;
+
 
     /**
      * sold of year
@@ -51,7 +53,7 @@ class Year
      */
     protected $solde;
 
-    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
+    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde,$consoTotaleGlobale)
     {
         $this->consoTotalEolien = $consoTotalEolien;
         $this->consoTotalFlamme = $consoTotalFlamme;
@@ -60,6 +62,7 @@ class Year
         $this->consoTotalPhotovoltaique = $consoTotalPhotovoltaique;
         $this->solde = $solde;
         $this->yearIdentifiant = $yearIdentifiant;
+        $this->consoTotalGlobale=$consoTotaleGlobale;
     }
 
     /**
@@ -119,6 +122,16 @@ class Year
     }
 
     /**
+     * @param float $consoTotalGlobale
+     */
+    public function setConsoTotalGlobale($consoTotalGlobale)
+    {
+        $this->consoTotalGlobale = $consoTotalGlobale;
+    }
+
+
+
+    /**
      * @return float
      */
     public function getConsoTotalFlamme()
@@ -156,5 +169,14 @@ class Year
     public function getSolde()
     {
         return $this->solde;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getConsoTotalGlobale()
+    {
+        return $this->consoTotalGlobale;
     }
 }
