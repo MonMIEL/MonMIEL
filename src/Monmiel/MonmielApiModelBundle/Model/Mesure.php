@@ -42,7 +42,7 @@ class Mesure
      * @return bol
      */
     static function isEqualsMesure($mesureA, $mesureB){
-        return $mesureA->getUnitOfMesure()->getName() == $mesureB->getUnitOfMesure()->getName();
+        return true;
     }
 
     /**
@@ -102,7 +102,7 @@ class Mesure
                     $coeff = 1000/365*24;
                 }
                 //terraWattheure to WATT
-                else if($newUnitOfMesure == ConstantUtils::KILOWATTWATT){
+                else if($newUnitOfMesure == ConstantUtils::KILOWATT){
                     $coeff = 1000000/365*24;
                 }
                 //terraWattheure to WATT
@@ -117,7 +117,7 @@ class Mesure
                     $coeff = 1/365*24;
                 }
                 //GIGAWattheure to WATT
-                else if($newUnitOfMesure == ConstantUtils::KILOWATTWATT){
+                else if($newUnitOfMesure == ConstantUtils::KILOWATT){
                     $coeff = 1000/365*24;
                 }
                 //GIGAWattheure to WATT

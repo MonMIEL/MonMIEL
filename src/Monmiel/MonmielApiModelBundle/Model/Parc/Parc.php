@@ -41,7 +41,6 @@ class Parc{
     public static function getInstance() {
         if(is_null(self::$instance)) {
             self::$instance = new Parc();
-            echo 'Creation du parc initial';
         }
         return self::$instance;
     }

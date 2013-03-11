@@ -65,7 +65,7 @@ class Flamme
     }
 
     public function setPowerFlamme(){
-        $this->power_Flamme=(($this->max_Flamme) * 4);
+        $this->power_Flamme=(($this->max_Flamme));
     }
 
     public function getPowerFlamme(){
