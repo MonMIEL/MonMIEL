@@ -99,7 +99,7 @@ class Parc{
             //$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
-        $newParc=new ParcFinal(($PuisNuc/$this->nucleaire->getTauxDisponibiliteNuclear()),($PuisEol/$this->eolien->getTauxDisponibiliteEolien()),($PuisHyd/$this->hydraulique->getTauxDisponibiliteHydraulique()),($PuisPv/$this->pv->getTauxDisponibilitePv()),($this->flamme->getTauxDisponibiliteFlamme()),($PuisAut/$this->autres->getTauxDisponibiliteAutre()),$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
+        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisFlamme,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
         return $newParc;
     }
 
