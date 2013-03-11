@@ -19,37 +19,29 @@ class TransformersV2 implements TransformerServiceInterface
    */
   public $riakDao;
 
-   /**
-   * default year reference
-   */
-    const defaultYearReferece = 2011;
   /**
    * @var
    */
   private $yearDataDefineByUser;
 
-  private $yearReference;
-
-
-  public function setYearReference($yearReference)
-    {
-        $this->yearReference = $yearReference;
-    }
-
-    public function getYearReference()
-    {
-        if($this->yearReference == null)
-            return TransformersV2::defaultYearReferece;
-        return $this->yearReference;
-    }
-
     /**
+     * @var Year
+     */
+    private $yearReference;
+
+
+   public function setYearReference($yearReference)
+   {
+        $this->yearReference = $yearReference;
+   }
+
+   /**
     * @param  $yearDataDefineByUser
     */
-    public function setYearDataDefineByUser($yearDataDefineByUser)
-    {
-        $this->yearDataDefineByUser = $yearDataDefineByUser;
-    }
+   public function setYearDataDefineByUser($yearDataDefineByUser)
+   {
+     $this->yearDataDefineByUser = $yearDataDefineByUser;
+   }
 
     /**
      * @return
@@ -66,5 +58,6 @@ class TransformersV2 implements TransformerServiceInterface
      */
     public function  getConsoTotalForYearReference()
     {
-        // TODO: Implement getConsoTotalForYearReference() method.
-    }}
+       $this->getYearReference();
+    }
+}
