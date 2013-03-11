@@ -24,7 +24,7 @@ class Day
      */
     protected $quarters;
 
-    function __construct($dateTime, $quarters = array())
+    function __construct($dateTime = null, $quarters = array())
     {
         $this->dateTime = $dateTime;
         $this->quarters = $quarters;

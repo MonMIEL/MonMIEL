@@ -21,8 +21,6 @@ class AskUser
      */
     protected $flame;
 
-
-
     /**
      * @var float
      * @Ser\Type("float")
