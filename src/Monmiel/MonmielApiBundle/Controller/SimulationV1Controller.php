@@ -7,18 +7,59 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Monmiel\MonmielApiModelBundle\Model\Mesure;
+use Monmiel\MonmielApiModelBundle\Model\UnitOfMesure;
+use Monmiel\MonmielApiModelBundle\Model\Year;
 /**
  * @DI\Service("monmiel.simulation.controller")
  */
 class SimulationV1Controller extends Controller
 {
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function sendSimulationResult(HttpRequest $request)
     {
         $response = new Response();
-        $response->setContent($this->getContent());
+        $this->init($request);
+//        $response->setContent($this->getContent());
         return $response;
     }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function init(HttpRequest $request)
+    {
+        $userConsoMesure = new Mesure(650);
+        $userConsoMesure->setUnitOfMesure(UnitOfMesure::createUnityTerraWatt());
+        $actualConsoMesure = new Mesure(600);
+        $actualConsoMesure->setUnitOfMesure(UnitOfMesure::createUnityTerraWatt());
+
+        $this->transformers->setConsoTotalActuel($actualConsoMesure);
+        $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
+        $this->transformers->setReferenceYear($this->createRefYearObject());
+        $this->transformers->setTargetYear($this->createTargetYearObject($request));
+
+        $this->repartition->computeCoeffDailyMix();
+        $day = $this->repartition->get(1);
+
+
+        var_dump($day->getQuarter(1));
+    }
+
+    public function createTargetYearObject(HttpRequest $request)
+    {
+//        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
+        return new Year(2050, 1679207799, 4514598, 4966116, 0, 151998661, 0);
+    }
+
+     public function createRefYearObject()
+     {
+         return new Year(2011, 1679207799, 4514598, 4966116, 0, 151998661, 0);
+     }
 
     public function getContent()
     {
@@ -73,4 +114,16 @@ EOF;
         return $content;
 
     }
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1
+     * @DI\Inject("monmiel.transformers.v1.service")
+     */
+    public $transformers;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1 $repartition
+     * @DI\Inject("monmiel.repartition.service")
+     */
+    public $repartition;
 }

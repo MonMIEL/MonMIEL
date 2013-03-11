@@ -8,7 +8,7 @@ use \Monmiel\MonmielApiModelBundle\Model\Quarter;
 use \Monmiel\MonmielApiModelBundle\Model\Day;
 
 /**
- * @DI\Service("monmiel.transformers.service")
+ * @DI\Service("monmiel.transformers.v2.service")
  */
 class TransformersV2 implements TransformerServiceInterface
 {
@@ -30,54 +30,8 @@ class TransformersV2 implements TransformerServiceInterface
 
   private $yearReference;
 
-  /**
-  * @return Year
-  */
-  public function  getConsoTotalForYearReference()
-    {
-    /**
-     * the current reference year, default 2011 or 2012
-     * @var $yearReference Year
-     */
-    $yearReference;
 
-    /**
-     * @var $consoTotalNucleaire float
-     * @var $consoTotalEolien float
-     * @var $consoTotalPhotovoltaique float
-     * @var $consoTotalFlamme float
-     * @var $consoTotalHydraulique float
-     */
-    $consoTotalNucleaire; $consoTotalEolien;$consoTotalPhotovoltaique; $consoTotalFlamme; $consoTotalHydraulique;
-    for($i = 1; $i<365; $i++){
-        $dao = $this->getContainer()->get("monmiel.dao.riak");
-        /**
-         * @var $day Day
-         */
-        $day = $dao->getDayConso($i);
-        /**
-         * @var $quarter Quarter
-         */
-        foreach ($day->getQuarters() as $quarter) {
-            $consoTotalNucleaire = $consoTotalEolien + $quarter->getNucleaire();
-            $consoTotalEolien = $consoTotalEolien + $quarter->getEolien();
-            $consoTotalPhotovoltaique = $consoTotalPhotovoltaique + $quarter->getPhotovoltaique();
-            $consoTotalHydraulique = $consoTotalHydraulique + $quarter->getHydraulique();
-            $consoTotalFlamme = $consoTotalFlamme + $quarter->getFlamme();
-        }
-    }
-    return new Year($this->getYearReference(),$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, null);
-   }
-
-   /**
-   * @param \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
-   */
-    public function setRiakDao($riakDao)
-    {
-        $this->riakDao = $riakDao;
-    }
-
-    public function setYearReference($yearReference)
+  public function setYearReference($yearReference)
     {
         $this->yearReference = $yearReference;
     }
@@ -104,4 +58,13 @@ class TransformersV2 implements TransformerServiceInterface
     {
         return $this->yearDataDefineByUser;
     }
-}
+
+    /**
+     * get the total consummation for the different Energy for year reference, eg conso 2011
+     *
+     * @return Year
+     */
+    public function  getConsoTotalForYearReference()
+    {
+        // TODO: Implement getConsoTotalForYearReference() method.
+    }}
