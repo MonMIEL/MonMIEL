@@ -24,15 +24,10 @@ class Mesure
      * constructor using the default unitOfMesure
      * @param $value float
      */
-    function __construct($value, $unitOfMesure = null)
+    function __construct($value,$unitOfMesure)
     {
         $this->value = $value;
-
-        if(isset($unitOfMesure)){
-            $this->unitOfMesure = $this->getDefaultUnitOfMesure();
-        }else{
-           $this->unitOfMesure = $unitOfMesure;
-        }
+        $this->setUnitOfMesure($unitOfMesure);
     }
 
     /**
@@ -42,7 +37,13 @@ class Mesure
      * @return bol
      */
     static function isEqualsMesure($mesureA, $mesureB){
-        return $mesureA->getUnitOfMesure()->getName() == $mesureB->getUnitOfMesure()->getName();
+        /**
+         * @var $bol bool
+         */
+        $bol = true;
+        $bol = $bol && ($mesureA->getUnitOfMesure() == $mesureB->getUnitOfMesure());
+        $bol = $bol && ($mesureA->getValue() == $mesureB->getValue());
+        return $bol;
     }
 
     /**
@@ -68,14 +69,32 @@ class Mesure
             {
                 //terrawatt to gigawatt
                 if($newUnitOfMesure == ConstantUtils::GIGAWATT){
-                    echo("_____________________________________ HERE_______________________");
                     //convert Terrawatt to Gigawatt
                     $coeff = 1000;
+                }
+                else if($newUnitOfMesure == ConstantUtils::MEGAWATT){
+                    //convert Terrawatt to megawatt
+                    $coeff = 1000000;
+                }
+                else if($newUnitOfMesure == ConstantUtils::KILOWATT){
+                    //convert Terrawatt to KILOWATT
+                    $coeff = 1000000000;
                 }
                 //terrawatt to watt
                 else if($newUnitOfMesure == ConstantUtils::WATT){
                     //convert Terrawatt to watt
-                    $coeff = 1000000;
+                    $coeff = 1000000000000;
+                }
+                //terrawatt to terrawattHeure
+                else if($newUnitOfMesure == ConstantUtils::TERAWATT_HOUR){
+                    $coeff = 365*24;
+                }
+                //terawatt to gigawattHeure
+                else if($newUnitOfMesure == ConstantUtils::GIGAWATT_HOUR){
+                    $coeff = 365*24/1000;
+                }
+                else{
+                    //NotImplementedException
                 }
             }
             else if($mesureToConvert->isGigaWatt())
@@ -85,10 +104,26 @@ class Mesure
                     //convert Terrawatt to Gigawatt
                     $coeff = 1/1000;
                 }
+                //GIGAWATT to MEGAWATT
+                else if($newUnitOfMesure == ConstantUtils::MEGAWATT){
+                    //convert Terrawatt to megawatt
+                    $coeff = 1000;
+                }
+                //gigawatt to gigawattHeure
+                else if($newUnitOfMesure == ConstantUtils::GIGAWATT_HOUR){
+                    $coeff = 365*24;
+                }
+                else if($newUnitOfMesure == ConstantUtils::KILOWATT){
+                    //convert Terrawatt to KILOWATT
+                    $coeff = 1000000;
+                }
                 //gigawatt to watt
                 else if($newUnitOfMesure == ConstantUtils::WATT){
                     //convert Terrawatt to watt
-                    $coeff = 1000000;
+                    $coeff = 1000000000;
+                }
+                else{
+                    //NotImplementedCodeException
                 }
             }
             else if($mesureToConvert->isTerraWattHeure())
@@ -109,6 +144,9 @@ class Mesure
                 else if($newUnitOfMesure == ConstantUtils::WATT){
                     $coeff = 1000000000/365*24;
                 }
+                else{
+                    //NotImplementedException
+                }
             }
             else if($mesureToConvert->isGigaWattHour())
             {
@@ -124,21 +162,14 @@ class Mesure
                 else if($newUnitOfMesure == ConstantUtils::WATT){
                     $coeff = 1000000/365*24;
                 }
-            }
-            else if($mesureToConvert->isWatt())
-            {
-                //...
-            }
-            else if($mesureToConvert->isWattHour())
-            {
-                //...
+                else{
+                    //NotImplementedException
+                }
             }
             else{
                 //Not implemented code Exception
             }
         }
-        echo("------------- coefficient:".$coeff);
-        echo("------------- unit of mesure:".$newUnitOfMesure);
 
         $valueConverted = ($mesureToConvert->getValue())*$coeff;
 
@@ -179,7 +210,7 @@ class Mesure
      * return the default unitOfMesure
      */
     private function getDefaultUnitOfMesure(){
-        return \Monmiel\Utils\ConstantUtils::GIGAWATT;
+        return ConstantUtils::GIGAWATT;
     }
 
     /**
@@ -207,6 +238,38 @@ class Mesure
     }
 
     /**
+     * this method return true if the current unity is a Megawatt
+     * @return bool
+     */
+    public function isMegaWatt(){
+        return $this->getUnitOfMesure() == ConstantUtils::MEGAWATT;
+    }
+
+    /**
+     * this method return true if the current unity is a MegawattHeure
+     * @return bool
+     */
+    public function isMegaWattHour(){
+        return $this->getUnitOfMesure() == ConstantUtils::MEGAWATT_HOUR;
+    }
+
+    /**
+     * this method return true if the current unity is a killowatt
+     * @return bool
+     */
+    public function isKiloWatt(){
+        return $this->getUnitOfMesure() == ConstantUtils::KILOWATT;
+    }
+
+    /**
+     * this method return true if the current unity is a MegawattHeure
+     * @return bool
+     */
+    public function isKiloWattHour(){
+        return $this->getUnitOfMesure() == ConstantUtils::KILOWATT_HOUR;
+    }
+
+    /**
      * this method return true if the current unity is a Gigawatt
      * @return bool
      */
@@ -228,5 +291,16 @@ class Mesure
      */
     public function isWattHour(){
         return $this->getUnitOfMesure() == ConstantUtils::WATT_HOUR;
+    }
+
+    /**
+     *@var $mesureA Mesure
+     *@var $mesureB Mesure
+     *@return bool
+     */
+    static public function isCompatible($mesureA, $mesureB)
+    {
+        return ($mesureA->getUnitOfMesure() == $mesureB->getUnitOfMesure());
+
     }
 }
