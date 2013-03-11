@@ -227,7 +227,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     /**
      *  Get the power of each type energy for target year
      * @return \Monmiel\MonmielApiModelBundle\Model\Power
-     */
+
     public function getPowerTarget()
     {
       // return an object power calculated
@@ -242,6 +242,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
            $this->calculateWattHour2Power($this->askUser->getWind())
            );
     }
+     * */
 
 
     /**
@@ -249,6 +250,23 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      * @param $wattHour float  megawatt hour
      * return float   megawatt
      */
+
+    public function getPowerTarget()
+    {
+        // return an object power calculated
+        return new \Monmiel\MonmielApiModelBundle\Model\Power(
+            $this->calculateWattHour2Power($this->askUser->getFlame()),
+            $this->calculateWattHour2Power($this->askUser->getHydraulic()),
+            $this->calculateWattHour2Power($this->askUser->getImport()),
+            $this->calculateWattHour2Power($this->askUser->getNuclear()),
+            $this->calculateWattHour2Power($this->askUser->getOther()),
+            $this->calculateWattHour2Power($this->askUser->getPhotovoltaic()),
+            $this->calculateWattHour2Power($this->askUser->getStep()),
+            $this->calculateWattHour2Power($this->askUser->getWind())
+        );
+    }
+
+
     private function calculateWattHour2Power($wattHour){
 
       return $wattHour/(365*24);
