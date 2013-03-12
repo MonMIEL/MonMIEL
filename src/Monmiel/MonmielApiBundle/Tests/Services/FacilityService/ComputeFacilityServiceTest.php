@@ -52,7 +52,7 @@ class ComputeFacilityServiceTest extends BaseTestCase
         $repartionService = $this->getRepartionMock();
         $repartionService->expects($this->once())
                          ->will($this->returnValue($day));
-        $this->facilityService->set
+        echo "toto";
     }
 
     public function getRepartionMock()

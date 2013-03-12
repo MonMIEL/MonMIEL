@@ -1,5 +1,5 @@
 monmiel_api_simulation:
-    pattern: /v1/{power}.json
+    pattern: /v1/{targetConso}.json
     defaults:
         _controller: monmiel.simulation.controller:sendSimulationResult
         _format: json
