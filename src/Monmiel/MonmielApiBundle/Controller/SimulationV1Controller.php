@@ -26,11 +26,12 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-
-        for ($i = 1; $i < 100; $i++) {
+        $this->stopWatch->start("boucle", "controller");
+        for ($i = 1; $i < 10; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
+        $this->stopWatch->stop("boucle");
         $finaParc = $this->parc->getSimulatedParc();
         $result->setFinalParcPower($finaParc);
         $parc = $this->repartition->getTargetParcPower();
@@ -48,6 +49,7 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request = null)
     {
+        $this->stopWatch->start("init", "controller");
         $userConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
         $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
 
@@ -62,6 +64,7 @@ class SimulationV1Controller extends Controller
         $this->repartition->setTargetYear($this->createTargetYearObject($request));
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
+        $this->stopWatch->stop("init");
     }
 
     public function createTargetYearObject(HttpRequest $request = null)
@@ -146,4 +149,10 @@ EOF;
      * @DI\Inject("monmiel.facility.service")
      */
     public $parc;
+
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
 }
