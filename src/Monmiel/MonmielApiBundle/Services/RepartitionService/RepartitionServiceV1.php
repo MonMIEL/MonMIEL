@@ -222,14 +222,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * Updating values with quarter
      * @param $quarter Quarter
      */
-    private function updateYearComputed($quarter)
+    private function updateYearComputed($quarter,$coeff=4)
     {
 
-        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()+$this->yearComputed->getConsoTotalEolien());
-        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()+$this->yearComputed->getConsoTotalFlamme());
-        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()+$this->yearComputed->getConsoTotalHydraulique());
+        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
+        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()/$coeff+$this->yearComputed->getConsoTotalFlamme());
+        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()/$coeff+$this->yearComputed->getConsoTotalHydraulique());
         $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()+$this->yearComputed->getConsoTotalNucleaire());
-        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()+$this->yearComputed->getConsoTotalPhotovoltaique());
+        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()/$coeff+$this->yearComputed->getConsoTotalPhotovoltaique());
 
     }
 
