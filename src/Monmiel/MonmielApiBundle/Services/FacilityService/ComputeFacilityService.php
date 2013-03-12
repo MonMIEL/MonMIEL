@@ -31,7 +31,7 @@ class ComputeFacilityService implements FacilityServiceInterface
     public function getSimulatedParc($year)
     {
         $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc();
+        $parcFinal=$parc->getParc($year);
         return $parcFinal;
     }
 
