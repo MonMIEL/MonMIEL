@@ -25,7 +25,6 @@ class ParcFinal
         $this->ParcHydraulique=$ParcHydraulique;
         $this->ParcFlamme= $ParcFlamme;
         $this->ParcAutres= $ParcAutres;
-        echo 'Creation of final parc';
     }
 
     public function getParcNucleaire(){

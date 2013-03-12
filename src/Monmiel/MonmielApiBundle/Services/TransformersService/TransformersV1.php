@@ -170,16 +170,6 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     }
 
     /**
-     * This method use for the calculate from megawatt hour to Power
-     * @param $wattHour float  megawatt hour
-     * return float   megawatt
-     */
-    private function calculateWattHour2Power($wattHour){
-
-      return $wattHour/(365*24);
-    }
-
-    /**
      * @param \Monmiel\MonmielApiModelBundle\Model\Year $referenceYear
      */
     public function setReferenceYear($referenceYear)
