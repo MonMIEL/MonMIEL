@@ -78,6 +78,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         return $userMixDay;
     }
 
+
     /**
      * @param $quarter Quarter
      * @return Quarter
@@ -203,5 +204,37 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     public function getReferenceParcPower()
     {
         return $this->referenceParcPower;
+    }
+
+    /**
+     * @param \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     */
+    public function setFacilityService($facilityService)
+    {
+        $this->facilityService = $facilityService;
+    }
+
+    /**
+     * @return \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService
+     */
+    public function getFacilityService()
+    {
+        return $this->facilityService;
+    }
+
+    /**
+     * @param \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1 $transformers
+     */
+    public function setTransformers($transformers)
+    {
+        $this->transformers = $transformers;
+    }
+
+    /**
+     * @return \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1
+     */
+    public function getTransformers()
+    {
+        return $this->transformers;
     }
 }
