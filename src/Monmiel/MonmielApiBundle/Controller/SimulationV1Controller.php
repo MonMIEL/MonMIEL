@@ -27,7 +27,7 @@ class SimulationV1Controller extends Controller
 
         $result = new SimulationResultSeries();
         $this->stopWatch->start("boucle", "controller");
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 365; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
