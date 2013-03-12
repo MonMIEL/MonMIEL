@@ -26,20 +26,21 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < 365; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
-        $finaParc = $this->parc->getSimulatedParc();
-        $result->setFinalParcPower($finaParc);
-        $result->setTargetParcPower($this->repartition->getTargetParcPower());
-        var_dump($finaParc);exit;
+//        $finaParc = $this->parc->getSimulatedParc()
+//        $result->setFinalParcPower($finaParc);
+        $parc = $this->repartition->getTargetParcPower();
+        $result->setTargetParcPower($parc);
+        $result->setFinalParcPower($parc);
         $response = new Response();
-        $json = json_encode($result->getSeries());
+        $json = $this->serializer->serialize($result, "json");
         $response->setContent($json);
         $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->send();
+
+        return $response;
     }
 
     /**
@@ -47,26 +48,34 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request = null)
     {
-        $userConsoMesure = new Mesure(478, 'GW');
-        $actualConsoMesure = new Mesure(478, 'GW');
+        $this->stopWatch->start("init", "controller");
+        $userConsoMesure = new Mesure($request->get("targetConso"), \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+        $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
-        $this->transformers->setReferenceYear($this->createRefYearObject());
-        $this->transformers->setTargetYear($this->createTargetYearObject($request));
 
-        $targetParcPower = $this->parc->getPower($this->createTargetYearObject($request));
-        $refParcPower = $this->parc->getPower($this->createRefYearObject());
-        $this->repartition->setReferenceYear($this->createRefYearObject($request));
-        $this->repartition->setTargetYear($this->createTargetYearObject($request));
+        $refYear = $this->createRefYearObject();
+        $targetYear = $this->createTargetYearObject($request);
+
+        $this->transformers->setReferenceYear($refYear);
+        $this->transformers->setTargetYear($targetYear);
+
+        $targetParcPower = $this->parc->getPower($targetYear);
+        $refParcPower = $this->parc->getPower($refYear);
+        $this->repartition->setReferenceYear($refYear);
+        $this->repartition->setTargetYear($targetYear);
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
+        $this->stopWatch->stop("init");
     }
 
     public function createTargetYearObject(HttpRequest $request = null)
     {
-//        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
-        return new Year(2050, 1679207799/4, 4514598/4, 4966116/4, 0/4, 151998661/4, 0);
+        $totalNuclear = $request->get("nuke") * 1000000;
+        $totalPhoto = $request->get("photo") * 1000000;
+        $totalEol = $request->get("eol") * 1000000;
+        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 151998661/4, 0);
     }
 
      public function createRefYearObject()
@@ -145,4 +154,16 @@ EOF;
      * @DI\Inject("monmiel.facility.service")
      */
     public $parc;
+
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
+
+    /**
+     * @var \JMS\Serializer\Serializer $serializer
+     * @DI\Inject("serializer")
+     */
+    public $serializer;
 }

@@ -17,20 +17,7 @@ class ParcFinal
     private $ParcFlamme;
     private $ParcAutres;
 
-    private $PuisNucleaire;
-    private $PuisEolien;
-    private $PuisPv;
-    private $PuisHydraulique;
-    private $PuisFlamme;
-    private $PuisAutres;
-
-    public function __construct($PuisNucleaire, $PuisEolien, $PuisPv, $PuisHydraulique, $PuisFlamme, $PuisAutres, $ParcNucleaire, $ParcEolien, $ParcPv, $ParcHydraulique,$ParcFlamme, $ParcAutres){
-        $this->PuisNucleaire= $PuisNucleaire;
-        $this->PuisEolien= $PuisEolien;
-        $this->PuisPv= $PuisPv;
-        $this->PuisHydraulique=$PuisHydraulique;
-        $this->PuisFlamme= $PuisFlamme;
-        $this->PuisAutres= $PuisAutres;
+    public function __construct($ParcNucleaire, $ParcEolien, $ParcPv, $ParcHydraulique,$ParcFlamme, $ParcAutres){
 
         $this->ParcNucleaire= $ParcNucleaire;
         $this->ParcEolien= $ParcEolien;
@@ -38,31 +25,6 @@ class ParcFinal
         $this->ParcHydraulique=$ParcHydraulique;
         $this->ParcFlamme= $ParcFlamme;
         $this->ParcAutres= $ParcAutres;
-        echo 'Creation of final parc';
-    }
-
-    public function getPuisNucleaire(){
-        return $this->PuisNucleaire;
-    }
-
-    public function getPuisEolien(){
-        return $this->PuisEolien;
-    }
-
-    public function getPuisPv(){
-        return $this->PuisPv;
-    }
-
-    public function getPuisHydraulique(){
-        return $this->PuisHydraulique;
-    }
-
-    public function getPuisFlamme(){
-        return $this->PuisFlamme;
-    }
-
-    public function getPuisAutre(){
-        return $this->PuisAutres;
     }
 
     public function getParcNucleaire(){

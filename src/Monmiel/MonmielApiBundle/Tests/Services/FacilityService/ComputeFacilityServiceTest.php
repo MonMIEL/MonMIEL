@@ -43,7 +43,23 @@ class ComputeFacilityServiceTest extends BaseTestCase
 
     }
 
+    /**
+     * @test
+     */
+    public function testMachin()
+    {
+        $day = new \Monmiel\MonmielApiModelBundle\Model\Day();
+        $repartionService = $this->getRepartionMock();
+        $repartionService->expects($this->once())
+                         ->will($this->returnValue($day));
+        echo "toto";
+    }
 
-
-
+    public function getRepartionMock()
+    {
+        $mockedRepartionService = $this->getMockBuilder("Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1")
+                                       ->disableOriginalConstructor()
+                                       ->getMock();
+        return $mockedRepartionService;
+    }
 }

@@ -21,17 +21,17 @@ class ComputeFacilityService implements FacilityServiceInterface
             $parc->setMaxValueFlamme($solde);
         }
         else{
-            echo "Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable";
+            throw new \Exception("Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable");
         }
     }
     /*
      *
      */
 
-    public function getSimulatedParc()
+    public function getSimulatedParc($year)
     {
         $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc();
+        $parcFinal=$parc->getParc($year);
         return $parcFinal;
     }
 
@@ -45,8 +45,7 @@ class ComputeFacilityService implements FacilityServiceInterface
     {
         // return an object power calculated
         $parc=Parc::getInstance();
-        $parc->setPowerForEachEnergy($year);
-        return $parc->getPower();
+        return $parc->getPower($year);
     }
 
 }

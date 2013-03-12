@@ -300,6 +300,7 @@ class Mesure
      */
     static public function isCompatible($mesureA, $mesureB)
     {
+     //   var_dump($mesureA, $mesureB);
         return ($mesureA->getUnitOfMesure() == $mesureB->getUnitOfMesure());
 
     }

@@ -37,7 +37,7 @@ class TestProductionCapacityCommand extends ContainerAwareCommand
         $powertRef = new Power(0,2,0,15,0,2,0,5);
 
         $repartitionService = new \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1();
-        $quarterupdated = $repartitionService->updateQuarterForProductionCapacity($quarter,$powerTarget,$powertRef);
+        $quarterupdated = $repartitionService->computeMaxProductionPerEnergy($quarter,$powerTarget,$powertRef);
 
         echo("Capacite de production de l'eolien :".$quarterupdated->getEolien()."\n");
         echo("Capacite de production du photovoltaique :".$quarterupdated->getPhotovoltaique()."\n");

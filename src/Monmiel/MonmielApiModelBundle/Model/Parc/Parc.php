@@ -69,18 +69,12 @@ class Parc{
     }
 
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
-    public function getParc(){
-        $this->flamme->setPowerFlamme();
-        //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
-        //$this->DefineRate($mixFinal);
-        //On recupere l'energie nécessaire pour chaque énergie
-        $PuisNuc=$this->nucleaire->getPowerNuclear();
-        $PuisEol=$this->eolien->getPowerEolien();
-        $PuisHyd=$this->hydraulique->getPowerHydraulic();
-        $PuisPv=$this->pv->getPowerPv();
-        $PuisFlamme=$this->flamme->getPowerFlamme();
-        $PuisAut=null;
-            //$this->autres->getValueAutre();
+    /**
+     * @var $year Year
+     * @return ParcFinal
+     */
+    public function getParc($year){
+        $this->setPowerForEachEnergy($year);
 
         //On recupere l'energie nécessaire pour chaque énergie
         $ParcNuc=$this->nucleaire->getParcNuclear();
@@ -90,16 +84,11 @@ class Parc{
         $ParcFlamme=$this->flamme->getParcFlamme();
 
         $ParcAut=null;
-            //$this->autres->getParcAutre();
+        //$this->autres->getParcAutre();
 
         //Creation d'un object ParcFinal pour ne retourner que ce qui est necessaire
-        $newParc=new ParcFinal($PuisNuc,$PuisEol,$PuisHyd,$PuisPv,$PuisFlamme,$PuisAut,$ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
+        $newParc=new ParcFinal($ParcNuc,$ParcEol,$ParcHyd,$ParcPv,$ParcFlamme,$ParcAut);
         return $newParc;
-    }
-
-    private function calculateWattHour2Power($wattHour){
-
-        return $wattHour/(365*24);
     }
 
 
@@ -119,12 +108,17 @@ class Parc{
     }
 
     /**
-     *
+     * @var $year Year
      */
-    public function getPower(){
-        return new Power(0,$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
+    public function getPower($year){
+        $this->setPowerForEachEnergy($year);
+        return new Power($this->flamme->getPowerFlamme(),$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
     }
 
+    private function calculateWattHour2Power($wattHour){
+
+        return $wattHour/(365*24);
+    }
 
 
 
