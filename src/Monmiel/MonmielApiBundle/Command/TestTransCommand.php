@@ -10,46 +10,98 @@ use Symfony\Component\Console\Output\OutputInterface;
 use \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1;
 use \Monmiel\MonmielApiModelBundle\Model\Day;
 use \Monmiel\MonmielApiModelBundle\Model\Quarter;
-use \Monmiel\Utils\ConstantUtils;
-use \Monmiel\MonmielApiModelBundle\Model\Mesure;
+use Monmiel\MonmielApiModelBundle\Model\AskUser;
+use Monmiel\MonmielApiModelBundle\Model\Power;
+use Monmiel\MonmielApiModelBundle\Model\Mesure;
+use Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService;
+use Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1;
+
 class TestTransCommand extends ContainerAwareCommand
 {
+
+
+    /**
+     * @var $facility ComputeFacilityService
+     */
+    protected  $facility;
+    /**
+     * @var $control \Monmiel\MonmielApiBundle\Controller\SimulationV1Controller
+     */
+    protected $control;
+
     protected function configure()
     {
         $this
             ->setName("monmiel:test:test1")
             ->setDescription("Extract Data from RTE and populate Riak");
+
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
 
-        for($i = 1; $i<365; $i++){
-            $dao = $this->getContainer()->get("monmiel.dao.riak");
-            $day = $dao->getDayConso($i);
+        $this->facility = $this->getContainer()->get("monmiel.facility.service");
+        $this->transformers= $this->getContainer()->get("monmiel.transformers.v1.service");
+        $this->repartition= $this->getContainer()->get("monmiel.repartition.service");
 
 
-            echo "------------------ before \n";
-            $indexBefore = 0;
-            foreach ($day->getQuarters() as $val) {
-               echo("--------------- index :".$indexBefore." conso :".$val->getConsoTotal()."____________ \n");
-                $indexBefore ++;
-            }
 
-            $t = new \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1();
-            $consoActual = new Mesure(600,ConstantUtils::TERAWATT);
-            $consoInput = new \Mesure(800,ConstantUtils::TERAWATT);
-            $dayRetour = $t->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($day,$consoActual,$consoInput);
+        $q1=new Quarter("2013-01-02",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
+        $q2=new Quarter("2013-01-02",20000,0,0,0,20000,0,0,0,0,0,0,0,0);
 
-            $t->setConsoActual($consoActual);
-            $t->setConsoInput($consoInput);
+        $tmp = array();
 
-            echo "------------------ after \n";
-            $index = 0;
-            foreach ($dayRetour->getQuarters() as $val) {
-                echo("--------------- index :".$index." conso :".$val->getConsoTotal()."____________ \n");
-                $index ++;
-            }
-            echo("size _________________:"); echo sizeof($dayRetour->getQuarters()); echo("____________________end \n");
-        }
+        array_push($tmp,$q1);
+        array_push($tmp,$q2);
+
+        $day = new Day('2012-01-02',$tmp);
+
+        $yearRef = new \Monmiel\MonmielApiModelBundle\Model\Year("1",100000000,0,0,0,0,0,100000000);
+
+        $yearTarget = new \Monmiel\MonmielApiModelBundle\Model\Year("2",150000000,0,0,0,0,0,150000000);
+
+
+        $powerRef=$this->facility->getPower($yearRef);
+
+
+
+        $powerTarget=$this->facility->getPower($yearTarget);
+
+
+        $this->transformers->setConsoTotalActuel(new \Monmiel\MonmielApiModelBundle\Model\Mesure(100,\Monmiel\Utils\ConstantUtils::TERAWATT));
+        $this->transformers->setConsoTotalDefinedByUser(new Mesure(150,\Monmiel\Utils\ConstantUtils::TERAWATT));
+
+        $this->transformers->setReferenceYear($yearRef);
+        $this->transformers->setTargetYear($yearTarget);
+
+
+        $dayTransf=$this->transformers->UpdateConsoTotalForQuatersForDay($day);
+
+
+
+        $this->repartition->setReferenceYear($yearRef);
+        $this->repartition->setTargetYear($yearTarget);
+        $this->repartition->setReferenceParcPower($powerRef);
+        $this->repartition->setTargetParcPower($powerTarget);
+
+
+        /**
+         * @var Day $tmpDay
+         */
+        $tmpDay=$this->repartition->computeMixedTargetDailyConsumption($dayTransf);
+
+
+        echo "power ref" . "\n";
+        var_dump($powerRef);
+
+        echo "power target" . "\n";
+        var_dump($powerTarget);
+
+        var_dump($tmpDay);
+
+
+
+
     }
+
 }

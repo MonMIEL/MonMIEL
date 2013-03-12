@@ -53,30 +53,20 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $day integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function get($day)
+    public function get($dayNumber)
     {
-        $referenceDay = $this->getReferenceDay($day);
-        $ComputeDay = $this->computeMixedTargetDailyConsumption($referenceDay);
-        return $ComputeDay;
+        $referenceDay = $this->transformers->get($dayNumber);
+        $day = $this->computeMixedTargetDailyConsumption($referenceDay);
+
+        return $day;
     }
 
     /**
-     * @param $dayNumber integer
+     * @param $referenceDay Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getReferenceDay($dayNumber)
+    private function  computeMixedTargetDailyConsumption($referenceDay)
     {
-        return $this->transformers->get($dayNumber);
-    }
-
-
-    /**Public method for test, allow to pass a day directly in parameter without using database
-     * @param $referenceDay
-     * @return \Monmiel\MonmielApiModelBundle\Model\Day
-     */
-    public function  computeMixedTargetDailyConsumption($referenceDay)
-    {
-
         $this->stopWatch->start("computeDistribution", "repartition");
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
@@ -142,9 +132,8 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
-        $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
-        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
-
+        $aeolianProductionCapacity = ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
+        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
