@@ -26,7 +26,7 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 365; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
