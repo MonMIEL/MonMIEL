@@ -18,7 +18,7 @@ class TransformersServicesV1Test extends BaseTestCase
     public function setup()
     {
        $this->transformersService = new TransformersV1();
-       $this->transformersService->setRiakDao($this->getMockedDao());
+       //$this->transformersService->setRiakDao($this->getMockedDao());
 
     }
 

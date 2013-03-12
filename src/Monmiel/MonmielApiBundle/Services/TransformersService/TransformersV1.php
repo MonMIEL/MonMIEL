@@ -23,6 +23,12 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public $riakDao;
 
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
+
 
     /**
      * the consommation in 2050
@@ -95,8 +101,9 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    protected function UpdateConsoTotalForQuatersForDay($day)
+    public function UpdateConsoTotalForQuatersForDay($day)
     {
+        $this->stopWatch->start("updateConsoTotal", "transformers");
         $updatedDay = new Day($day->getDateTime());
         if (isset($day)) {
             $consoActuel = $this->getConsoTotalActuel();
@@ -114,7 +121,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             }
             $updatedDay->setQuarters($newQuartersArray);
         }
-
+        $this->stopWatch->stop("updateConsoTotal");
         return $updatedDay;
     }
 
@@ -157,51 +164,10 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public  function transformeTotalCalcul($totalActQuart,$consoTotalActValue,$consoDefineByUserValue)
     {
-        //Calculate
         $ret = ($totalActQuart* $consoDefineByUserValue)/$consoTotalActValue;
 
         return $ret;
     }
-
-    /**
-     *  Get the power of each type energy for reference year
-     * @return  \Monmiel\MonmielApiModelBundle\Model\Power
-     */
-    public function getPowerRef()
-    {
-        // return an object power calculated
-        return new Power(
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalFlamme()),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalHydraulique()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalNucleaire()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalPhotovoltaique()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalEolien())
-        );
-
-    }
-
-    /**
-     *  Get the power of each type energy for target year
-     * @return \Monmiel\MonmielApiModelBundle\Model\Power
-     */
-    public function getPowerTarget()
-    {
-      // return an object power calculated
-      return new Power(
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalFlamme()),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalHydraulique()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalNucleaire()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalPhotovoltaique()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalEolien())
-           );
-    }
-
 
     /**
      * This method use for the calculate from megawatt hour to Power

@@ -24,17 +24,34 @@ class SimulationV1Controller extends Controller
     {
         $response = new Response();
         $this->init($request);
-//        $response->setContent($this->getContent());
+
+        $result = new SimulationResultSeries();
+        $this->stopWatch->start("boucle", "controller");
+        for ($i = 1; $i < 10; $i++) {
+            $day = $this->repartition->get($i);
+            $result->addDay($day);
+        }
+        $this->stopWatch->stop("boucle");
+        $finaParc = $this->parc->getSimulatedParc();
+        $result->setFinalParcPower($finaParc);
+        $parc = $this->repartition->getTargetParcPower();
+        $result->setTargetParcPower($parc);
+        $response = new Response();
+        $json = json_encode($result->getSeries());
+        $response->setContent($json);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function init(HttpRequest $request)
+    public function init(HttpRequest $request = null)
     {
-        $userConsoMesure = new Mesure(650, 'GW');
-        $actualConsoMesure = new Mesure(600, 'GW');
+        $this->stopWatch->start("init", "controller");
+        $userConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+        $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
@@ -47,24 +64,10 @@ class SimulationV1Controller extends Controller
         $this->repartition->setTargetYear($this->createTargetYearObject($request));
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
-
-        $result = new SimulationResultSeries();
-
-        for ($i = 1; $i < 100; $i++) {
-            $day = $this->repartition->get($i);
-            $result->addDay($day);
-        }
-//        $finaParc = $this->parc->getSimulatedParc();
-//        var_dump($finaParc);exit;
-        $response = new Response();
-        $json = json_encode($result->getSeries());
-        $response->setContent($json);
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->send();
-
+        $this->stopWatch->stop("init");
     }
 
-    public function createTargetYearObject(HttpRequest $request)
+    public function createTargetYearObject(HttpRequest $request = null)
     {
 //        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
         return new Year(2050, 1679207799/4, 4514598/4, 4966116/4, 0/4, 151998661/4, 0);
@@ -146,4 +149,10 @@ EOF;
      * @DI\Inject("monmiel.facility.service")
      */
     public $parc;
+
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
 }

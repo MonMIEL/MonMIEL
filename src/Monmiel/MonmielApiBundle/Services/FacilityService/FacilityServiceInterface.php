@@ -18,7 +18,7 @@ interface FacilityServiceInterface
      * @return
      */
 
-    public function getSimulatedParc();
+    public function getSimulatedParc($year);
 
     public function getPower($year);
 }
