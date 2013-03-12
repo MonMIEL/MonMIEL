@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
-use Monmiel\MonmielApiModelBundle\Model\UnitOfMesure;
 use Monmiel\MonmielApiModelBundle\Model\Year;
+use Monmiel\MonmielApiModelBundle\Model\Response\SimulationResultSeries;
 /**
  * @DI\Service("monmiel.simulation.controller")
  */
@@ -33,10 +33,8 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request)
     {
-        $userConsoMesure = new Mesure(650);
-        $userConsoMesure->setUnitOfMesure(UnitOfMesure::createUnityTerraWatt());
-        $actualConsoMesure = new Mesure(600);
-        $actualConsoMesure->setUnitOfMesure(UnitOfMesure::createUnityTerraWatt());
+        $userConsoMesure = new Mesure(650, 'GW');
+        $actualConsoMesure = new Mesure(600, 'GW');
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
@@ -45,29 +43,36 @@ class SimulationV1Controller extends Controller
 
         $targetParcPower = $this->parc->getPower($this->createTargetYearObject($request));
         $refParcPower = $this->parc->getPower($this->createRefYearObject());
-        var_dump($refParcPower);exit;
         $this->repartition->setReferenceYear($this->createRefYearObject($request));
         $this->repartition->setTargetYear($this->createTargetYearObject($request));
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
 
-        $day = $this->repartition->get(1);
+        $result = new SimulationResultSeries();
 
-        $finaParc = $this->parc->getSimulatedParc();
+        for ($i = 1; $i < 100; $i++) {
+            $day = $this->repartition->get($i);
+            $result->addDay($day);
+        }
+//        $finaParc = $this->parc->getSimulatedParc();
+//        var_dump($finaParc);exit;
+        $response = new Response();
+        $json = json_encode($result->getSeries());
+        $response->setContent($json);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->send();
 
-
-        var_dump($day->getQuarter(1));
     }
 
     public function createTargetYearObject(HttpRequest $request)
     {
 //        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
-        return new Year(2050, 1679207799, 4514598, 4966116, 0, 151998661, 0);
+        return new Year(2050, 1679207799/4, 4514598/4, 4966116/4, 0/4, 151998661/4, 0);
     }
 
      public function createRefYearObject()
      {
-         return new Year(2011, 1679207799, 4514598, 4966116, 0, 151998661, 0);
+         return new Year(2011, 1679207799/4, 4514598/4, 4966116/4, 0, 151998661/4, 0);
      }
 
     public function getContent()

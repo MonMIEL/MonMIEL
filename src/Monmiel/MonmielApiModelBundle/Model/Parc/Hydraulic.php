@@ -43,17 +43,17 @@ class Hydraulic
     }
 
     public function getFacteurChargeHydraulique(){
-        return $this->fc_hydraulique;
+        return $this->fc_hydraulic;
     }
 
     public function setTauxDisponibiliteHydraulique($tdHydraulique){
         if(isset($tdHydraulique)){
-            $this->td_hydraulique=$tdHydraulique;
+            $this->td_hydraulic=$tdHydraulique;
         }
     }
 
     public function getTauxDisponibiliteHydraulique(){
-        return $this->td_hydraulique;
+        return $this->td_hydraulic;
     }
 
     public function getParcHydraulic(){

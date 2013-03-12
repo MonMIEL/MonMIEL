@@ -28,25 +28,25 @@ class ComputeFacilityService implements FacilityServiceInterface
      *
      */
 
-    public function getSimulatedParc($mixFinal = null, $power)
+    public function getSimulatedParc()
     {
         $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc($mixFinal,$power);
+        $parcFinal=$parc->getParc();
         return $parcFinal;
     }
 
 
-/**
- * @param $year Year
- * @return \Monmiel\MonmielApiModelBundle\Model\Power
- */
+    /**
+     * @param $year Year
+     * @return \Monmiel\MonmielApiModelBundle\Model\Power
+     */
 
-public function getPower($year)
-{
-    // return an object power calculated
-    $parc=Parc::getInstance();
-    $parc->setPowerForEachEnergy($year);
-    return $parc->getPower();
-}
+    public function getPower($year)
+    {
+        // return an object power calculated
+        $parc=Parc::getInstance();
+        $parc->setPowerForEachEnergy($year);
+        return $parc->getPower();
+    }
 
 }
