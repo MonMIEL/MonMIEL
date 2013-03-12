@@ -92,7 +92,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
             $computedQuarter=    $this->computeDistribution($maxProductionQuarter);
             $userMixDay->addQuarters($computedQuarter);
 
-            $this->updateYearComputed($quarter);
+            $this->updateYearComputed($computedQuarter);
         }
         $this->stopWatch->stop("computeDistribution");
         return $userMixDay;
