@@ -47,8 +47,8 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request = null)
     {
-        $userConsoMesure = new Mesure(478, 'GW');
-        $actualConsoMesure = new Mesure(478, 'GW');
+        $userConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+        $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
