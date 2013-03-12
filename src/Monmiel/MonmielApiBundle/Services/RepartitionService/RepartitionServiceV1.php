@@ -23,10 +23,6 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public $facilityService;
 
-//    private $coeffToUseYarly; // for computing theoric consumption
-//
-//    private $coeffPerEnergy; //for each type of energy a specific value
-
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Year $targetYear
      */
@@ -70,9 +66,6 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $referenceDay = $this->getReferenceDay($dayNumber);
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
-
-        $this->setTargetParcPower($this->transformers->getPowerTarget());
-        $this->setReferenceParcPower($this->transformers->getPowerRef());
 
         /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
         foreach ($referenceQuarters as $quarter) {

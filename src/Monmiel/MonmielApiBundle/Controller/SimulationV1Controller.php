@@ -24,8 +24,21 @@ class SimulationV1Controller extends Controller
     {
         $response = new Response();
         $this->init($request);
-//        $response->setContent($this->getContent());
-        return $response;
+
+        $result = new SimulationResultSeries();
+        $result->setTargetParcPower($this->repartition->getTargetParcPower());
+        for ($i = 1; $i < 100; $i++) {
+            $day = $this->repartition->get($i);
+            $result->addDay($day);
+        }
+        $finaParc = $this->parc->getSimulatedParc();
+        $result->setFinalParcPower($finaParc);
+//        var_dump($finaParc);exit;
+        $response = new Response();
+        $json = json_encode($result->getSeries());
+        $response->setContent($json);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->send();
     }
 
     /**
@@ -33,8 +46,8 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request)
     {
-        $userConsoMesure = new Mesure(650, 'GW');
-        $actualConsoMesure = new Mesure(600, 'GW');
+        $userConsoMesure = new Mesure(478, 'GW');
+        $actualConsoMesure = new Mesure(478, 'GW');
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
@@ -47,21 +60,6 @@ class SimulationV1Controller extends Controller
         $this->repartition->setTargetYear($this->createTargetYearObject($request));
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
-
-        $result = new SimulationResultSeries();
-
-        for ($i = 1; $i < 100; $i++) {
-            $day = $this->repartition->get($i);
-            $result->addDay($day);
-        }
-//        $finaParc = $this->parc->getSimulatedParc();
-//        var_dump($finaParc);exit;
-        $response = new Response();
-        $json = json_encode($result->getSeries());
-        $response->setContent($json);
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->send();
-
     }
 
     public function createTargetYearObject(HttpRequest $request)
