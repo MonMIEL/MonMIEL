@@ -102,10 +102,12 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
 
-            if(Mesure::isEqualsMesure($consoActuel,$consoTotalDefinedByUser)){
+            if(Mesure::isCompatible($consoActuel,$consoTotalDefinedByUser))
+            {
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
-            else{
+            else
+            {
                 //convert the mesure $consoTotalDefinedByUser
                 $consoInputConverted = Mesure::convertMesureByOtherUnitOfMesure($consoTotalDefinedByUser,$consoActuel->getUnitOfMesure());
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
@@ -130,7 +132,8 @@ class TransformersV1 implements TransformersServiceInterfaceV1
         $quartersUpdated = array();
        // Go through the list and transformer each consumption to theoretical consumption
          /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
-        foreach ($listQuarter as $quarter) {
+        foreach ($listQuarter as $quarter)
+        {
          // Call the method for the transformation calculate
             $tmpVal= $this->transformeTotalCalcul($quarter->getConsoTotal(),$consoTotalActuel->getValue(),$consoTotalDefineByUser->getValue());
          //Replace the old value of consumption by a new one
