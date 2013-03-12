@@ -33,8 +33,8 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request)
     {
-        $userConsoMesure = new Mesure(650, 'GW');
-        $actualConsoMesure = new Mesure(600, 'GW');
+        $userConsoMesure = new Mesure(478, 'GW');
+        $actualConsoMesure = new Mesure(478, 'GW');
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
