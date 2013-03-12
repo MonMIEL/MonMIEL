@@ -28,7 +28,7 @@ class Hydraulic
 
     public function setPowerHydraulic($powerHydro){
         if(isset($powerHydro)){
-            $this->power_hydraulic=((($powerHydro*4)/$this->td_hydraulic)/$this->fc_hydraulic);
+            $this->power_hydraulic=$powerHydro/$this->fc_hydraulic;
         }
     }
 
@@ -43,21 +43,21 @@ class Hydraulic
     }
 
     public function getFacteurChargeHydraulique(){
-        return $this->fc_hydraulique;
+        return $this->fc_hydraulic;
     }
 
     public function setTauxDisponibiliteHydraulique($tdHydraulique){
         if(isset($tdHydraulique)){
-            $this->td_hydraulique=$tdHydraulique;
+            $this->td_hydraulic=$tdHydraulique;
         }
     }
 
     public function getTauxDisponibiliteHydraulique(){
-        return $this->td_hydraulique;
+        return $this->td_hydraulic;
     }
 
     public function getParcHydraulic(){
-        $this->parc_hydraulic=( $this->power_hydraulic/ self::PUISSANCEUNITAIRE );
+        $this->parc_hydraulic=( ($this->power_hydraulic/$this->td_hydraulic)/ self::PUISSANCEUNITAIRE );
         return $this->parc_hydraulic;
     }
 

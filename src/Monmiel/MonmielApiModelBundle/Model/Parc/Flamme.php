@@ -65,7 +65,7 @@ class Flamme
     }
 
     public function setPowerFlamme(){
-        $this->power_Flamme=(((($this->max_Flamme) * 4)/$this->td_Flamme)/$this->fc_Flamme);
+        $this->power_Flamme=(($this->max_Flamme));
     }
 
     public function getPowerFlamme(){
@@ -80,7 +80,7 @@ class Flamme
     }
 
     public function getParcFlamme(){
-        $this->parc_Flamme=( $this->power_Flamme/ self::PUISSANCEUNITAIRE );
+        $this->parc_Flamme=( ($this->power_Flamme/$this->td_Flamme)/ self::PUISSANCEUNITAIRE );
         return $this->parc_Flamme;
     }
 }

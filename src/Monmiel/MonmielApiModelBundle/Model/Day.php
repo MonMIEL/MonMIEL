@@ -24,7 +24,7 @@ class Day
      */
     protected $quarters;
 
-    function __construct($dateTime, $quarters = array())
+    function __construct($dateTime = null, $quarters = array())
     {
         $this->dateTime = $dateTime;
         $this->quarters = $quarters;
@@ -34,6 +34,21 @@ class Day
     {
         $format = "Y-m-d";
         return date_format($this->dateTime, $format);
+    }
+
+    public function getMax()
+    {
+        $max = array("nucleaire" => 0, "photovoltaique" => 0, "eolien" => 0, "flamme" => 0, "hydraulique" => 0);
+        /** @var $quarter Quarter */
+        foreach ($this->quarters as $quarter) {
+            if ($max["nucleaire"] < $quarter->getNucleaire()) { $max["nucleaire"] = $quarter->getNucleaire(); }
+            if ($max["photovoltaique"] < $quarter->getPhotovoltaique()) { $max["photovoltaique"] = $quarter->getPhotovoltaique(); }
+            if ($max["eolien"] < $quarter->getEolien()) { $max["eolien"] = $quarter->getEolien(); }
+            if ($max["flamme"] < $quarter->getFlamme()) { $max["flamme"] = $quarter->getFlamme(); }
+            if ($max["hydraulique"] < $quarter->getHydraulique()) { $max["hydraulique"] = $quarter->getHydraulique(); }
+        }
+
+        return $max;
     }
 
     /**

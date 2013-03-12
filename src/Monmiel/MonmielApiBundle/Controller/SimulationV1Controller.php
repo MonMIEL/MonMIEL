@@ -7,18 +7,73 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Monmiel\MonmielApiModelBundle\Model\Mesure;
+use Monmiel\MonmielApiModelBundle\Model\Year;
+use Monmiel\MonmielApiModelBundle\Model\Response\SimulationResultSeries;
 /**
  * @DI\Service("monmiel.simulation.controller")
  */
 class SimulationV1Controller extends Controller
 {
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function sendSimulationResult(HttpRequest $request)
     {
         $response = new Response();
-        $response->setContent($this->getContent());
+        $this->init($request);
+//        $response->setContent($this->getContent());
         return $response;
     }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function init(HttpRequest $request)
+    {
+        $userConsoMesure = new Mesure(650, 'GW');
+        $actualConsoMesure = new Mesure(600, 'GW');
+
+        $this->transformers->setConsoTotalActuel($actualConsoMesure);
+        $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
+        $this->transformers->setReferenceYear($this->createRefYearObject());
+        $this->transformers->setTargetYear($this->createTargetYearObject($request));
+
+        $targetParcPower = $this->parc->getPower($this->createTargetYearObject($request));
+        $refParcPower = $this->parc->getPower($this->createRefYearObject());
+        $this->repartition->setReferenceYear($this->createRefYearObject($request));
+        $this->repartition->setTargetYear($this->createTargetYearObject($request));
+        $this->repartition->setReferenceParcPower($refParcPower);
+        $this->repartition->setTargetParcPower($targetParcPower);
+
+        $result = new SimulationResultSeries();
+
+        for ($i = 1; $i < 100; $i++) {
+            $day = $this->repartition->get($i);
+            $result->addDay($day);
+        }
+//        $finaParc = $this->parc->getSimulatedParc();
+//        var_dump($finaParc);exit;
+        $response = new Response();
+        $json = json_encode($result->getSeries());
+        $response->setContent($json);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->send();
+
+    }
+
+    public function createTargetYearObject(HttpRequest $request)
+    {
+//        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
+        return new Year(2050, 1679207799/4, 4514598/4, 4966116/4, 0/4, 151998661/4, 0);
+    }
+
+     public function createRefYearObject()
+     {
+         return new Year(2011, 1679207799/4, 4514598/4, 4966116/4, 0, 151998661/4, 0);
+     }
 
     public function getContent()
     {
@@ -73,4 +128,22 @@ EOF;
         return $content;
 
     }
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1
+     * @DI\Inject("monmiel.transformers.v1.service")
+     */
+    public $transformers;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1 $repartition
+     * @DI\Inject("monmiel.repartition.service")
+     */
+    public $repartition;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
+     * @DI\Inject("monmiel.facility.service")
+     */
+    public $parc;
 }

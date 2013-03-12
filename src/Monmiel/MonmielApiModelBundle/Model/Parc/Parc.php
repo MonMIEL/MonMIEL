@@ -1,13 +1,7 @@
 <?php
 
 namespace Monmiel\MonmielApiModelBundle\Model\Parc;
-/**
- * Created by JetBrains PhpStorm.
- * User: Miage
- * Date: 04/03/13
- * Time: 17:05
- * To change this template use File | Settings | File Templates.
- */
+
 use Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Eolien;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic;
@@ -16,6 +10,7 @@ use Monmiel\MonmielApiModelBundle\Model\Parc\Autres;
 use Monmiel\MonmielApiModelBundle\Model\Parc\Flamme;
 use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
 
+use Monmiel\MonmielApiModelBundle\Model\Year;
 use Monmiel\MonmielApiModelBundle\Model\Power;
 
 
@@ -46,7 +41,6 @@ class Parc{
     public static function getInstance() {
         if(is_null(self::$instance)) {
             self::$instance = new Parc();
-            echo 'Creation du parc initial';
         }
         return self::$instance;
     }
@@ -61,13 +55,13 @@ class Parc{
 
     //Met a jour le facteur de charge et le taux de disponibilité pour le nucléaire, l'éolien, le pv et l'hydraulique en fonction du mix final
     protected function DefineRate($mixFinal){
-        $this->nucleaire->setFacteurChargeNuclear($mixFinal);
+        //$this->nucleaire->setFacteurChargeNuclear($mixFinal);
         $this->eolien->setFacteurChargeEolien($mixFinal);
         $this->pv->setFacteurChargePv($mixFinal);
         $this->hydraulique->setFacteurChargeHydraulique($mixFinal);
         $this->flamme->setFacteurChargeFlamme($mixFinal);
 
-        $this->nucleaire->setTauxDisponibiliteNuclear($mixFinal);
+        //$this->nucleaire->setTauxDisponibiliteNuclear($mixFinal);
         $this->eolien->setTauxDisponibiliteEolien($mixFinal);
         $this->pv->setTauxDisponibilitePv($mixFinal);
         $this->hydraulique->setTauxDisponibiliteHydraulique($mixFinal);
@@ -75,12 +69,12 @@ class Parc{
     }
 
     //Retourne le parc final (pour le moment que l'énergie, pas de réacteur par exemple
-    public function getParc($mixFinal, $power){
+    public function getParc(){
+        $this->flamme->setPowerFlamme();
         //On défini le taux de disponibilité et le facteur de charge pour chacune des energies
-        $this->DefineRate($mixFinal);
-        $this->setPowerForEachEnergy($power);
+        //$this->DefineRate($mixFinal);
         //On recupere l'energie nécessaire pour chaque énergie
-        $PuisNuc=$this->nucleaire->getFacteurChargeNuclear();
+        $PuisNuc=$this->nucleaire->getPowerNuclear();
         $PuisEol=$this->eolien->getPowerEolien();
         $PuisHyd=$this->hydraulique->getPowerHydraulic();
         $PuisPv=$this->pv->getPowerPv();
@@ -94,6 +88,7 @@ class Parc{
         $ParcHyd=$this->hydraulique->getParcHydraulic();
         $ParcPv=$this->pv->getParcPv();
         $ParcFlamme=$this->flamme->getParcFlamme();
+
         $ParcAut=null;
             //$this->autres->getParcAutre();
 
@@ -102,20 +97,35 @@ class Parc{
         return $newParc;
     }
 
+    private function calculateWattHour2Power($wattHour){
+
+        return $wattHour/(365*24);
+    }
+
 
     //Define the power of Nuclear, PV, Wind, Photovoltaic
     /**
-     * @param $power Power
+     * @param $year Year
      */
-    public function setPowerForEachEnergy($power){
-        $this->nucleaire->setPowerNuclear($power->getNuclear());
-        $this->eolien->setPowerEolien($power->getWind());
-        $this->pv->setPowerPv($power->getPhotovoltaic());
-        $this->hydraulique->setPowerHydraulic($power->getHydraulic());
+    public function setPowerForEachEnergy($year){
+
+        $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire()),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()));
+        $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien()));
+        $this->pv->setPowerPv($this->calculateWattHour2Power($year->getConsoTotalPhotovoltaique()));
+        $this->hydraulique->setPowerHydraulic($this->calculateWattHour2Power($year->getConsoTotalHydraulique()));
         $this->flamme->setPowerFlamme();
         //$this->autres->setPowerAutre($power->getOther());
 
     }
+
+    /**
+     *
+     */
+    public function getPower(){
+        return new Power(0,$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
+    }
+
+
 
 
 
