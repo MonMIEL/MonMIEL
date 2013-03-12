@@ -33,7 +33,8 @@ class SimulationV1Controller extends Controller
         }
         $finaParc = $this->parc->getSimulatedParc();
         $result->setFinalParcPower($finaParc);
-        $result->setTargetParcPower($this->repartition->getTargetParcPower());
+        $parc = $this->repartition->getTargetParcPower();
+        $result->setTargetParcPower($parc);
         var_dump($finaParc);exit;
         $response = new Response();
         $json = json_encode($result->getSeries());

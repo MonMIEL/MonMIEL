@@ -5,3 +5,11 @@ monmiel_api_simulation:
         _format: json
     requirements:
        _method: GET
+
+monmiel_api_test:
+    pattern: /test.html
+    defaults:
+        _controller: monmiel.test.controller:testPerf
+        _format: html
+    requirements:
+        _method: GET
