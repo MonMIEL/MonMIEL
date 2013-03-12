@@ -95,7 +95,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      * @param $day \Monmiel\MonmielApiModelBundle\Model\Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    protected function UpdateConsoTotalForQuatersForDay($day)
+    public function UpdateConsoTotalForQuatersForDay($day)
     {
         $updatedDay = new Day($day->getDateTime());
         if (isset($day)) {
