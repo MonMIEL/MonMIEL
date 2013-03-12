@@ -4,6 +4,7 @@ namespace Monmiel\MonmielApiBundle\Tests\Services\FacilityService;
 use Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1;
 use Monmiel\MonmielApiBundle\Tests\BaseTestCase;
 use Monmiel\MonmielApiModelBundle\Model\Day;
+use Monmiel\MonmielApiModelBundle\Model\Quarter;
 /**
  * Created by JetBrains PhpStorm.
  * User: Dadoo
@@ -23,24 +24,25 @@ class RepartitionServiceTest extends BaseTestCase
         $this->repartitionService = new RepartitionServiceV1();
     }
 
-    public function testUpdateQuarter(){
+    public function testComputeMaxProductionPerEnergy(){
         /**
          * @var $day Day
          */
         $day = $this->getDayObject();
-        /**
-         * @var $quarter \Monmiel\MonmielApiModelBundle\Model\Quarter
-         */
+
+       /**
+        * @var $quarter Quarter
+        */
         $quarter = $day->getQuarter(1);
-
-        $this->repartitionService->computeCoeffDailyMix();
+        $this->repartitionService->setReferenceParcPower(500);
+        $this->repartitionService->setTargetParcPower(600);
 
         /**
-         * @var $quarterActual \Monmiel\MonmielApiModelBundle\Model\Quarter
+         * @var $quarterActual Quarter
          */
-        $quarterActual = $this->repartitionService->updateQuarter($quarter);
+        $quarterActual = $this->repartitionService->computeMaxProductionPerEnergy($quarter);
 
-        assertEquals($quarter->getNucleaire()*(770/720),$quarterActual->getNucleaire());
+        assertEquals($quarter->getDate(),$quarterActual->getDate(),"La date n'est pas bonne");
     }
 
     /**
