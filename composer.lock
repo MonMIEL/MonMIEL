@@ -1,5 +1,5 @@
 {
-    "hash": "848755d1031cafc62e2b60fccb262956",
+    "hash": "b2e5867b9f5db38e3fc8da148b908c1f",
     "packages": [
         {
             "name": "doctrine/common",
@@ -275,16 +275,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.3.0",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "v3.3.0"
+                "reference": "v3.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.3.0",
-                "reference": "v3.3.0",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.3.1",
+                "reference": "v3.3.1",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +329,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -364,7 +364,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-03-04 00:41:45"
+            "time": "2013-03-10 23:05:38"
         },
         {
             "name": "hamcrest/hamcrest",
@@ -1410,16 +1410,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.16",
+            "version": "3.7.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.16"
+                "reference": "3.7.18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.16",
-                "reference": "3.7.16",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.18",
+                "reference": "3.7.18",
                 "shasum": ""
             },
             "require": {
@@ -1480,7 +1480,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-03-06 11:07:01"
+            "time": "2013-03-07 21:45:39"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2036,16 +2036,16 @@
         },
         {
             "name": "twig/extensions",
-            "version": "v1.0.0-alpha",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig-extensions",
-                "reference": "v1.0.0-alpha"
+                "url": "https://github.com/fabpot/Twig-extensions.git",
+                "reference": "v1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig-extensions/zipball/v1.0.0-alpha",
-                "reference": "v1.0.0-alpha",
+                "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/v1.0.0",
+                "reference": "v1.0.0",
                 "shasum": ""
             },
             "require": {
@@ -2079,7 +2079,7 @@
                 "i18n",
                 "text"
             ],
-            "time": "2012-08-28 08:04:23"
+            "time": "2013-02-28 14:21:30"
         },
         {
             "name": "twig/twig",

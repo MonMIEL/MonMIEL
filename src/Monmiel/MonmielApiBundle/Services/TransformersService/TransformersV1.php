@@ -102,10 +102,12 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
 
-            if(Mesure::isEqualsMesure($consoActuel,$consoTotalDefinedByUser)){
+            if(Mesure::isCompatible($consoActuel,$consoTotalDefinedByUser))
+            {
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
-            else{
+            else
+            {
                 //convert the mesure $consoTotalDefinedByUser
                 $consoInputConverted = Mesure::convertMesureByOtherUnitOfMesure($consoTotalDefinedByUser,$consoActuel->getUnitOfMesure());
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
@@ -130,7 +132,8 @@ class TransformersV1 implements TransformersServiceInterfaceV1
         $quartersUpdated = array();
        // Go through the list and transformer each consumption to theoretical consumption
          /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
-        foreach ($listQuarter as $quarter) {
+        foreach ($listQuarter as $quarter)
+        {
          // Call the method for the transformation calculate
             $tmpVal= $this->transformeTotalCalcul($quarter->getConsoTotal(),$consoTotalActuel->getValue(),$consoTotalDefineByUser->getValue());
          //Replace the old value of consumption by a new one
@@ -154,51 +157,10 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public  function transformeTotalCalcul($totalActQuart,$consoTotalActValue,$consoDefineByUserValue)
     {
-        //Calculate
         $ret = ($totalActQuart* $consoDefineByUserValue)/$consoTotalActValue;
 
         return $ret;
     }
-
-    /**
-     *  Get the power of each type energy for reference year
-     * @return  \Monmiel\MonmielApiModelBundle\Model\Power
-     */
-    public function getPowerRef()
-    {
-        // return an object power calculated
-        return new Power(
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalFlamme()),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalHydraulique()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalNucleaire()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalPhotovoltaique()),
-            $this->calculateWattHour2Power(0),
-            $this->calculateWattHour2Power($this->referenceYear->getConsoTotalEolien())
-        );
-
-    }
-
-    /**
-     *  Get the power of each type energy for target year
-     * @return \Monmiel\MonmielApiModelBundle\Model\Power
-     */
-    public function getPowerTarget()
-    {
-      // return an object power calculated
-      return new Power(
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalFlamme()),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalHydraulique()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalNucleaire()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalPhotovoltaique()),
-           $this->calculateWattHour2Power(0),
-           $this->calculateWattHour2Power($this->targetYear->getConsoTotalEolien())
-           );
-    }
-
 
     /**
      * This method use for the calculate from megawatt hour to Power
