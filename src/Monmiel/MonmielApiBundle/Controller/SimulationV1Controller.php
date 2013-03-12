@@ -35,12 +35,12 @@ class SimulationV1Controller extends Controller
         $result->setFinalParcPower($finaParc);
         $parc = $this->repartition->getTargetParcPower();
         $result->setTargetParcPower($parc);
-        var_dump($finaParc);exit;
         $response = new Response();
         $json = json_encode($result->getSeries());
         $response->setContent($json);
         $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->send();
+
+        return $response;
     }
 
     /**
