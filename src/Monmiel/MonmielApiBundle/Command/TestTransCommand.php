@@ -22,6 +22,10 @@ class TestTransCommand extends ContainerAwareCommand
      * @var $facility ComputeFacilityService
      */
     protected  $facility;
+    /**
+     * @var Si
+     */
+    protected $control;
 
     protected function configure()
     {
@@ -35,6 +39,7 @@ class TestTransCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output){
 
           $this->facility = $this->getContainer()->get("monmiel.facility.service");
+        $this->control = $this->getContainer()->get("monmiel.simulation.service");
 
     /*
         for($i = 1; $i<365; $i++){
