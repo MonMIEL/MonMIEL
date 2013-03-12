@@ -55,9 +55,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function get($day)
     {
-        $day = $this->computeMixedTargetDailyConsumption($day);
-
-        return $day;
+        $referenceDay = $this->getReferenceDay($day);
+        $ComputeDay = $this->computeMixedTargetDailyConsumption($referenceDay);
+        return $ComputeDay;
     }
 
     /**
@@ -69,9 +69,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         return $this->transformers->get($dayNumber);
     }
 
-    private function  computeMixedTargetDailyConsumption($dayNumber)
+
+    /**Public method for test, allow to pass a day directly in parameter without using database
+     * @param $referenceDay
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function  computeMixedTargetDailyConsumption($referenceDay)
     {
-        $referenceDay = $this->getReferenceDay($dayNumber);
+
         $this->stopWatch->start("computeDistribution", "repartition");
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
