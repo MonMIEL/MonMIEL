@@ -104,7 +104,7 @@ class Power
             "eolien" => $eol,
             "hydraulique" => $hydrau,
             "flammes" => $flamme,
-            "step" => $flamme,
+            "step" => $step,
             "import" => $import
         );
     }
