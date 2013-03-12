@@ -20,9 +20,9 @@ class Hydraulic
     const PUISSANCEUNITAIRE=1;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct($loadFactor=1, $uptimeRate=0.872,$power=0){
+    public function __construct($loadFactor=1, $availabilityRate=0.872,$power=0){
         $this->fc_hydraulic=$loadFactor;
-        $this->td_hydraulic=$uptimeRate;
+        $this->td_hydraulic=$availabilityRate;
         $this->max_hydraulic=$power;
     }
 
