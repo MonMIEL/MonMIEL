@@ -53,20 +53,34 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $day integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function get($dayNumber)
+    public function get($day)
     {
-        $referenceDay = $this->transformers->get($dayNumber);
-        $day = $this->computeMixedTargetDailyConsumption($referenceDay);
-
-        return $day;
+        $referenceDay = $this->getReferenceDay($day);
+        $ComputeDay = $this->computeMixedTargetDailyConsumption($referenceDay);
+        return $ComputeDay;
     }
 
     /**
-     * @param $referenceDay Day
+     * @var \Monmiel\MonmielApiModelBundle\Model\Year
+     */
+    private $yearComputed;
+    /**
+     * @param $dayNumber integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    private function  computeMixedTargetDailyConsumption($referenceDay)
+    public function getReferenceDay($dayNumber)
     {
+        return $this->transformers->get($dayNumber);
+    }
+
+
+    /**Public method for test, allow to pass a day directly in parameter without using database
+     * @param $referenceDay
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function  computeMixedTargetDailyConsumption($referenceDay)
+    {
+
         $this->stopWatch->start("computeDistribution", "repartition");
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
@@ -77,6 +91,8 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
             $maxProductionQuarter = $this->computeMaxProductionPerEnergy($quarter);
             $computedQuarter=    $this->computeDistribution($maxProductionQuarter);
             $userMixDay->addQuarters($computedQuarter);
+
+            $this->updateYearComputed($computedQuarter);
         }
         $this->stopWatch->stop("computeDistribution");
         return $userMixDay;
@@ -132,8 +148,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
-        $aeolianProductionCapacity = ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
-        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
+        $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
+        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
+
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
@@ -184,6 +201,36 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     public function setTargetYear($targetYear)
     {
         $this->targetYear = $targetYear;
+        $this->initComputedYear();
+    }
+
+    /**
+     *Resetting values
+      */
+    private function initComputedYear()
+{
+    $this->yearComputed=$this->targetYear;
+       $this->yearComputed->setConsoTotalEolien(0);
+    $this->yearComputed->setConsoTotalFlamme(0);
+    $this->yearComputed->setConsoTotalHydraulique(0);
+    $this->yearComputed->setConsoTotalNucleaire(0);
+    $this->yearComputed->setConsoTotalPhotovoltaique(0);
+
+}
+
+    /**
+     * Updating values with quarter
+     * @param $quarter Quarter
+     */
+    private function updateYearComputed($quarter)
+    {
+
+        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()+$this->yearComputed->getConsoTotalEolien());
+        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()+$this->yearComputed->getConsoTotalFlamme());
+        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()+$this->yearComputed->getConsoTotalHydraulique());
+        $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()+$this->yearComputed->getConsoTotalNucleaire());
+        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()+$this->yearComputed->getConsoTotalPhotovoltaique());
+
     }
 
     /**
@@ -240,5 +287,12 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     public function getTransformers()
     {
         return $this->transformers;
+    }
+
+
+
+    public function getComputedYear()
+    {
+        return $this->yearComputed;
     }
 }
