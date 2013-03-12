@@ -15,10 +15,14 @@ class RiakDao implements DaoInterface
      */
     public function getDayConso($dayNumber)
     {
+        $this->stopWatch->start("createDate", "dao");
         $date = date_create_from_format("Y-m-d", "2011-01-01");
         $date->modify("+".($dayNumber-1)." day");
         $key = $date->format("Y-m-d");
+        $this->stopWatch->stop('createDate');
+        $this->stopWatch->start("getDayConsoDao", "dao");
         $day = $this->rteIndexBucket->uniq($key)->getContent();
+        $this->stopWatch->stop('getDayConsoDao');
         return $day;
     }
 
@@ -45,4 +49,10 @@ class RiakDao implements DaoInterface
      * @var \Kbrw\RiakBundle\Model\Bucket\Bucket
      */
     public $rteIndexBucket;
+
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
 }

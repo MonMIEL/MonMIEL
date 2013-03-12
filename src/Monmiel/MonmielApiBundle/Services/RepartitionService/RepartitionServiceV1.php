@@ -24,6 +24,12 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     public $facilityService;
 
     /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
+
+    /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Year $targetYear
      */
     protected $targetYear;
@@ -49,7 +55,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function get($day)
     {
-        return $this->computeMixedTargetDailyConsumption($day);
+        $day = $this->computeMixedTargetDailyConsumption($day);
+
+        return $day;
     }
 
     /**
@@ -64,6 +72,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     private function  computeMixedTargetDailyConsumption($dayNumber)
     {
         $referenceDay = $this->getReferenceDay($dayNumber);
+        $this->stopWatch->start("computeDistribution", "repartition");
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
 
@@ -74,7 +83,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
             $computedQuarter=    $this->computeDistribution($maxProductionQuarter);
             $userMixDay->addQuarters($computedQuarter);
         }
-
+        $this->stopWatch->stop("computeDistribution");
         return $userMixDay;
     }
 

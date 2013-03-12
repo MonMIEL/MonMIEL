@@ -21,8 +21,6 @@ class Power
      */
     protected $flame;
 
-
-
     /**
      * @var float
      * @Ser\Type("float")
@@ -80,6 +78,39 @@ class Power
         $this->photovoltaic = $photovoltaic;
         $this->step = $step;
         $this->wind = $wind;
+    }
+
+    public function toArray()
+    {
+        $total = $this->getTotal();
+        $nucleaire = $this->nuclear/$total * 100;
+        $photo = $this->photovoltaic/$total * 100;
+        $eol = $this->wind/$total * 100;
+        $hydrau= $this->hydraulic/$total * 100;
+        $flamme = $this->flame/$total * 100;
+        $step = $this->step/$total * 100;
+        $import = $this->import/$total * 100;
+        return Array(
+            "nucleaire" => $nucleaire,
+            "photovoltaique" => $photo,
+            "eolien" => $eol,
+            "hydraulique" => $hydrau,
+            "flammes" => $flamme,
+            "step" => $flamme,
+            "import" => $import
+        );
+    }
+
+    public function getTotal()
+    {
+        return $this->flame
+            + $this->hydraulic
+            + $this->import
+            + $this->nuclear
+            + $this->other
+            + $this->photovoltaic
+            + $this->step
+            + $this->wind;
     }
 
 
@@ -210,9 +241,4 @@ class Power
     {
         return $this->wind;
     }
-
-
-
-
-
 }

@@ -23,6 +23,12 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public $riakDao;
 
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
+
 
     /**
      * the consommation in 2050
@@ -97,6 +103,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function UpdateConsoTotalForQuatersForDay($day)
     {
+        $this->stopWatch->start("updateConsoTotal", "transformers");
         $updatedDay = new Day($day->getDateTime());
         if (isset($day)) {
             $consoActuel = $this->getConsoTotalActuel();
@@ -114,7 +121,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             }
             $updatedDay->setQuarters($newQuartersArray);
         }
-
+        $this->stopWatch->stop("updateConsoTotal");
         return $updatedDay;
     }
 
