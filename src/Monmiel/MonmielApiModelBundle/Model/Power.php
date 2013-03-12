@@ -1,59 +1,67 @@
 <?php
 namespace Monmiel\MonmielApiModelBundle\Model;
+
+use JMS\Serializer\Annotation as Ser;
+
 /**
- * Created by JetBrains PhpStorm.
- * User: qiaob
- * Date: 07/03/13
- * Time: 15:21
- * To change this template use File | Settings | File Templates.
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("power")
  */
 class Power
 {
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nuclear")
      */
     protected $nuclear;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("flame")
      */
     protected $flame;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("wind")
      */
     protected $wind;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("hydraulic")
      */
     protected $hydraulic;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("photovoltaic")
      */
     protected $photovoltaic;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("other")
      */
     protected $other;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("import")
      */
     protected $import;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("step")
      */
     protected $step;
 

@@ -26,16 +26,17 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 365; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
-        $finaParc = $this->parc->getSimulatedParc();
-        $result->setFinalParcPower($finaParc);
+//        $finaParc = $this->parc->getSimulatedParc()
+//        $result->setFinalParcPower($finaParc);
         $parc = $this->repartition->getTargetParcPower();
         $result->setTargetParcPower($parc);
+        $result->setFinalParcPower($parc);
         $response = new Response();
-        $json = json_encode($result->getSeries());
+        $json = $this->serializer->serialize($result, "json");
         $response->setContent($json);
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
@@ -159,4 +160,10 @@ EOF;
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
+
+    /**
+     * @var \JMS\Serializer\Serializer $serializer
+     * @DI\Inject("serializer")
+     */
+    public $serializer;
 }
