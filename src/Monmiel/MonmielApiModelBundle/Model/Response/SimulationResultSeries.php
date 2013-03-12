@@ -3,21 +3,33 @@
 namespace Monmiel\MonmielApiModelBundle\Model\Response;
 
 use Monmiel\MonmielApiModelBundle\Model\Day;
+use JMS\Serializer\Annotation as Ser;
 
+/**
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("result")
+ */
 class SimulationResultSeries
 {
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Power $finalParcPower
+     * @Ser\Type("Monmiel\MonmielApiModelBundle\Model\Power")
+     * @Ser\SerializedName("$finalParcPower")
      */
     protected $finalParcPower;
 
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Power $targetParcPower
+     * @Ser\Type("Monmiel\MonmielApiModelBundle\Model\Power")
+     * @Ser\SerializedName("targetParcPower")
      */
     protected $targetParcPower;
 
     /**
      * @var $series array
+     * @Ser\Type("array")
+     * @Ser\SerializedName("series")
+     *
      */
     protected $series;
 
