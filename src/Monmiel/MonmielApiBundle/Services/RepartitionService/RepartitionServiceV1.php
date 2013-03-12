@@ -78,6 +78,28 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         return $userMixDay;
     }
 
+    /**
+     * @param $referenceDay Day
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function computeMixedTargetDailyConsumptionTest($referenceDay)
+    {
+        //$referenceDay = $this->getReferenceDay($dayNumber);
+
+        $referenceQuarters = $referenceDay->getQuarters();
+        $userMixDay = new Day();
+
+        /** @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter */
+        foreach ($referenceQuarters as $quarter) {
+
+            $maxProductionQuarter = $this->computeMaxProductionPerEnergy($quarter);
+            $computedQuarter=    $this->computeDistribution($maxProductionQuarter);
+            $userMixDay->addQuarters($computedQuarter);
+        }
+
+        return $userMixDay;
+    }
+
 
     /**
      * @param $quarter Quarter
@@ -128,8 +150,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
-        $aeolianProductionCapacity = ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
-        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
+        $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
+        $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
+
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
