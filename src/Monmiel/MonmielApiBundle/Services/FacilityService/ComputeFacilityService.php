@@ -28,7 +28,7 @@ class ComputeFacilityService implements FacilityServiceInterface
      *
      */
 
-    public function getSimulatedParc()
+    public function getSimulatedParc($year)
     {
         $parc=Parc::getInstance();
         $parcFinal=$parc->getParc();
@@ -45,8 +45,7 @@ class ComputeFacilityService implements FacilityServiceInterface
     {
         // return an object power calculated
         $parc=Parc::getInstance();
-        $parc->setPowerForEachEnergy($year);
-        return $parc->getPower();
+        return $parc->getPower($year);
     }
 
 }
