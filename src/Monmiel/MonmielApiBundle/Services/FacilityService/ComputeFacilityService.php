@@ -21,7 +21,7 @@ class ComputeFacilityService implements FacilityServiceInterface
             $parc->setMaxValueFlamme($solde);
         }
         else{
-            echo "Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable";
+            throw new \Exception("Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable");
         }
     }
     /*

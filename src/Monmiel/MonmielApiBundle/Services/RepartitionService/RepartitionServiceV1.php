@@ -53,25 +53,20 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $day integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function get($day)
+    public function get($dayNumber)
     {
-        $day = $this->computeMixedTargetDailyConsumption($day);
+        $referenceDay = $this->transformers->get($dayNumber);
+        $day = $this->computeMixedTargetDailyConsumption($referenceDay);
 
         return $day;
     }
 
     /**
-     * @param $dayNumber integer
+     * @param $referenceDay Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getReferenceDay($dayNumber)
+    private function  computeMixedTargetDailyConsumption($referenceDay)
     {
-        return $this->transformers->get($dayNumber);
-    }
-
-    private function  computeMixedTargetDailyConsumption($dayNumber)
-    {
-        $referenceDay = $this->getReferenceDay($dayNumber);
         $this->stopWatch->start("computeDistribution", "repartition");
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
