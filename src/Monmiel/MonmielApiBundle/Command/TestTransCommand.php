@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1;
 use \Monmiel\MonmielApiModelBundle\Model\Day;
 use \Monmiel\MonmielApiModelBundle\Model\Quarter;
+use \Monmiel\Utils\ConstantUtils;
+use \Monmiel\MonmielApiModelBundle\Model\Mesure;
 class TestTransCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -25,7 +27,7 @@ class TestTransCommand extends ContainerAwareCommand
             $dao = $this->getContainer()->get("monmiel.dao.riak");
             $day = $dao->getDayConso($i);
 
-            echo("size _________________:"); echo sizeof($day->getQuarters());
+
             echo "------------------ before \n";
             $indexBefore = 0;
             foreach ($day->getQuarters() as $val) {
@@ -34,13 +36,13 @@ class TestTransCommand extends ContainerAwareCommand
             }
 
             $t = new \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1();
-            $consoActual = new \Monmiel\MonmielApiModelBundle\Model\Mesure(600);
-            $consoInput = new \Monmiel\MonmielApiModelBundle\Model\Mesure(800);
+            $consoActual = new Mesure(600,ConstantUtils::TERAWATT);
+            $consoInput = new \Mesure(800,ConstantUtils::TERAWATT);
             $dayRetour = $t->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($day,$consoActual,$consoInput);
-            //$dayRetour = $t->getDayUpdatedByDayIdActualConsoAndInputConso(1,$consoActual,$consoInput);
+
             $t->setConsoActual($consoActual);
             $t->setConsoInput($consoInput);
-            //$dayRetour = $t->get(1);
+
             echo "------------------ after \n";
             $index = 0;
             foreach ($dayRetour->getQuarters() as $val) {
