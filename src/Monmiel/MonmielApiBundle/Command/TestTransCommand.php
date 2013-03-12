@@ -88,7 +88,7 @@ class TestTransCommand extends ContainerAwareCommand
         /**
          * @var Day $tmpDay
          */
-        $tmpDay=$this->repartition->computeMixedTargetDailyConsumptionTest($dayTransf);
+        $tmpDay=$this->repartition->computeMixedTargetDailyConsumption($dayTransf);
 
 
         echo "power ref" . "\n";
