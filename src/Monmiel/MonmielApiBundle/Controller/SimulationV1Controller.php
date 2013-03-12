@@ -26,14 +26,15 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-        $result->setTargetParcPower($this->repartition->getTargetParcPower());
+
         for ($i = 1; $i < 100; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
         $finaParc = $this->parc->getSimulatedParc();
         $result->setFinalParcPower($finaParc);
-//        var_dump($finaParc);exit;
+        $result->setTargetParcPower($this->repartition->getTargetParcPower());
+        var_dump($finaParc);exit;
         $response = new Response();
         $json = json_encode($result->getSeries());
         $response->setContent($json);
@@ -44,7 +45,7 @@ class SimulationV1Controller extends Controller
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function init(HttpRequest $request)
+    public function init(HttpRequest $request = null)
     {
         $userConsoMesure = new Mesure(478, 'GW');
         $actualConsoMesure = new Mesure(478, 'GW');
@@ -62,7 +63,7 @@ class SimulationV1Controller extends Controller
         $this->repartition->setTargetParcPower($targetParcPower);
     }
 
-    public function createTargetYearObject(HttpRequest $request)
+    public function createTargetYearObject(HttpRequest $request = null)
     {
 //        return new AskUser(0, 151998661, 12, 1679207799, 124821812, 4966116, 0, 600000000, 4514598);
         return new Year(2050, 1679207799/4, 4514598/4, 4966116/4, 0/4, 151998661/4, 0);
