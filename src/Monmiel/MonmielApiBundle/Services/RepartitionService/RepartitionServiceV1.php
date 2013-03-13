@@ -224,16 +224,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     private function updateYearComputed($quarter,$coeff = 4)
     {
-        echo "conso eol: ".($quarter->getEolien()/$coeff)."\n";
-        echo "conso flamme: ".($quarter->getFlamme()/$coeff)."\n";
-        echo "conso hydraulique: ".($quarter->getHydraulique()/$coeff)."\n";
-        echo "conso nucleaire: ".($quarter->getNucleaire()/$coeff)."\n";
-        echo "conso pv: ".($quarter->getPhotovoltaique()/$coeff)."\n";
-        $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
-        $this->yearComputed->setConsoTotalFlamme(($quarter->getFlamme()/$coeff)+$this->yearComputed->getConsoTotalFlamme());
-        $this->yearComputed->setConsoTotalHydraulique(($quarter->getHydraulique())/$coeff+$this->yearComputed->getConsoTotalHydraulique());
-        $this->yearComputed->setConsoTotalNucleaire(($quarter->getNucleaire()/$coeff)+$this->yearComputed->getConsoTotalNucleaire());
-        $this->yearComputed->setConsoTotalPhotovoltaique(($quarter->getPhotovoltaique()/$coeff)+$this->yearComputed->getConsoTotalPhotovoltaique());
+
     }
 
     /**
@@ -294,6 +285,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
     public function getComputedYear()
     {
+        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
+            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
+
         return $this->yearComputed;
     }
 }
