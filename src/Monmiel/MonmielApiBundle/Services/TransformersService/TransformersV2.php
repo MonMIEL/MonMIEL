@@ -60,4 +60,13 @@ class TransformersV2 implements TransformerServiceInterface
     {
        $this->getYearReference();
     }
+
+    /**
+     * calculate the median of consummation of yers in parameter
+     * @param $year integer year identifiant, for example, 2011
+     * @return float
+     */
+    public function calculateMedianOfConsummationForYear($year){
+        return 999999;
+    }
 }
