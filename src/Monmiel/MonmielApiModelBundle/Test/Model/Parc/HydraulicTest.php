@@ -9,7 +9,7 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Hydraulic
      */
-    protected $object;
+    protected $hydraulic;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -17,7 +17,7 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Hydraulic;
+        $this->hydraulic = new Hydraulic;
     }
 
     /**
@@ -30,85 +30,52 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::setPowerHydraulic
-     * @todo   Implement testSetPowerHydraulic().
      */
     public function testSetPowerHydraulic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getPowerHydraulic
-     * @todo   Implement testGetPowerHydraulic().
-     */
-    public function testGetPowerHydraulic()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->hydraulic->setFacteurChargeHydraulique(0.75);
+        $this->hydraulic->setPowerHydraulic(500);
+        $expectedValue = 500*100/75;
+        $result = $this->hydraulic->getPowerHydraulic();
+        $this->assertNotNull($result);
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::setFacteurChargeHydraulique
-     * @todo   Implement testSetFacteurChargeHydraulique().
      */
     public function testSetFacteurChargeHydraulique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->hydraulic->setFacteurChargeHydraulique(0.75);
+        $expectedValue = 0.75;
+        $result = $this->hydraulic->getFacteurChargeHydraulique();
+        $this->assertNotNull($result);
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getFacteurChargeHydraulique
-     * @todo   Implement testGetFacteurChargeHydraulique().
      */
     public function testGetFacteurChargeHydraulique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::setTauxDisponibiliteHydraulique
-     * @todo   Implement testSetTauxDisponibiliteHydraulique().
-     */
-    public function testSetTauxDisponibiliteHydraulique()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getTauxDisponibiliteHydraulique
-     * @todo   Implement testGetTauxDisponibiliteHydraulique().
-     */
-    public function testGetTauxDisponibiliteHydraulique()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->hydraulic->setFacteurChargeHydraulique(0.75);
+        $expectedValue = 0.75;
+        $result = $this->hydraulic->getFacteurChargeHydraulique();
+        $this->assertNotNull($result);
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getParcHydraulic
-     * @todo   Implement testGetParcHydraulic().
      */
     public function testGetParcHydraulic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->hydraulic->setFacteurChargeHydraulique(0.75);
+        $this->hydraulic->setPowerHydraulic(500);
+        $this->hydraulic->setTauxDisponibiliteHydraulique(0.80);
+        $expectedValue = (500*100/75)*(100/80);
+        $result = $this->hydraulic->getParcHydraulic();
+        $this->assertNotNull($result);
+        assertThat($result, is($expectedValue));
     }
 }
