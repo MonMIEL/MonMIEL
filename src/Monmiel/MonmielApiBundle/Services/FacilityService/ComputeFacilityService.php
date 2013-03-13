@@ -28,10 +28,10 @@ class ComputeFacilityService implements FacilityServiceInterface
      *
      */
 
-    public function getSimulatedParc($year)
+    public function getSimulatedParc($year,$interval=8760)
     {
         $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc($year);
+        $parcFinal=$parc->getParc($year,$interval);
         return $parcFinal;
     }
 
@@ -41,11 +41,11 @@ class ComputeFacilityService implements FacilityServiceInterface
      * @return \Monmiel\MonmielApiModelBundle\Model\Power
      */
 
-    public function getPower($year)
+    public function getPower($year,$interval=8760)
     {
         // return an object power calculated
         $parc=Parc::getInstance();
-        return $parc->getPower($year);
+        return $parc->getPower($year,$interval);
     }
 
 }

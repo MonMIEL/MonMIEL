@@ -108,19 +108,19 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $consoTotal = $quarter->getConsoTotal();
         $consoTotal = $consoTotal - $quarter->getEolien();
 
-        if ($consoTotal < 0) {
+        if ($consoTotal <= 0) {
             $quarter->setEolien($quarter->getEolien() + $consoTotal);
             return $quarter;
         }
 
         $consoTotal = $consoTotal - $quarter->getPhotovoltaique();
-        if ($consoTotal < 0) {
+        if ($consoTotal <= 0) {
             $quarter->setPhotovoltaique($quarter->getPhotovoltaique() + $consoTotal);
             return $quarter;
         }
 
         $consoTotal = $consoTotal - $quarter->getHydraulique();
-        if ($consoTotal < 0) {
+        if ($consoTotal <= 0) {
             $quarter->setHydraulique($quarter->getHydraulique() + $consoTotal);
             return $quarter;
         }
@@ -200,7 +200,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function setTargetYear($targetYear)
     {
-        $this->targetYear = $targetYear;
+        $this->targetYear = clone $targetYear;
         $this->initComputedYear();
     }
 
@@ -224,12 +224,11 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     private function updateYearComputed($quarter,$coeff = 4)
     {
-
-        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
-        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()/$coeff+$this->yearComputed->getConsoTotalFlamme());
-        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()/$coeff+$this->yearComputed->getConsoTotalHydraulique());
-        $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()/$coeff+$this->yearComputed->getConsoTotalNucleaire());
-        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()/$coeff+$this->yearComputed->getConsoTotalPhotovoltaique());
+        $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
+        $this->yearComputed->setConsoTotalFlamme(($quarter->getFlamme()/$coeff)+$this->yearComputed->getConsoTotalFlamme());
+        $this->yearComputed->setConsoTotalHydraulique(($quarter->getHydraulique())/$coeff+$this->yearComputed->getConsoTotalHydraulique());
+        $this->yearComputed->setConsoTotalNucleaire(($quarter->getNucleaire()/$coeff)+$this->yearComputed->getConsoTotalNucleaire());
+        $this->yearComputed->setConsoTotalPhotovoltaique(($quarter->getPhotovoltaique()/$coeff)+$this->yearComputed->getConsoTotalPhotovoltaique());
 
     }
 

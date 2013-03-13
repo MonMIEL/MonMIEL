@@ -45,24 +45,23 @@ class Nuclear
             $upper_value=0.76;
             $lower_percent=0.25;
             $lower_value=0.95;
-            if(isset($percentOfNuclear)){
-                if($percentOfNuclear>= $upper_percent){
-                    $this->fc_nuclear=$upper_value;
-                }
-                elseif(($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)){
-                    //ex:
-                    /**
-                     * @var $facteur Float
-                     */
-                    $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
-
-                    $this->fc_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
-
-                }
-                elseif($percentOfNuclear <= $lower_percent){
-                    $this->fc_nuclear=$lower_value;
-                }
+            if($percentOfNuclear>= $upper_percent){
+                $this->fc_nuclear=$upper_value;
             }
+            elseif(($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)){
+                //ex:
+                /**
+                 * @var $facteur Float
+                 */
+                $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
+
+                $this->fc_nuclear= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
+
+            }
+            elseif($percentOfNuclear <= $lower_percent){
+                $this->fc_nuclear=$lower_value;
+            }
+
         }
     }
 

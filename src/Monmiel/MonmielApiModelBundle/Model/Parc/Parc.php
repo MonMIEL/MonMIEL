@@ -73,8 +73,8 @@ class Parc{
      * @var $year Year
      * @return ParcFinal
      */
-    public function getParc($year){
-        $this->setPowerForEachEnergy($year);
+    public function getParc($year,$interval=8760){
+        $this->setPowerForEachEnergy($year,$interval);
 
         //On recupere l'energie nécessaire pour chaque énergie
         $ParcNuc=$this->nucleaire->getParcNuclear();
@@ -96,12 +96,16 @@ class Parc{
     /**
      * @param $year Year
      */
-    public function setPowerForEachEnergy($year){
 
-        $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire()),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()));
-        $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien()));
-        $this->pv->setPowerPv($this->calculateWattHour2Power($year->getConsoTotalPhotovoltaique()));
-        $this->hydraulique->setPowerHydraulic($this->calculateWattHour2Power($year->getConsoTotalHydraulique()));
+    public function setPowerForEachEnergy($year,$interval){
+        //echo "puissance nuc: ".$this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval)."\n";
+        $percentNuclear=$year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale();
+        //echo "% nuc: ".$percentNuclear;
+
+        $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()),$percentNuclear);
+        $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien(),$interval));
+        $this->pv->setPowerPv($this->calculateWattHour2Power($year->getConsoTotalPhotovoltaique(),$interval));
+        $this->hydraulique->setPowerHydraulic($this->calculateWattHour2Power($year->getConsoTotalHydraulique(),$interval));
         $this->flamme->setPowerFlamme();
         //$this->autres->setPowerAutre($power->getOther());
 
@@ -110,20 +114,17 @@ class Parc{
     /**
      * @var $year Year
      */
-    public function getPower($year){
-        $this->setPowerForEachEnergy($year);
+    public function getPower($year, $interval=8760){
+        //echo "interval".$interval."\n";
+        $this->setPowerForEachEnergy($year,$interval);
+        //echo "puissance calculee nuc".$this->nucleaire->getPowerNuclear()."\n";
         return new Power($this->flamme->getPowerFlamme(),$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
     }
 
-    private function calculateWattHour2Power($wattHour){
-
-        return $wattHour/(365*24);
+    //Le parametre intervalle correspond a l'interval de temps durant lequel a été faites la consommation ( 8760 correspond à 1 année)
+    private function calculateWattHour2Power($wattHour,$interval){
+        return $wattHour/$interval;
     }
-
-
-
-
-
 }
 
 
