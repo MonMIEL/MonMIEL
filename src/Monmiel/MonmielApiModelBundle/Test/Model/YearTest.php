@@ -17,7 +17,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Year;
+        $this->object = new Year("1",256.38,569.23,245.36,8563.25,547812.36,0.365);
     }
 
     /**
@@ -34,10 +34,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalEolien(125.36);
+        $this->assertEquals(125.36,$this->object->getConsoTotalEolien());
     }
 
     /**
@@ -46,10 +44,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalEolien());
     }
 
     /**
@@ -58,10 +53,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalHydraulique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalHydraulique(465465.39);
+        $this->assertEquals(465465.39,$this->object->getConsoTotalHydraulique());
     }
 
     /**
@@ -70,10 +63,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalHydraulique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalHydraulique());
     }
 
     /**
@@ -82,10 +72,9 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalPhotovoltaique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalPhotovoltaique(134654.25);
+        $this->assertEquals(134654.25,$this->object->getConsoTotalPhotovoltaique());
+
     }
 
     /**
@@ -94,10 +83,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalPhotovoltaique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalPhotovoltaique());
     }
 
     /**
@@ -106,10 +92,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalFlamme(1154.25);
+        $this->assertEquals(1154.25,$this->object->getConsoTotalFlamme());
     }
 
     /**
@@ -118,10 +102,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalGlobale()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalGlobale(65649476.2589);
+        $this->assertEquals(65649476.2589,$this->object->getConsoTotalGlobale());
     }
 
     /**
@@ -130,10 +112,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalFlamme());
     }
 
     /**
@@ -142,10 +121,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConsoTotalNucleaire()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setConsoTotalNucleaire(551.2369);
+        $this->assertEquals(551.2369,$this->object->getConsoTotalNucleaire());
     }
 
     /**
@@ -154,10 +131,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalNucleaire()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalNucleaire());
     }
 
     /**
@@ -166,10 +140,8 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetSolde()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setSolde(321314654.2398);
+        $this->assertEquals(321314654.2398,$this->object->getSolde());
     }
 
     /**
@@ -178,10 +150,7 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSolde()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getSolde());
     }
 
     /**
@@ -190,9 +159,6 @@ class YearTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConsoTotalGlobale()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getConsoTotalGlobale());
     }
 }
