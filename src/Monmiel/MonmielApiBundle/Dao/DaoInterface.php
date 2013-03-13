@@ -5,9 +5,9 @@ namespace Monmiel\MonmielApiBundle\Dao;
 interface DaoInterface
 {
     /**
-     * @param $day integer Le xiéme jour de 2011
+     * @param $key string
      */
-    public function getDayConso($day);
+    public function get($key);
 
     /**
      * @param $day \Monmiel\MonmielApiModelBundle\Model\Day

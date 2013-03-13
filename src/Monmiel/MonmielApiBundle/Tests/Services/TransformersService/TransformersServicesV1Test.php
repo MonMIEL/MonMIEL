@@ -79,7 +79,7 @@ class TransformersServicesV1Test extends BaseTestCase
                     ->disableOriginalConstructor()
                     ->getMock();
         /*$dao->expects($this->once())
-            ->method("getDayConso")
+            ->method("get")
             ->will($this->returnValue($day));*/
         return $dao;
     }

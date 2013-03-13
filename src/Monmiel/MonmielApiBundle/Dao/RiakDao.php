@@ -10,20 +10,15 @@ use JMS\DiExtraBundle\Annotation as DI;
 class RiakDao implements DaoInterface
 {
     /**
-     * @param $dayNumber integer
+     * @param $keys array<string>
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function getDayConso($dayNumber)
+    public function get($keys)
     {
-        $this->stopWatch->start("createDate", "dao");
-        $date = date_create_from_format("Y-m-d", "2011-01-01");
-        $date->modify("+".($dayNumber-1)." day");
-        $key = $date->format("Y-m-d");
-        $this->stopWatch->stop('createDate');
-        $this->stopWatch->start("getDayConsoDao", "dao");
-        $day = $this->rteIndexBucket->uniq($key)->getContent();
-        $this->stopWatch->stop('getDayConsoDao');
-        return $day;
+        $this->stopWatch->start("get", "dao");
+        $days = $this->rteIndexBucket->fetch($keys)->getContents();
+        $this->stopWatch->stop('get');
+        return $days;
     }
 
     /**

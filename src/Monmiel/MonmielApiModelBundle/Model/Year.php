@@ -2,19 +2,27 @@
 
 namespace Monmiel\MonmielApiModelBundle\Model;
 
+use JMS\Serializer\Annotation as Ser;
+
 /**
- * Modeling of consummation of on Year for the different type of Energy
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("year")
+ * @Ser\ExclusionPolicy("none")
  */
 class Year
 {
     /**
      * @var integer
+     * @Ser\Type("integer")
+     * @Ser\SerializedName("year")
      */
     protected  $yearIdentifiant;
 
     /**
      * sum consummation for the nucleaire of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nucleaire")
      */
     protected $consoTotalNucleaire;
 
@@ -22,12 +30,16 @@ class Year
     /**
      * sum consummation for the Eolien of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nucleaire")
      */
     protected $consoTotalEolien;
 
     /**
      * sum consummation for the hydro of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nucleaire")
      */
     protected $consoTotalHydraulique;
 
@@ -35,21 +47,30 @@ class Year
     /**
      * sum consummation for the pv of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nucleaire")
      */
     protected $consoTotalPhotovoltaique;
 
     /**
      * sum consummation for the Central flam of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nucleaire")
      */
     protected $consoTotalFlamme;
 
+    /**
+     * @var float
+     * @Ser\Exclude
+     */
     protected $consoTotalGlobale;
 
 
     /**
      * sold of year
      * @var float
+     * @Ser\Exclude
      */
     protected $solde;
 
