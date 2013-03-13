@@ -71,8 +71,9 @@ class TransformersV2 implements TransformerServiceInterface
         if(isset($medianYearReference)){
             $consoTotalYearReference = $this->yearReference->getConsoTotalGlobale();
             $consoTotalYearTarget = $this->yearDataDefineByUser->getConsoTotalGlobale();
-            if($consoTotalYearTarget != null  && $consoTotalYearReference != null)
-            return $medianYearReference * $consoTotalYearTarget/$consoTotalYearReference;
+            if($consoTotalYearTarget != null  && $consoTotalYearReference != null){
+                return $medianYearReference * $consoTotalYearTarget/$consoTotalYearReference;
+            }
         }
         return null;
     }
