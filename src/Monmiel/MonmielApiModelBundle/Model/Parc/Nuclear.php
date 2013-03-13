@@ -16,10 +16,12 @@ class Nuclear
     private $parc_Nuclear;
     
     //Represente la puissance unitaire d'un réacteur en MW
-    const PUISSANCEUNITAIRE=1090;
+    const POWERUNIT=1090;
+    const LOADFACTOR=0.762;
+    const AVAILABILITYRATE=0.807;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 0.762 (année 2011)
-    public function __construct($loadFactor=0.762, $availabilityRate=0.807,$power=0){
+    public function __construct($loadFactor= self::LOADFACTOR, $availabilityRate= self::AVAILABILITYRATE ,$power=0){
         $this->fc_nuclear=$loadFactor;
         $this->td_nuclear=$availabilityRate;
         $this->power_Nuclear=$power;
@@ -28,7 +30,6 @@ class Nuclear
     public function setPowerNuclear($PowerNuclear,$percentOfMix){
         if(isset($PowerNuclear)&& isset($percentOfMix)){
             $this->setFacteurChargeNuclear($percentOfMix);
-
             $this->power_Nuclear=$PowerNuclear/$this->fc_nuclear;
         }
     }
@@ -69,8 +70,8 @@ class Nuclear
         return $this->fc_nuclear;
     }
 
-    private function setTauxDisponibiliteNuclear($percentOfNuclear){
-
+    public function setTauxDisponibiliteNuclear($tdNuclear){
+        $this->td_nuclear=$tdNuclear;
     }
 
     public function getTauxDisponibiliteNuclear(){
@@ -79,7 +80,7 @@ class Nuclear
 
 
     public function getParcNuclear(){
-        $this->parc_Nuclear=( ($this->power_Nuclear/$this->td_nuclear)/ self::PUISSANCEUNITAIRE );
+        $this->parc_Nuclear=( $this->power_Nuclear/ self::POWERUNIT );
         return $this->parc_Nuclear;
     }
 
