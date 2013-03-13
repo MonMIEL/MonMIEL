@@ -12,6 +12,7 @@ use \Monmiel\MonmielApiModelBundle\Model\Day;
  */
 class TransformersV2 implements TransformerServiceInterface
 {
+
   /**
    * Injection of the RiakDao
    * @DI\Inject("monmiel.dao.riak")
@@ -20,14 +21,14 @@ class TransformersV2 implements TransformerServiceInterface
   public $riakDao;
 
   /**
-   * @var
+   * @var $yearDataDefineByUser Year
    */
   private $yearDataDefineByUser;
 
     /**
      * @var Year
      */
-    private $yearReference;
+  private $yearReference;
 
 
    public function setYearReference($yearReference)
@@ -63,10 +64,13 @@ class TransformersV2 implements TransformerServiceInterface
 
     /**
      * calculate the median of consummation of yers in parameter
-     * @param $year integer year identifiant, for example, 2011
+     * @param $yearTarget Year year target
+     * @parm $medianYearReference median of current year reference
      * @return float
      */
-    public function calculateMedianOfConsummationForYear($year){
-        return 999999;
+    public function calculateMedianOfConsummationForYearTarget($medianYearReference){
+        if(isset($medianYearReference)){
+            return $medianYearReference * $this->yearDataDefineByUser->getConsoTotalGlobale()/$this->yearReference->getConsoTotalGlobale();
+        }
     }
 }
