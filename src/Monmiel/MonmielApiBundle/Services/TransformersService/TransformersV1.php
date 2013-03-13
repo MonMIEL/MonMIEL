@@ -16,7 +16,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
 
     /**
      * Injection of the RiakDao
-     * @DI\Inject("monmiel.dao.riak")
+     * @DI\Inject("monmiel.dao.client")
      * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
      */
     public $riakDao;
@@ -60,7 +60,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function get($day)
     {
-        $consoDay = $this->riakDao->getDayConso($day);
+        $consoDay = $this->riakDao->get($day);
 
         return $this->UpdateConsoTotalForQuatersForDay($consoDay);
     }
@@ -74,7 +74,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso)
     {
-        $currentDay = $this->riakDao->getDayConso($dayId);//get the current day by id
+        $currentDay = $this->riakDao->get($dayId);//get the current day by id
 
         return $this->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($currentDay,$actualConso,$inputConso);
     }
