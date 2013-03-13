@@ -9,7 +9,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 /**
  * @DI\Service("monmiel.repartition.service")
  */
-class RepartitionServiceV1 implements RepartitionServiceInterface
+  class RepartitionServiceV1 implements RepartitionServiceInterface
 {
     /**
      * @DI\Inject("monmiel.transformers.v1.service")
@@ -63,7 +63,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     /**
      * @var $yearComputed \Monmiel\MonmielApiModelBundle\Model\Year
      */
-    private $yearComputed;
+    protected $yearComputed;
     /**
      * @param $dayNumber integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
@@ -103,7 +103,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $quarter Quarter
      * @return Quarter
      */
-    private function computeDistribution($quarter)
+    protected function computeDistribution($quarter)
     {
         $consoTotal = $quarter->getConsoTotal();
         $consoTotal = $consoTotal - $quarter->getEolien();
@@ -207,7 +207,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     /**
      *Resetting values
       */
-    private function initComputedYear()
+    protected function initComputedYear()
 {
     $this->yearComputed=$this->targetYear;
        $this->yearComputed->setConsoTotalEolien(0);
@@ -222,8 +222,10 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * Updating values with quarter
      * @param $quarter Quarter
      */
-    private function updateYearComputed($quarter,$coeff = 4)
+    protected function updateYearComputed($quarter,$coeff = 4)
     {
+        echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
+
 
         $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
         $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()/$coeff+$this->yearComputed->getConsoTotalFlamme());
