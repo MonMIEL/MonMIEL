@@ -4,6 +4,7 @@ namespace Monmiel\MonmielApiBundle\Tests\Services\FacilityService;
 
 use Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService;
 use Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal;
+use Monmiel\MonmielApiModelBundle\Model\Year;
 use Monmiel\MonmielApiBundle\Tests\BaseTestCase;
 
 class ComputeFacilityServiceTest extends BaseTestCase
@@ -23,11 +24,14 @@ class ComputeFacilityServiceTest extends BaseTestCase
      */
     public function testMaxFlamme()
     {
-        $array = array(5,3,1500);
+        $array = array(5,3,1500,800,500);
 
         foreach($array as &$solde){
             $this->facilityService->submitQuarters($solde);
         }
+
+        $year= new Year("1",50000000,25000000,25000000,0,0,0,100000000);
+
 
         $power= new Power(0,1000,0,10000,0,100,0,100);
 //        $nuc->setTauxDisponibiliteNuclear(0.10);

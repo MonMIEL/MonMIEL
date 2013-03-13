@@ -28,16 +28,19 @@ class EolienTest extends \PHPUnit_Framework_TestCase
     {
     }
 
+
+
     /**
+     *
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::setPowerEolien
      * @todo   Implement testSetPowerEolien().
      */
     public function testSetPowerEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+
+        $this->object->setPowerEolien(4);
+        $result= 4 / $this->object->getFacteurChargeEolien();
+        assertThat($this->object->getPowerEolien(),is($result));
     }
 
     /**
