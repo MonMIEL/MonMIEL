@@ -96,11 +96,11 @@ class Parc{
     /**
      * @param $year Year
      */
+
     public function setPowerForEachEnergy($year,$interval){
-        echo "puissance nuc: ".$this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval)."\n";
-        if( (isset($year->getConsoTotalGlobale()) && ($year->getConsoTotalGlobale()) ){
-            $percentNuclear=$year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale();
-        }
+        //echo "puissance nuc: ".$this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval)."\n";
+        $percentNuclear=$year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale();
+        //echo "% nuc: ".$percentNuclear;
 
         $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()),$percentNuclear);
         $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien(),$interval));
@@ -115,9 +115,9 @@ class Parc{
      * @var $year Year
      */
     public function getPower($year, $interval=8760){
-        echo "interval".$interval."\n";
+        //echo "interval".$interval."\n";
         $this->setPowerForEachEnergy($year,$interval);
-        echo "puissance calculee nuc".$this->nucleaire->getPowerNuclear()."\n";
+        //echo "puissance calculee nuc".$this->nucleaire->getPowerNuclear()."\n";
         return new Power($this->flamme->getPowerFlamme(),$this->hydraulique->getPowerHydraulic(),0,$this->nucleaire->getPowerNuclear(),0,$this->pv->getPowerPv(),0,$this->eolien->getPowerEolien());
     }
 

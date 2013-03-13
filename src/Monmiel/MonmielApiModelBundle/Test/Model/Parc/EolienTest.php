@@ -9,7 +9,7 @@ class EolienTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Eolien
      */
-    protected $object;
+    protected $eolien;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -17,7 +17,7 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Eolien;
+        $this->eolien = new Eolien;
     }
 
     /**
@@ -26,6 +26,7 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+
     }
 
 
@@ -37,10 +38,19 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPowerEolien()
     {
+<<<<<<< HEAD
 
         $this->object->setPowerEolien(4);
         $result= 4 / $this->object->getFacteurChargeEolien();
         assertThat($this->object->getPowerEolien(),is($result));
+=======
+        $this->eolien->setFacteurChargeEolien(75/100);
+        $this->eolien->setPowerEolien(500);
+
+        $expectedValue = 500*100/75;
+        $result = $this->eolien->getPowerEolien();
+        assertThat($result, is($expectedValue));
+>>>>>>> 6883c6d58f835297e5966ea5b72add92ae9c0696
     }
 
     /**
@@ -49,10 +59,12 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPowerEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->eolien->setFacteurChargeEolien(25/100);
+        $this->eolien->setPowerEolien(400);
+
+        $result = $this->eolien->getPowerEolien();
+
+        $this->assertNotNull($result, "must not null");
     }
 
     /**
@@ -61,57 +73,9 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFacteurChargeEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->eolien->setFacteurChargeEolien(75/100);
+        $result = $this->eolien->getFacteurChargeEolien();
+        $this->assertNotNull($result, "must not null");
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::getFacteurChargeEolien
-     * @todo   Implement testGetFacteurChargeEolien().
-     */
-    public function testGetFacteurChargeEolien()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::setTauxDisponibiliteEolien
-     * @todo   Implement testSetTauxDisponibiliteEolien().
-     */
-    public function testSetTauxDisponibiliteEolien()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::getTauxDisponibiliteEolien
-     * @todo   Implement testGetTauxDisponibiliteEolien().
-     */
-    public function testGetTauxDisponibiliteEolien()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::getParcEolien
-     * @todo   Implement testGetParcEolien().
-     */
-    public function testGetParcEolien()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 }
