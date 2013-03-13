@@ -179,4 +179,24 @@ class Year
     {
         return $this->consoTotalGlobale;
     }
+
+
+    public function toString ()
+    {
+        $result="";
+
+        $result=$result . "Nuclear: " .$this->consoTotalNucleaire/1000000 . " TW \n";
+        $result=$result . "Eolian: " .$this->consoTotalEolien/1000000 . " TW \n";
+        $result=$result . "Hydraulic: " .$this->consoTotalHydraulique/1000000 . " TW \n";
+        $result=$result . "Photovoltaic: " .$this->consoTotalPhotovoltaique/1000000 . " TW \n";
+        $result=$result . "Thermal: " .$this->consoTotalFlamme/1000000 . " TW \n";
+        $result=$result . "Global: " .$this->consoTotalGlobale/1000000 . " TW \n";
+
+
+        return $result;
+
+    }
+
 }
+
+
