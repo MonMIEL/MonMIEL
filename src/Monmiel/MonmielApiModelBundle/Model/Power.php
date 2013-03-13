@@ -1,61 +1,67 @@
 <?php
 namespace Monmiel\MonmielApiModelBundle\Model;
+
+use JMS\Serializer\Annotation as Ser;
+
 /**
- * Created by JetBrains PhpStorm.
- * User: qiaob
- * Date: 07/03/13
- * Time: 15:21
- * To change this template use File | Settings | File Templates.
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("power")
  */
 class Power
 {
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nuclear")
      */
     protected $nuclear;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("flame")
      */
     protected $flame;
 
-
-
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("wind")
      */
     protected $wind;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("hydraulic")
      */
     protected $hydraulic;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("photovoltaic")
      */
     protected $photovoltaic;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("other")
      */
     protected $other;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("import")
      */
     protected $import;
 
     /**
      * @var float
-     * @Ser\Type("float")
+     * @Ser\Type("double")
+     * @Ser\SerializedName("step")
      */
     protected $step;
 
@@ -80,6 +86,39 @@ class Power
         $this->photovoltaic = $photovoltaic;
         $this->step = $step;
         $this->wind = $wind;
+    }
+
+    public function toArray()
+    {
+        $total = $this->getTotal();
+        $nucleaire = $this->nuclear/$total * 100;
+        $photo = $this->photovoltaic/$total * 100;
+        $eol = $this->wind/$total * 100;
+        $hydrau= $this->hydraulic/$total * 100;
+        $flamme = $this->flame/$total * 100;
+        $step = $this->step/$total * 100;
+        $import = $this->import/$total * 100;
+        return Array(
+            "nucleaire" => $nucleaire,
+            "photovoltaique" => $photo,
+            "eolien" => $eol,
+            "hydraulique" => $hydrau,
+            "flammes" => $flamme,
+            "step" => $step,
+            "import" => $import
+        );
+    }
+
+    public function getTotal()
+    {
+        return $this->flame
+            + $this->hydraulic
+            + $this->import
+            + $this->nuclear
+            + $this->other
+            + $this->photovoltaic
+            + $this->step
+            + $this->wind;
     }
 
 
@@ -210,9 +249,4 @@ class Power
     {
         return $this->wind;
     }
-
-
-
-
-
 }

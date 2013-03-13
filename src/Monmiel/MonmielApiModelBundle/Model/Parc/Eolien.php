@@ -16,18 +16,20 @@ class Eolien
     private $parc_eolien;
 
     //Represente la puissance unitaire d'une éolienne en MW
-    const PUISSANCEUNITAIRE=1.5;
+    const POWERUNIT=1.5;
+    const LOADFACTOR=0.22;
+    const AVAILABILITYRATE=0.98;
 
-    //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct(){
-        $this->fc_eolien=1;
-        $this->td_eolien=1;
-        $this->power_eolien=0;
+    //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 22%
+    public function __construct($loadFactor= self::LOADFACTOR, $availabilityRate= self::AVAILABILITYRATE ,$power=0){
+        $this->fc_eolien=$loadFactor;
+        $this->td_eolien=$availabilityRate;
+        $this->power_eolien=$power;
     }
 
     public function setPowerEolien($powerEolien){
         if(isset($powerEolien)){
-            $this->power_eolien=((($powerEolien*4)/$this->getTauxDisponibiliteEolien())/$this->getFacteurChargeEolien());
+            $this->power_eolien=$powerEolien/$this->getFacteurChargeEolien();
         }
     }
 
@@ -35,11 +37,16 @@ class Eolien
         return $this->power_eolien;
     }
 
+    public function getParcEolien(){
+        $this->parc_eolien=( $this->power_eolien / self::POWERUNIT );
+        return $this->parc_eolien;
+    }
+
+
     public function setFacteurChargeEolien($fcEolien){
         if(isset($fcEolien)){
             $this->fc_eolien=$fcEolien;
         }
-
     }
 
     public function getFacteurChargeEolien(){
@@ -54,10 +61,5 @@ class Eolien
 
     public function getTauxDisponibiliteEolien(){
         return $this->td_eolien;
-    }
-
-    public function getParcEolien(){
-        $this->parc_eolien=( $this->power_eolien / self::PUISSANCEUNITAIRE );
-        return $this->parc_eolien;
     }
 }

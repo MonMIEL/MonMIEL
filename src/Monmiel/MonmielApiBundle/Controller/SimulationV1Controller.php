@@ -7,18 +7,89 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Monmiel\MonmielApiModelBundle\Model\Mesure;
+use Monmiel\MonmielApiModelBundle\Model\Year;
+use Monmiel\MonmielApiModelBundle\Model\Response\SimulationResultSeries;
 /**
  * @DI\Service("monmiel.simulation.controller")
  */
 class SimulationV1Controller extends Controller
 {
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function sendSimulationResult(HttpRequest $request)
     {
         $response = new Response();
-        $response->setContent($this->getContent());
+        $this->init($request);
+
+        $result = new SimulationResultSeries();
+        for ($i = 1; $i < 365; $i++) {
+            $day = $this->repartition->get($i);
+            $result->addDay($day);
+        }
+        $targetYear = $this->createTargetYearObject($request);
+        $computedYear = $this->repartition->getComputedYear();
+
+        $parc = $this->repartition->getTargetParcPower();
+        $finaParc = $this->parc->getPower($targetYear);
+
+
+        $result->setFinalConso($computedYear);
+        $result->setTargetConso($targetYear);
+        $result->setTargetParcPower($parc);
+        $result->setFinalParcPower($finaParc);
+
+
+        $response = new Response();
+        $json = $this->serializer->serialize($result, "json");
+        $response->setContent($json);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function init(HttpRequest $request = null)
+    {
+        $this->stopWatch->start("init", "controller");
+        $userConsoMesure = new Mesure($request->get("targetConso"), \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+        $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+
+        $this->transformers->setConsoTotalActuel($actualConsoMesure);
+        $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
+
+        $refYear = $this->createRefYearObject();
+        $targetYear = $this->createTargetYearObject($request);
+
+        $this->transformers->setReferenceYear($refYear);
+        $this->transformers->setTargetYear($targetYear);
+
+        $targetParcPower = $this->parc->getPower($targetYear);
+        $refParcPower = $this->parc->getPower($refYear);
+        $this->repartition->setReferenceYear($refYear);
+        $this->repartition->setTargetYear($targetYear);
+        $this->repartition->setReferenceParcPower($refParcPower);
+        $this->repartition->setTargetParcPower($targetParcPower);
+        $this->stopWatch->stop("init");
+    }
+
+    public function createTargetYearObject(HttpRequest $request = null)
+    {
+        $totalNuclear = $request->get("nuke") * 1000000;
+        $totalPhoto = $request->get("photo") * 1000000;
+        $totalEol = $request->get("eol") * 1000000;
+        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 151998661/4, 0);
+    }
+
+     public function createRefYearObject()
+     {
+         return new Year(2011, 1679207799/4, 4514598/4, 4966116/4, 0, 151998661/4, 0);
+     }
 
     public function getContent()
     {
@@ -73,4 +144,34 @@ EOF;
         return $content;
 
     }
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1
+     * @DI\Inject("monmiel.transformers.v1.service")
+     */
+    public $transformers;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1 $repartition
+     * @DI\Inject("monmiel.repartition.service")
+     */
+    public $repartition;
+
+    /**
+     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
+     * @DI\Inject("monmiel.facility.service")
+     */
+    public $parc;
+
+    /**
+     * @DI\Inject("debug.stopwatch")
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    public $stopWatch;
+
+    /**
+     * @var \JMS\Serializer\Serializer $serializer
+     * @DI\Inject("serializer")
+     */
+    public $serializer;
 }
