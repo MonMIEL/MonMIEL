@@ -149,9 +149,13 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
+        echo "eolProdCap";
+        echo $aeolianProductionCapacity;
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
 
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
+        echo "nukProdCap";
+        echo $nuclearProductionCapacity;
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
         $maxProductionQuarter = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
