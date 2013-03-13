@@ -1,7 +1,9 @@
 <?php
 
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
+
 use JMS\DiExtraBundle\Annotation as DI;
+
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
@@ -119,7 +121,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             }
             $updatedDay->setQuarters($newQuartersArray);
         }
-       $this->stopWatch->stop("updateConsoTotal");
+       $this->stopWach->stop("updateConsoTotal");
        return $updatedDay;
     }
 
@@ -232,7 +234,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
+    \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
      */
     public function setRiakDao($riakDao)
     {
