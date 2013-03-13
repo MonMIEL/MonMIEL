@@ -13,8 +13,7 @@ class Year
 {
     /**
      * @var integer
-     * @Ser\Type("integer")
-     * @Ser\SerializedName("year")
+     * @Ser\Exclude
      */
     protected  $yearIdentifiant;
 
@@ -22,7 +21,7 @@ class Year
      * sum consummation for the nucleaire of Year
      * @var float
      * @Ser\Type("double")
-     * @Ser\SerializedName("nucleaire")
+     * @Ser\SerializedName("nuclear")
      */
     protected $consoTotalNucleaire;
 
@@ -31,7 +30,7 @@ class Year
      * sum consummation for the Eolien of Year
      * @var float
      * @Ser\Type("double")
-     * @Ser\SerializedName("nucleaire")
+     * @Ser\SerializedName("wind")
      */
     protected $consoTotalEolien;
 
@@ -39,7 +38,7 @@ class Year
      * sum consummation for the hydro of Year
      * @var float
      * @Ser\Type("double")
-     * @Ser\SerializedName("nucleaire")
+     * @Ser\SerializedName("hydraulic")
      */
     protected $consoTotalHydraulique;
 
@@ -48,7 +47,7 @@ class Year
      * sum consummation for the pv of Year
      * @var float
      * @Ser\Type("double")
-     * @Ser\SerializedName("nucleaire")
+     * @Ser\SerializedName("photovoltaic")
      */
     protected $consoTotalPhotovoltaique;
 
@@ -56,7 +55,7 @@ class Year
      * sum consummation for the Central flam of Year
      * @var float
      * @Ser\Type("double")
-     * @Ser\SerializedName("nucleaire")
+     * @Ser\SerializedName("flame")
      */
     protected $consoTotalFlamme;
 
@@ -192,7 +191,6 @@ class Year
         return $this->solde;
     }
 
-
     /**
      * @return float
      */
@@ -200,7 +198,6 @@ class Year
     {
         return $this->consoTotalGlobale;
     }
-
 
     public function toString ()
     {
@@ -218,6 +215,21 @@ class Year
 
     }
 
+    /**
+     * @param int $yearIdentifiant
+     */
+    public function setYearIdentifiant($yearIdentifiant)
+    {
+        $this->yearIdentifiant = $yearIdentifiant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYearIdentifiant()
+    {
+        return $this->yearIdentifiant;
+    }
 }
 
 
