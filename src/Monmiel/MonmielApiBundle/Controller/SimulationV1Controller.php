@@ -26,15 +26,15 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-        for ($i = 1; $i < 365; $i++) {
+        for ($i = 1; $i < 10; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
-//        $finaParc = $this->parc->getSimulatedParc()
-//        $result->setFinalParcPower($finaParc);
+        $computedYear = $this->repartition->getComputedYear();
+        $finaParc = $this->parc->getPower($computedYear);
         $parc = $this->repartition->getTargetParcPower();
         $result->setTargetParcPower($parc);
-        $result->setFinalParcPower($parc);
+        $result->setFinalParcPower($finaParc);
         $response = new Response();
         $json = $this->serializer->serialize($result, "json");
         $response->setContent($json);

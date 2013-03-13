@@ -61,7 +61,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     }
 
     /**
-     * @var \Monmiel\MonmielApiModelBundle\Model\Year
+     * @var $yearComputed \Monmiel\MonmielApiModelBundle\Model\Year
      */
     private $yearComputed;
     /**
@@ -75,7 +75,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
 
     /**Public method for test, allow to pass a day directly in parameter without using database
-     * @param $referenceDay
+     * @param $referenceDay Day
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
     public function  computeMixedTargetDailyConsumption($referenceDay)
@@ -222,7 +222,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * Updating values with quarter
      * @param $quarter Quarter
      */
-    private function updateYearComputed($quarter,$coeff=4)
+    private function updateYearComputed($quarter,$coeff = 4)
     {
 
         $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
@@ -288,8 +288,6 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     {
         return $this->transformers;
     }
-
-
 
     public function getComputedYear()
     {

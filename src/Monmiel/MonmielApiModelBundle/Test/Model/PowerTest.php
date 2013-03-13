@@ -17,7 +17,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Power;
+        $this->object = new Power(500,20,300,600,700,120,23,55);
     }
 
     /**
@@ -34,10 +34,14 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testToArray()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEmpty(array_diff_assoc(Array(
+            "nucleaire" => $this->object->getNuclear(),
+            "photovoltaique" => $this->object->getPhotovoltaic(),
+            "eolien" => $this->object->getWind(),
+            "hydraulique" => $this->object->getHydraulic(),
+            "flammes" => $this->object->getFlame(),
+            "step" => $this->object->getStep(),
+            "import" => $this->object->getImport()),$this->object->toArray()));
     }
 
     /**
@@ -46,10 +50,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTotal()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals($this->object->getTotal(),2318);
     }
 
     /**
@@ -58,10 +59,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFlame()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+       $this->object->setFlame(100.56);
+       $this->assertEquals(100.56,$this->object->getFlame());
     }
 
     /**
@@ -70,10 +69,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFlame()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getFlame());
     }
 
     /**
@@ -82,10 +78,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHydraulic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setHydraulic(200.88);
+        $this->assertEquals(200.88,$this->object->getHydraulic());
     }
 
     /**
@@ -94,10 +88,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHydraulic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getHydraulic());
     }
 
     /**
@@ -106,10 +97,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetImport()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setImport(546498465.23);
+        $this->assertEquals(546498465.23,$this->object->getImport());
     }
 
     /**
@@ -118,10 +107,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetImport()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getImport());
     }
 
     /**
@@ -130,10 +116,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNuclear()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setNuclear(5431313.23);
+        $this->assertEquals(5431313.23,$this->object->getNuclear());
     }
 
     /**
@@ -142,10 +126,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNuclear()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getNuclear());
     }
 
     /**
@@ -154,10 +135,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOther()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setOther(4665486.89);
+        $this->assertEquals(4665486.89,$this->object->getOther());
     }
 
     /**
@@ -166,10 +145,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOther()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getOther());
     }
 
     /**
@@ -178,10 +154,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPhotovoltaic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setPhotovoltaic(46.89);
+        $this->assertEquals(46.89,$this->object->getPhotovoltaic());
     }
 
     /**
@@ -190,10 +164,7 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPhotovoltaic()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getPhotovoltaic());
     }
 
     /**
@@ -202,22 +173,16 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStep()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setStep(49849.8);
+        $this->assertEquals(49849.8,$this->object->getStep());
     }
-
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Power::getStep
      * @todo   Implement testGetStep().
      */
     public function testGetStep()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getStep());
     }
 
     /**
@@ -226,10 +191,8 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetWind()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setWind(56.238);
+        $this->assertEquals(56.238,$this->object->getWind());
     }
 
     /**
@@ -238,9 +201,6 @@ class PowerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWind()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getWind());
     }
 }
