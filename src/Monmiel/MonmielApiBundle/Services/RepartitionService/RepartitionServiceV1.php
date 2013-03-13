@@ -232,6 +232,8 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()/$coeff+$this->yearComputed->getConsoTotalHydraulique());
         $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()/$coeff+$this->yearComputed->getConsoTotalNucleaire());
         $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()/$coeff+$this->yearComputed->getConsoTotalPhotovoltaique());
+        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
+            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
 
     }
 
@@ -293,8 +295,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
     public function getComputedYear()
     {
-        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
-            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
+
 
         return $this->yearComputed;
     }
