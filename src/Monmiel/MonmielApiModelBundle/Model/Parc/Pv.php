@@ -13,15 +13,16 @@ class Pv
 
     private $fc_pv;
     private $td_pv;
-
     private $power_Pv;
     private $parc_Pv;
 
     //Represente la puissance unitaire d'un panneau photovoltaique par M² en MW
-    const PUISSANCEUNITAIRE=0.001;
+    const POWERUNIT=0.001;
+    const LOADFACTOR=0.09;
+    const AVAILABILITYRATE=1;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 9% (année 2011)
-    public function __construct($loadFactor=0.09, $availabilityRate=1,$power=0){
+    public function __construct($loadFactor= self::LOADFACTOR, $availabilityRate= self::AVAILABILITYRATE ,$power=0){
         $this->fc_pv=$loadFactor;
         $this->td_pv=$availabilityRate;
         $this->power_Pv=$power;
@@ -58,7 +59,7 @@ class Pv
     }
 
     public function getParcPv(){
-        $this->parc_Pv=( ($this->power_Pv/$this->td_pv)/ self::PUISSANCEUNITAIRE );
+        $this->parc_Pv=( $this->power_Pv/ self::POWERUNIT );
         return $this->parc_Pv;
     }
 }

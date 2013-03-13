@@ -46,14 +46,15 @@ class TestTransCommand extends ContainerAwareCommand
 
 
 
-        $q1=new Quarter("2013-01-02",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
+        $q1=new Quarter("2013-01-01",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
         $q2=new Quarter("2013-01-02",20000,0,0,0,20000,0,0,0,0,0,0,0,0);
+        $q3=new Quarter("2013-01-03",15000,0,0,0,15000,0,0,0,0,0,0,0,0);
 
         $tmp = array();
 
         array_push($tmp,$q1);
         array_push($tmp,$q2);
-
+        array_push($tmp,$q3);
         $day = new Day('2012-01-02',$tmp);
 
         $yearRef = new \Monmiel\MonmielApiModelBundle\Model\Year("1",100000000,0,0,0,0,0,100000000);
@@ -90,14 +91,18 @@ class TestTransCommand extends ContainerAwareCommand
          */
         $tmpDay=$this->repartition->computeMixedTargetDailyConsumption($dayTransf);
 
-
-        echo "power ref" . "\n";
+        $yearComputed=$this->repartition->getComputedYear();
+        echo "year target" . "\n";
+        var_dump($yearComputed);
+        /*echo "power ref" . "\n";
         var_dump($powerRef);
 
         echo "power target" . "\n";
-        var_dump($powerTarget);
+        var_dump($powerTarget);*/
 
         var_dump($tmpDay);
+        //echo "Répartition des puissances après simulation \n";
+        //var_dump($newPower);
 
 
 

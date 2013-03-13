@@ -2,19 +2,26 @@
 
 namespace Monmiel\MonmielApiModelBundle\Model;
 
+use JMS\Serializer\Annotation as Ser;
+
 /**
- * Modeling of consummation of on Year for the different type of Energy
+ * @Ser\AccessType("public_method")
+ * @Ser\XmlRoot("year")
+ * @Ser\ExclusionPolicy("none")
  */
 class Year
 {
     /**
      * @var integer
+     * @Ser\Exclude
      */
     protected  $yearIdentifiant;
 
     /**
      * sum consummation for the nucleaire of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("nuclear")
      */
     protected $consoTotalNucleaire;
 
@@ -22,12 +29,16 @@ class Year
     /**
      * sum consummation for the Eolien of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("wind")
      */
     protected $consoTotalEolien;
 
     /**
      * sum consummation for the hydro of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("hydraulic")
      */
     protected $consoTotalHydraulique;
 
@@ -35,21 +46,30 @@ class Year
     /**
      * sum consummation for the pv of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("photovoltaic")
      */
     protected $consoTotalPhotovoltaique;
 
     /**
      * sum consummation for the Central flam of Year
      * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("flame")
      */
     protected $consoTotalFlamme;
 
+    /**
+     * @var float
+     * @Ser\Exclude
+     */
     protected $consoTotalGlobale;
 
 
     /**
      * sold of year
      * @var float
+     * @Ser\Exclude
      */
     protected $solde;
 
@@ -171,7 +191,6 @@ class Year
         return $this->solde;
     }
 
-
     /**
      * @return float
      */
@@ -179,7 +198,6 @@ class Year
     {
         return $this->consoTotalGlobale;
     }
-
 
     public function toString ()
     {
@@ -197,6 +215,21 @@ class Year
 
     }
 
+    /**
+     * @param int $yearIdentifiant
+     */
+    public function setYearIdentifiant($yearIdentifiant)
+    {
+        $this->yearIdentifiant = $yearIdentifiant;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYearIdentifiant()
+    {
+        return $this->yearIdentifiant;
+    }
 }
 
 
