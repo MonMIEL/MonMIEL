@@ -291,6 +291,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
     public function getComputedYear()
     {
+        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
+            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
+
         return $this->yearComputed;
     }
 }
