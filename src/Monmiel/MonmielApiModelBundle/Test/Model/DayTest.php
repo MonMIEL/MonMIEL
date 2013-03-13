@@ -17,7 +17,13 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Day;
+        $q1=new Quarter("2013-01-02",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
+        $q2=new Quarter("2013-01-02",20000,0,0,0,20000,0,0,0,0,0,0,0,0);
+        $tmp = array();
+        array_push($tmp,$q1);
+        array_push($tmp,$q2);
+
+        $this->object = new Day(date_create_from_format('Y-m-d','2013-01-02'),$tmp);
     }
 
     /**
@@ -34,10 +40,9 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetKey()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setDateTime(date_create_from_format('Y-m-d','2013-05-08'));
+        //echo $this->object->getKey();
+        $this->assertEquals("2013-05-08",$this->object->getKey());
     }
 
     /**
@@ -46,10 +51,18 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMax()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $q1 = new Quarter("2013-08-09",7530,589,336,994,5588,23,0,0);
+        $q2 = new Quarter("2013-08-09",14970,5859,8336,94,258,423,0,0);
+        $tmp = array();
+        array_push($tmp,$q1);
+        array_push($tmp,$q2);
+        $this->object->setQuarters($tmp);
+        $tmpResult = $this->object->getMax();
+        $this->assertEquals(994,$tmpResult["hydraulique"]);
+        $this->assertEquals(5588,$tmpResult["nucleaire"]);
+        $this->assertEquals(423,$tmpResult["photovoltaique"]);
+        $this->assertEquals(5859,$tmpResult["eolien"]);
+        $this->assertEquals(8336,$tmpResult["flamme"]);
     }
 
     /**
@@ -58,10 +71,11 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddQuarters()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $qTmp=new Quarter("2013-05-02",15000,0,0,0,15000,0,0,0,0,0,0,0,0);
+        $this->object->addQuarters($qTmp);
+        $tmpResult =array();
+        $tmpResult = $this->object->getQuarters();
+        $this->assertEquals($tmpResult[sizeof($tmpResult)-1],$qTmp);
     }
 
     /**
@@ -70,10 +84,15 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQuarter()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $q1=new Quarter("2013-05-02",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
+        $q2=new Quarter("2013-05-02",20000,0,0,0,20000,0,0,0,0,0,0,0,0);
+
+        $tmp = array();
+
+        array_push($tmp,$q1);
+        array_push($tmp,$q2);
+        $this->object->setQuarters($tmp);
+        $this->assertEquals($q1,$this->object->getQuarter(0));
     }
 
     /**
@@ -82,10 +101,8 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDateTime()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setDateTime(date_create_from_format('Y-M-D','2013-02-03'));
+        $this->assertEquals(date_create_from_format('Y-M-D','2013-02-03'),$this->object->getDateTime());
     }
 
     /**
@@ -94,10 +111,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDateTime()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+       $this->assertNotNull($this->object->getDateTime());
     }
 
     /**
@@ -106,10 +120,16 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetQuarters()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $q1=new Quarter("2013-05-02",5000,0,0,0,5000,0,0,0,0,0,0,0,0);
+        $q2=new Quarter("2013-05-02",20000,0,0,0,20000,0,0,0,0,0,0,0,0);
+
+        $tmp = array();
+
+        array_push($tmp,$q1);
+        array_push($tmp,$q2);
+        $this->object->setQuarters($tmp);
+        $this->assertEquals($tmp,$this->object->getQuarters());
+
     }
 
     /**
@@ -118,9 +138,6 @@ class DayTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQuarters()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->object->getQuarters());
     }
 }
