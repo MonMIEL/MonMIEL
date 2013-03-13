@@ -24,10 +24,12 @@ class Flamme
     private $parc_Flamme;
 
     //Represente la puissance unitaire d'une éolienne en MW
-    const PUISSANCEUNITAIRE=500;
+    const POWERUNIT=500;
+    const LOADFACTOR=1;
+    const AVAILABILITYRATE=0.95;
 
     //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct($loadFactor=1, $availabilityRate=0.95,$power=0){
+    public function __construct($loadFactor= self::LOADFACTOR, $availabilityRate= self::AVAILABILITYRATE ,$power=0){
         $this->fc_Flamme=$loadFactor;
         $this->td_Flamme=$availabilityRate;
         $this->max_Flamme=0;
@@ -42,6 +44,26 @@ class Flamme
 
     public function getMaxFlamme(){
         return $this->max_Flamme;
+    }
+
+    public function setPowerFlamme(){
+        $this->power_Flamme=(($this->max_Flamme));
+    }
+
+    public function getPowerFlamme(){
+        if(isset($this->power_Flamme)){
+            return $this->power_Flamme;
+        }
+        else{
+            $this->setPowerFlamme();
+            return $this->power_Flamme;
+        }
+
+    }
+
+    public function getParcFlamme(){
+        $this->parc_Flamme=( $this->power_Flamme/ self::POWERUNIT );
+        return $this->parc_Flamme;
     }
 
     public function setFacteurChargeFlamme($fcFlamme){
@@ -62,25 +84,5 @@ class Flamme
 
     public function getTauxDisponibiliteFlamme(){
         return $this->td_Flamme;
-    }
-
-    public function setPowerFlamme(){
-        $this->power_Flamme=(($this->max_Flamme));
-    }
-
-    public function getPowerFlamme(){
-        if(isset($this->power_Flamme)){
-            return $this->power_Flamme;
-        }
-        else{
-            $this->setPowerFlamme();
-            return $this->power_Flamme;
-        }
-
-    }
-
-    public function getParcFlamme(){
-        $this->parc_Flamme=( ($this->power_Flamme/$this->td_Flamme)/ self::PUISSANCEUNITAIRE );
-        return $this->parc_Flamme;
     }
 }

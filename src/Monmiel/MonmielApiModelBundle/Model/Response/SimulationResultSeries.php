@@ -14,7 +14,7 @@ class SimulationResultSeries
     /**
      * @var \Monmiel\MonmielApiModelBundle\Model\Power $finalParcPower
      * @Ser\Type("Monmiel\MonmielApiModelBundle\Model\Power")
-     * @Ser\SerializedName("$finalParcPower")
+     * @Ser\SerializedName("finalParcPower")
      */
     protected $finalParcPower;
 
@@ -24,6 +24,20 @@ class SimulationResultSeries
      * @Ser\SerializedName("targetParcPower")
      */
     protected $targetParcPower;
+
+    /**
+     * @var \Monmiel\MonmielApiModelBundle\Model\Year
+     * @Ser\Type("Monmiel\MonmielApiModelBundle\Model\Year")
+     * @Ser\SerializedName("finalConso")
+     */
+    protected $finalConso;
+
+    /**
+     * @var \Monmiel\MonmielApiModelBundle\Model\Year
+     * @Ser\Type("Monmiel\MonmielApiModelBundle\Model\Year")
+     * @Ser\SerializedName("targetConso")
+     */
+    protected $targetConso;
 
     /**
      * @var $series array
@@ -128,5 +142,37 @@ class SimulationResultSeries
     public function getSeries()
     {
         return $this->series;
+    }
+
+    /**
+     * @param \Monmiel\MonmielApiModelBundle\Model\Year $finalConso
+     */
+    public function setFinalConso($finalConso)
+    {
+        $this->finalConso = $finalConso;
+    }
+
+    /**
+     * @return \Monmiel\MonmielApiModelBundle\Model\Year
+     */
+    public function getFinalConso()
+    {
+        return $this->finalConso;
+    }
+
+    /**
+     * @param \Monmiel\MonmielApiModelBundle\Model\Year $targetConso
+     */
+    public function setTargetConso($targetConso)
+    {
+        $this->targetConso = $targetConso;
+    }
+
+    /**
+     * @return \Monmiel\MonmielApiModelBundle\Model\Year
+     */
+    public function getTargetConso()
+    {
+        return $this->targetConso;
     }
 }

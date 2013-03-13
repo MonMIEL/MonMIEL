@@ -12,13 +12,17 @@ use Monmiel\MonmielApiModelBundle\Model\Year;
  */
 class ComputeFacilityService implements FacilityServiceInterface
 {
+    /**
+     * @var $parc Parc
+     */
+    private $parc;
 
     public function submitQuarters($solde)
     {
-        $parc=Parc::getInstance();
-        if(isset($parc) && isset($solde)){
+        $this->parc=Parc::getInstance();
+        if(isset($this->parc) && isset($solde)){
             //$parc->setMaxValue($quarter[0],$quarter[1],$quarter[2],$quarter[3],$quarter[4]);
-            $parc->setMaxValueFlamme($solde);
+            $this->parc->setMaxValueFlamme($solde);
         }
         else{
             throw new \Exception("Aucun objet parc existant. La méthode initParc() doit avoir été appelée au préalable");
@@ -30,9 +34,9 @@ class ComputeFacilityService implements FacilityServiceInterface
 
     public function getSimulatedParc($year,$interval=8760)
     {
-        $parc=Parc::getInstance();
-        $parcFinal=$parc->getParc($year,$interval);
-        return $parcFinal;
+        $this->parc=Parc::getInstance();
+        $this->parc->setPowerForEachEnergy($year,$interval);
+        return $this->parc->getParc();
     }
 
 
@@ -45,7 +49,8 @@ class ComputeFacilityService implements FacilityServiceInterface
     {
         // return an object power calculated
         $parc=Parc::getInstance();
-        return $parc->getPower($year,$interval);
+        $parc->setPowerForEachEnergy($year,$interval);
+        return $parc->getPower();
     }
 
 }
