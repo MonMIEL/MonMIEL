@@ -9,7 +9,7 @@ class ParcFinalTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ParcFinal
      */
-    protected $object;
+    protected $finalPark;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -17,7 +17,7 @@ class ParcFinalTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new ParcFinal;
+        $this->finalPark = new ParcFinal(5000,4000,3000,2000,1000,500);
     }
 
     /**
@@ -30,73 +30,69 @@ class ParcFinalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcNucleaire
-     * @todo   Implement testGetParcNucleaire().
+
      */
     public function testGetParcNucleaire()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+         $this->assertNotNull($this->finalPark->getParcNucleaire());
+         $expectedValue = 5000;
+         $result = $this->finalPark->getParcNucleaire();
+         assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcEolien
-     * @todo   Implement testGetParcEolien().
      */
     public function testGetParcEolien()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->finalPark->getParcEolien());
+        $expectedValue = 4000;
+        $result = $this->finalPark->getParcEolien();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcPv
-     * @todo   Implement testGetParcPv().
      */
     public function testGetParcPv()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->finalPark->getParcPv());
+        $expectedValue = 3000;
+        $result = $this->finalPark->getParcPv();
+        assertThat($result, is($expectedValue));
+
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcHydraulique
-     * @todo   Implement testGetParcHydraulique().
      */
     public function testGetParcHydraulique()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->finalPark->getParcHydraulique());
+        $expectedValue = 2000;
+        $result = $this->finalPark->getParcHydraulique();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcFlamme
-     * @todo   Implement testGetParcFlamme().
      */
     public function testGetParcFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->finalPark->getParcFlamme());
+        $expectedValue = 1000;
+        $result = $this->finalPark->getParcFlamme();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\ParcFinal::getParcAutre
-     * @todo   Implement testGetParcAutre().
      */
     public function testGetParcAutre()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNotNull($this->finalPark->getParcAutre());
+        $expectedValue = 500;
+        $result = $this->finalPark->getParcAutre();
+        assertThat($result, is($expectedValue));
     }
 }
