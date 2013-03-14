@@ -56,15 +56,15 @@ class Quarter
      * @var integer
      * @Ser\Type("integer")
      */
-    protected $solde;
+    protected $consoTotal;
 
     /**
      * @var integer
      * @Ser\Type("integer")
      */
-    protected $consoTotal;
+    protected $interval;
 
-    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $solde)
+    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $interval)
     {
         $this->autre = $autre;
         $this->consoTotal = $consoTotal;
@@ -74,7 +74,7 @@ class Quarter
         $this->hydraulique = $hydraulique;
         $this->nucleaire = $nucleaire;
         $this->photovoltaique = $photovoltaique;
-        $this->solde = $solde;
+        $this->interval = $interval;
     }
 
 
@@ -234,18 +234,18 @@ class Quarter
     }
 
     /**
-     * @param int $solde
+     * @param integer $interval
      */
-    public function setSolde($solde)
+    public function setInterval($interval)
     {
-        $this->solde = $solde;
+        $this->interval = $interval;
     }
 
     /**
-     * @return int
+     * @return integer
      */
-    public function getSolde()
+    public function getInterval()
     {
-        return $this->solde;
+        return $this->interval;
     }
 }

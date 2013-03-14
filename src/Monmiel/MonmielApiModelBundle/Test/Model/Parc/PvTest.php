@@ -9,7 +9,7 @@ class PvTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Pv
      */
-    protected $object;
+    protected $pv;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -17,7 +17,7 @@ class PvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Pv;
+        $this->pv = new Pv;
     }
 
     /**
@@ -30,85 +30,49 @@ class PvTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setPowerPv
-     * @todo   Implement testSetPowerPv().
      */
     public function testSetPowerPv()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::getPowerPv
-     * @todo   Implement testGetPowerPv().
-     */
-    public function testGetPowerPv()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+      $this->pv->setFacteurChargePv(0.75);
+      $this->pv->setPowerPv(400);
+      $expectedValue = 400*100/75;
+      $result = $this->pv->getPowerPv();
+      assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setFacteurChargePv
-     * @todo   Implement testSetFacteurChargePv().
      */
     public function testSetFacteurChargePv()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::getFacteurChargePv
-     * @todo   Implement testGetFacteurChargePv().
-     */
-    public function testGetFacteurChargePv()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->pv->setFacteurChargePv(0.75);
+        $expectedValue = 0.75;
+        $result = $this->pv->getFacteurChargePv();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setTauxDisponibilitePv
-     * @todo   Implement testSetTauxDisponibilitePv().
+
      */
     public function testSetTauxDisponibilitePv()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::getTauxDisponibilitePv
-     * @todo   Implement testGetTauxDisponibilitePv().
-     */
-    public function testGetTauxDisponibilitePv()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->pv->setTauxDisponibilitePv(0.75);
+        $expectedValue = 0.75;
+        $result = $this->pv->getTauxDisponibilitePv();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::getParcPv
-     * @todo   Implement testGetParcPv().
      */
     public function testGetParcPv()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->pv->setFacteurChargePv(0.75);
+        $this->pv->setPowerPv(400);
+        $this->pv->setTauxDisponibilitePv(0.80);
+        $expectedValue = intval(((400*100/75)*100/80)/0.001);
+        $result = intval($this->pv->getParcPv());
+        assertThat($result, is($expectedValue));
     }
 }

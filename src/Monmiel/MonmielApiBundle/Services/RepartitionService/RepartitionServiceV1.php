@@ -9,7 +9,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 /**
  * @DI\Service("monmiel.repartition.service")
  */
-class RepartitionServiceV1 implements RepartitionServiceInterface
+  class RepartitionServiceV1 implements RepartitionServiceInterface
 {
     /**
      * @DI\Inject("monmiel.transformers.v1.service")
@@ -63,7 +63,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
     /**
      * @var $yearComputed \Monmiel\MonmielApiModelBundle\Model\Year
      */
-    private $yearComputed;
+    protected $yearComputed;
     /**
      * @param $dayNumber integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
@@ -106,13 +106,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * @param $quarter Quarter
      * @return Quarter
      */
-    private function computeDistribution($quarter)
+    protected function computeDistribution($quarter)
     {
         $consoTotal = $quarter->getConsoTotal();
         $consoTotal = $consoTotal - $quarter->getEolien();
 
         if ($consoTotal < 0) {
             $quarter->setEolien($quarter->getEolien() + $consoTotal);
+            echo "eolien: ".$quarter->getEolien()."\n";
             return $quarter;
         }
 
@@ -152,6 +153,12 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
+
+        echo "prod n-1: ".$quarter->getEolien()."\n";
+        echo "parc eolien n-1: ".$referenceParcPower->getWind()."\n";
+
+        echo "parc eolien n: ".$targetParcPower->getWind()."\n";
+        echo "capacité prod eolien n: ".$aeolianProductionCapacity."\n";
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
 
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
@@ -171,7 +178,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function setReferenceYear($referenceYear)
     {
-        $this->referenceYear = $referenceYear;
+        $this->referenceYear = clone $referenceYear;
     }
 
     /**
@@ -187,7 +194,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function setTargetParcPower($targetParcPower)
     {
-        $this->targetParcPower = $targetParcPower;
+        $this->targetParcPower = clone $targetParcPower;
     }
 
     /**
@@ -203,14 +210,14 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function setTargetYear($targetYear)
     {
-        $this->targetYear = $targetYear;
+        $this->targetYear = clone $targetYear;
         $this->initComputedYear();
     }
 
     /**
      *Resetting values
       */
-    private function initComputedYear()
+    protected function initComputedYear()
 {
     $this->yearComputed=$this->targetYear;
        $this->yearComputed->setConsoTotalEolien(0);
@@ -225,14 +232,18 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      * Updating values with quarter
      * @param $quarter Quarter
      */
-    private function updateYearComputed($quarter,$coeff = 4)
+    protected function updateYearComputed($quarter,$coeff = 4)
     {
+       // echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
 
-        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
-        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()/$coeff+$this->yearComputed->getConsoTotalFlamme());
-        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()/$coeff+$this->yearComputed->getConsoTotalHydraulique());
-        $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()/$coeff+$this->yearComputed->getConsoTotalNucleaire());
-        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()/$coeff+$this->yearComputed->getConsoTotalPhotovoltaique());
+
+        $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
+        $this->yearComputed->setConsoTotalFlamme(($quarter->getFlamme()/$coeff)+$this->yearComputed->getConsoTotalFlamme());
+        $this->yearComputed->setConsoTotalHydraulique(($quarter->getHydraulique()/$coeff)+$this->yearComputed->getConsoTotalHydraulique());
+        $this->yearComputed->setConsoTotalNucleaire(($quarter->getNucleaire()/$coeff)+$this->yearComputed->getConsoTotalNucleaire());
+        $this->yearComputed->setConsoTotalPhotovoltaique(($quarter->getPhotovoltaique()/$coeff)+$this->yearComputed->getConsoTotalPhotovoltaique());
+        $this->yearComputed->setConsoTotalGlobale(($this->yearComputed->getConsoTotalEolien())+$this->yearComputed->getConsoTotalFlamme()+
+            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
 
     }
 
@@ -249,7 +260,7 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function setReferenceParcPower($referenceParcPower)
     {
-        $this->referenceParcPower = $referenceParcPower;
+        $this->referenceParcPower = clone $referenceParcPower;
     }
 
     /**
@@ -294,9 +305,6 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
     public function getComputedYear()
     {
-        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
-            $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
-
         return $this->yearComputed;
     }
 }

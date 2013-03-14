@@ -1,7 +1,9 @@
 <?php
 
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
+
 use JMS\DiExtraBundle\Annotation as DI;
+
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
@@ -16,7 +18,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
 
     /**
      * Injection of the RiakDao
-     * @DI\Inject("monmiel.dao.riak")
+     * @DI\Inject("monmiel.dao.client")
      * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
      */
     public $riakDao;
@@ -60,7 +62,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function get($day)
     {
-        $consoDay = $this->riakDao->getDayConso($day);
+        $consoDay = $this->riakDao->get($day);
 
         return $this->UpdateConsoTotalForQuatersForDay($consoDay);
     }
@@ -74,7 +76,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso)
     {
-        $currentDay = $this->riakDao->getDayConso($dayId);//get the current day by id
+        $currentDay = $this->riakDao->get($dayId);//get the current day by id
 
         return $this->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($currentDay,$actualConso,$inputConso);
     }
@@ -101,9 +103,13 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function UpdateConsoTotalForQuatersForDay($day)
     {
-      $this->stopWatch->start("updateConsoTotal", "transformers");
-        $updatedDay = new Day($day->getDateTime());
-        if (isset($day)) {
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("updateConsoTotal", "transformers");
+        }
+        if (isset($day))
+        {
+            $updatedDay = new Day($day->getDateTime());
             $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
 
@@ -118,9 +124,17 @@ class TransformersV1 implements TransformersServiceInterfaceV1
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
             $updatedDay->setQuarters($newQuartersArray);
+            return $updatedDay;
         }
-       $this->stopWatch->stop("updateConsoTotal");
-       return $updatedDay;
+        else
+        {
+            return null;
+        }
+        if(isset($this->stopWatch))
+        {
+            $this->stopWach->stop("updateConsoTotal");
+        }
+
     }
 
     /**
@@ -232,7 +246,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
+    \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
      */
     public function setRiakDao($riakDao)
     {
