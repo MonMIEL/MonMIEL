@@ -103,9 +103,13 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function UpdateConsoTotalForQuatersForDay($day)
     {
-      $this->stopWatch->start("updateConsoTotal", "transformers");
-        $updatedDay = new Day($day->getDateTime());
-        if (isset($day)) {
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("updateConsoTotal", "transformers");
+        }
+        if (isset($day))
+        {
+            $updatedDay = new Day($day->getDateTime());
             $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
 
@@ -120,9 +124,17 @@ class TransformersV1 implements TransformersServiceInterfaceV1
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
             $updatedDay->setQuarters($newQuartersArray);
+            return $updatedDay;
         }
-       $this->stopWach->stop("updateConsoTotal");
-       return $updatedDay;
+        else
+        {
+            return null;
+        }
+        if(isset($this->stopWatch))
+        {
+            $this->stopWach->stop("updateConsoTotal");
+        }
+
     }
 
     /**
