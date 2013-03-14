@@ -91,13 +91,34 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
             $maxProductionQuarter = $this->computeMaxProductionPerEnergy($quarter);
             $computedQuarter=    $this->computeDistribution($maxProductionQuarter);
             $userMixDay->addQuarters($computedQuarter);
+          //  echo "Fin .....................................................................";
+        //    var_dump($computedQuarter);
+
+            //exit;
 
             $this->updateYearComputed($computedQuarter);
+
+
         }
         $this->stopWatch->stop("computeDistribution");
         return $userMixDay;
     }
+      /**
+       * @param $quarter
+       * @return \Monmiel\MonmielApiModelBundle\Model\Quarter
+       */
+      private function cloneAndReset($quarter)
+      {
+          /**
+           * @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarterNew
+           */
+          $quarterNew = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
 
+
+          return $quarterNew;
+
+
+      }
 
     /**
      * @param $quarter Quarter
@@ -105,36 +126,62 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     protected function computeDistribution($quarter)
     {
+        /**
+         *@var Quarter
+          */
+       $result=$this->cloneAndReset($quarter);//clone $quarter;
+        $result->setEolien(50);
+
         $consoTotal = $quarter->getConsoTotal();
         $consoTotal = $consoTotal - $quarter->getEolien();
 
-        if ($consoTotal < 0) {
-            $quarter->setEolien($quarter->getEolien() + $consoTotal);
-            return $quarter;
+        if ($consoTotal <= 0) {
+
+
+
+            $result->setEolien((int)$quarter->getEolien() + $consoTotal);
+
+          //    $result->setEolien($quarter->getEolien());
+            return $result;
         }
 
+        $result->setEolien($quarter->getEolien());
+
+   //     echo "\n";
+        $result->setPhotovoltaique(51);
         $consoTotal = $consoTotal - $quarter->getPhotovoltaique();
-        if ($consoTotal < 0) {
-            $quarter->setPhotovoltaique($quarter->getPhotovoltaique() + $consoTotal);
-            return $quarter;
+        if ($consoTotal <= 0) {
+            $result->setPhotovoltaique((int)$quarter->getPhotovoltaique() + $consoTotal);
+
+            return $result;
         }
 
+        $result->setHydraulique(52);
+        $result->setPhotovoltaique($quarter->getPhotovoltaique());
         $consoTotal = $consoTotal - $quarter->getHydraulique();
         if ($consoTotal < 0) {
-            $quarter->setHydraulique($quarter->getHydraulique() + $consoTotal);
-            return $quarter;
+            $result->setHydraulique((int)$quarter->getHydraulique() + $consoTotal);
+            return $result;
         }
-
+        $result->setHydraulique($quarter->getHydraulique());
+        $result->setNucleaire(53);
         $consoTotal = $consoTotal - $quarter->getNucleaire();
         if ($consoTotal <= 0) {
-            $quarter->setNucleaire($quarter->getNucleaire() + $consoTotal);
-            return $quarter;
+            $result->setNucleaire((int) $quarter->getNucleaire() + $consoTotal);
+            return $result;
         }
 
-        $quarter->setFlamme($consoTotal);
+        $result->setNucleaire($quarter->getNucleaire());
+        $result->setFlamme(0);
+        $result->setFlamme( $consoTotal);
+      // echo "dddddddddddddddd" . $consoTotal;
+    //    $result->setFlamme($quarter->getFlamme());
         $this->facilityService->submitQuarters($quarter->getFlamme());
 
-        return $quarter;
+//       var_dump($result);
+//        exit;
+
+        return $result;
     }
 
     /**
@@ -168,7 +215,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setReferenceYear($referenceYear)
     {
-        $this->referenceYear = $referenceYear;
+        $this->referenceYear = clone $referenceYear;
     }
 
     /**
@@ -224,7 +271,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     protected function updateYearComputed($quarter,$coeff = 4)
     {
-        echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
+      //  echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
 
 
         $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());

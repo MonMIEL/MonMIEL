@@ -20,7 +20,7 @@ class TransformersV2 implements TransformerServiceInterface
   public $riakDao;
 
   /**
-   * @var
+   * @var Year
    */
   private $yearDataDefineByUser;
 
@@ -32,7 +32,7 @@ class TransformersV2 implements TransformerServiceInterface
 
    public function setYearReference($yearReference)
    {
-        $this->yearReference = $yearReference;
+        $this->yearReference = clone $yearReference;
    }
 
    /**
@@ -40,11 +40,11 @@ class TransformersV2 implements TransformerServiceInterface
     */
    public function setYearDataDefineByUser($yearDataDefineByUser)
    {
-     $this->yearDataDefineByUser = $yearDataDefineByUser;
+     $this->yearDataDefineByUser = clone $yearDataDefineByUser;
    }
 
     /**
-     * @return
+     * @return Year
     */
     public function getYearDataDefineByUser()
     {

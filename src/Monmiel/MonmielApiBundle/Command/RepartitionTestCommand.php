@@ -26,6 +26,8 @@ class RepartitionTestCommand extends ContainerAwareCommand
      */
     public $parc;
 
+    public $toto;
+
     protected function configure()
     {
         $this
@@ -47,8 +49,9 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         $refYear = $this->createRefYearObject();
         $targetYear = $this->createTargetYearObject();
+        $this->toto=$targetYear;
 
-        var_dump($targetYear);
+  echo("target year     au debut ---------------------------------\n              ".$targetYear->toString());
 
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
@@ -64,9 +67,9 @@ class RepartitionTestCommand extends ContainerAwareCommand
     public function createTargetYearObject()
     {
         $totalNuclear = 150 * 1000000;
-        $totalPhoto = 150 * 1000000;
-        $totalEol = 150 * 1000000;
-        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 151998661/4, 0);
+        $totalPhoto = 250 * 100000;
+        $totalEol = 150 * 10000;
+        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, ($totalEol+$totalPhoto+$totalNuclear)/4, 0);
     }
 
     public function createRefYearObject()
@@ -105,7 +108,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         for ($boucle=1; $boucle<=$occ; $boucle++)
         {
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 365; $i++) {
             /*
              * @var Day $val
              */
@@ -130,7 +133,15 @@ class RepartitionTestCommand extends ContainerAwareCommand
         echo "\n start time" . $event->getStartTime();
 
  echo (" \n \n\n\n");
+        echo("target year APres calcul -------->".$this->toto->toString());
+        echo (" \n \n\n\n");
+
+
+        echo (" \n \n\n\n");
+
+       echo($this->repartition->getComputedYear()->toString());
+
+
         echo "Fin :";
-    //    echo($this->repartition->getComputedYear()->toString());
     }
 }
