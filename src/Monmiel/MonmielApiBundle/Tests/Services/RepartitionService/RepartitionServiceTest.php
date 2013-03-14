@@ -45,7 +45,7 @@ class RepartitionServiceTest extends BaseTestCase
         $powerRefEolian = 200;
 
         //Puissances de l'année cible
-        $powerTargetNuclear = 550;
+        $powerTargetNuclear = 1000;
         $powerTargetHydraulic = 50;
         $powerTargetPhotovoltaique = 200;
         $powerTargetEolian = 300;
@@ -115,7 +115,7 @@ class RepartitionServiceTest extends BaseTestCase
 
         //Puissances de l'année cible
         $powerTargetNuclear = 500;
-        $powerTargetHydraulic = 400;
+        $powerTargetHydraulic = 1500;
         $powerTargetPhotovoltaique = 200;
         $powerTargetEolian = 300;
 
@@ -141,6 +141,7 @@ class RepartitionServiceTest extends BaseTestCase
         $resultat = $this->repartitionService->computeMixedTargetDailyConsumption($day);
 
         //Verification du 1er quart d'heure
+
         //Eolien > ConsoTotal
         $expectedTrue = $day->getQuarter(1);
         $toTest = $resultat->getQuarter(1);
@@ -153,11 +154,46 @@ class RepartitionServiceTest extends BaseTestCase
         $expectedTrue = $day->getQuarter(2);
         $toTest = $resultat->getQuarter(2);
 
-        $valueEnergy = $expectedTrue->getConsoTotal()-($powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian);
+        $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
+        $valueEnergy = $expectedTrue->getConsoTotal() - $eolian;
         $expectedTrue->setPhotovoltaique($valueEnergy);
         $this->assertEquals($expectedTrue->getPhotovoltaique(),$toTest->getPhotovoltaique(),"La consommation du photovoltaique du quart d'heure est de ".$toTest->getPhotovoltaique()." alors qu'il doit etre a ".$expectedTrue->getPhotovoltaique());
-    }
 
+        //Hydraulique > ConsoTotal
+        $expectedTrue = $day->getQuarter(3);
+        $toTest = $resultat->getQuarter(3);
+
+        $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
+        $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
+        $valueEnergy = $expectedTrue->getConsoTotal() - $eolian - $photovoltaic;
+        $expectedTrue->setHydraulique($valueEnergy);
+
+        $this->assertEquals($expectedTrue->getHydraulique(),$toTest->getHydraulique(),"La consommation de l'hydraulique du quart d'heure est de ".$toTest->getHydraulique()." alors qu'il doit etre a ".$expectedTrue->getHydraulique());
+
+        //Nucleaire > ConsoTotal
+        $expectedTrue = $day->getQuarter(4);
+        $toTest = $resultat->getQuarter(4);
+
+        $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
+        $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
+        $hydraulic = $powerTargetHydraulic;
+        $valueEnergy = $expectedTrue->getConsoTotal() - $eolian - $photovoltaic - $hydraulic;
+        $expectedTrue->setNucleaire($valueEnergy);
+        $this->assertEquals($expectedTrue->getNucleaire(),$toTest->getNucleaire(),"La consommation du nucleaire du quart d'heure est de ".$toTest->getNucleaire()." alors qu'il doit etre a ".$expectedTrue->getNucleaire());
+
+        //Flamme
+        $expectedTrue = $day->getQuarter(5);
+        $toTest = $resultat->getQuarter(5);
+
+        $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
+        $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
+        $hydraulic = $powerTargetHydraulic;
+        $nuclear = $powerTargetNuclear;
+
+        $valueEnergy = $expectedTrue->getConsoTotal() - $eolian - $photovoltaic - $hydraulic - $nuclear;
+        $expectedTrue->setFlamme($valueEnergy);
+        $this->assertEquals($expectedTrue->getFlamme(),$toTest->getFlamme(),"La consommation de flamme du quart d'heure est de ".$toTest->getFlamme()." alors qu'il doit etre a ".$expectedTrue->getFlamme());
+    }
 
     /**
      * @return Day
@@ -180,7 +216,7 @@ class RepartitionServiceTest extends BaseTestCase
         $q3 = new Quarter($date3, 2000, 500, 0, 0, 0, 1500, 0, 0); //Photovoltaique
         $q4 = new Quarter($date4, 2000, 100, 0, 1500, 0, 400, 0, 0); //Hydraulique
         $q5 = new Quarter($date5, 2000, 200, 0, 500, 1000, 0, 300, 0); //Nucleaire
-        $q6 = new Quarter($date6, 2000, 200, 0, 300, 500, 0, 50, 0); //Flamme
+        $q6 = new Quarter($date6, 10000, 200, 0, 300, 500, 0, 50, 0); //Flamme
 
         $object->addQuarters($q1);
         $object->addQuarters($q2);
