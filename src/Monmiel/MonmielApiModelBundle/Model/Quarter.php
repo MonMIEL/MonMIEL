@@ -64,7 +64,7 @@ class Quarter
      */
     protected $interval;
 
-    function __construct($date, $consoTotal, $eolien, $flamme, $hydraulique, $nucleaire, $photovoltaique, $autre, $interval)
+    function __construct($date, $consoTotal = 0, $eolien = 0, $flamme = 0, $hydraulique = 0, $nucleaire = 0, $photovoltaique = 0, $autre = 0, $interval = 0)
     {
         $this->autre = $autre;
         $this->consoTotal = $consoTotal;
@@ -76,34 +76,6 @@ class Quarter
         $this->photovoltaique = $photovoltaique;
         $this->interval = $interval;
     }
-
-
-    /**
-     * Updates values by setting multiplicity coefficient
-     * @param $coeff
-     */
-    public function coeffMultiplication($coeff)
-    {
-
-        $this->eolien = $this->eolien*$coeff;
-        //   $this->fuel = $fuel;
-        // $this->gaz = $gaz;
-        $this->hydraulique = $this->hydraulique*$coeff;
-        $this->nucleaire = $this->nucleaire*$coeff;
-        $this->photovoltaique = $this->photovoltaique*$coeff;
-
-//        $this->updatesAjustValues();
-    }
-
-    /**
-     * Check if capacity available is below
-     * consumption need, and then ajust
-     * values for completion variables
-     */
-//    private function updatesAjustableValues( )
-//    {
-//        $this->fuel= math_max(0,$this->consoTotal-($this->hydraulique+ $this->nucleaire+$this->photovoltaique+$this->$this->eolien) );
-//    }
 
     /**
      * @param int $autre
