@@ -22,16 +22,15 @@ class Flamme extends Energy
             self::LOADFACTOR,
             $power,
             self::POWERUNIT);
-        $this->maxFlamme = 0;
     }
 
     /**
-     * @param float $maxFlamme
+     * @param float $power
      */
-    public function setMaxFlamme($maxFlamme)
+    public function setPower($power)
     {
-        if ($maxFlamme > $this->getMaxFlamme()) {
-            $this->maxFlamme = $maxFlamme;
+        if ($power > $this->getPower()) {
+            $this->power = $power;
         }
     }
 
