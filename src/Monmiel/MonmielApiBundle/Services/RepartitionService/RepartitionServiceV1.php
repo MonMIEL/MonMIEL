@@ -226,11 +226,17 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      * Updating values with quarter
      * @param $quarter Quarter
      */
-    protected function updateYearComputed($quarter,$coeff = 4)
+    protected function updateYearComputed($quarter)
     {
        // echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
-
-
+        if($quarter->getInterval()>0){
+            $coeff=(60/$quarter->getInterval());
+        }
+        else{
+            $coeff=4;
+        }
+        $this->yearComputed->setNbInterval($this->yearComputed->getNbInterval()
+                                           +($quarter->getInterval()/60));
         $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
         $this->yearComputed->setConsoTotalFlamme(($quarter->getFlamme()/$coeff)+$this->yearComputed->getConsoTotalFlamme());
         $this->yearComputed->setConsoTotalHydraulique(($quarter->getHydraulique()/$coeff)+$this->yearComputed->getConsoTotalHydraulique());
@@ -238,7 +244,6 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $this->yearComputed->setConsoTotalPhotovoltaique(($quarter->getPhotovoltaique()/$coeff)+$this->yearComputed->getConsoTotalPhotovoltaique());
         $this->yearComputed->setConsoTotalGlobale(($this->yearComputed->getConsoTotalEolien())+$this->yearComputed->getConsoTotalFlamme()+
             $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
-
     }
 
     /**
