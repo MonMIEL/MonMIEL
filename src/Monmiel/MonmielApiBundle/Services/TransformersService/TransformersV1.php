@@ -182,6 +182,22 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     }
 
     /**
+     * calculate the median of consummation of yers in parameter
+     * @param $medianYearReference float median of current year reference
+     * @return float
+     */
+    public function calculateMedianOfConsummationForYearTarget($medianYearReference){
+        $retour = 0;
+        if(isset($medianYearReference) && isset($this->consoTotalActuel)){
+             $retour = (($medianYearReference*$this->consoTotalDefinedByUser)/$this->consoTotalActuel);
+        }
+        else{
+           //TODO à calculer avec les données en bases
+        }
+        return $retour;
+    }
+
+    /**
      * @param \Monmiel\MonmielApiModelBundle\Model\Year $referenceYear
      */
     public function setReferenceYear($referenceYear)
