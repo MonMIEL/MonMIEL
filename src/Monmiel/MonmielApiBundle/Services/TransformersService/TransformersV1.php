@@ -62,7 +62,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function get($day)
     {
-        $consoDay = $this->riakDao->get($day);
+        $consoDay = $this->riakDao->gets($day);
 
         return $this->UpdateConsoTotalForQuatersForDay($consoDay);
     }
@@ -103,7 +103,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function UpdateConsoTotalForQuatersForDay($day)
     {
-      $this->stopWatch->start("updateConsoTotal", "transformers");
+        $this->stopWatch->start("updateConsoTotal", "transformers");
         $updatedDay = new Day($day->getDateTime());
         if (isset($day)) {
             $consoActuel = $this->getConsoTotalActuel();
@@ -121,7 +121,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
             }
             $updatedDay->setQuarters($newQuartersArray);
         }
-       $this->stopWach->stop("updateConsoTotal");
+       $this->stopWatch->stop("updateConsoTotal");
        return $updatedDay;
     }
 
