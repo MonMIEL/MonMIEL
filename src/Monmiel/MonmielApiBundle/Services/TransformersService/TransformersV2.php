@@ -63,16 +63,15 @@ class TransformersV2 implements TransformerServiceInterface
 
     /**
      * calculate the median of consummation of yers in parameter
-     * @param $yearTarget Year year target
-     * @parm $medianYearReference median of current year reference
+     * @param $medianYearReference median of current year reference
      * @return float
      */
     public function calculateMedianOfConsummationForYearTarget($medianYearReference){
         if(isset($medianYearReference)){
             $consoTotalYearReference = $this->yearReference->getConsoTotalGlobale();
             $consoTotalYearTarget = $this->yearDataDefineByUser->getConsoTotalGlobale();
-            if($consoTotalYearTarget != null  && $consoTotalYearReference != null){
-                return $medianYearReference * $consoTotalYearTarget/$consoTotalYearReference;
+            if(($consoTotalYearTarget != null)  && ($consoTotalYearReference != null)){
+                return ($medianYearReference * $consoTotalYearTarget/$consoTotalYearReference);
             }
         }
         return null;
