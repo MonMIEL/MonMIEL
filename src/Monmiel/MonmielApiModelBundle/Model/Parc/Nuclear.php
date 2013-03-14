@@ -19,20 +19,20 @@ class Nuclear extends Energy
             self::POWERUNIT);
     }
 
-//    public function setLoadFactor($percentOfNuclear = 1){
-//
-//        $upper_percent=0.75;
-//        $upper_value=0.76;
-//        $lower_percent=0.25;
-//        $lower_value=0.95;
-//
-//        if ($percentOfNuclear >= $upper_percent){
-//            $this->loadFactor=$upper_value;
-//        } elseif (($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)) {
-//            $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
-//            $this->loadFactor= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
-//        } elseif ($percentOfNuclear <= $lower_percent) {
-//            $this->loadFactor=$lower_value;
-//        }
-//    }
+    public function setLoadFactor($percentOfNuclear = 1){
+
+        $upper_percent=0.75;
+        $upper_value=0.76;
+        $lower_percent=0.25;
+        $lower_value=0.95;
+
+        if ($percentOfNuclear >= $upper_percent){
+            $this->loadFactor=$upper_value;
+        } elseif (($upper_percent >$percentOfNuclear) && ($percentOfNuclear > $lower_percent)) {
+            $facteur=(($lower_value-$upper_value)*100)/(($upper_percent-$lower_percent)*100);
+            $this->loadFactor= ($upper_percent-$percentOfNuclear)*$facteur + $upper_value;
+        } elseif ($percentOfNuclear <= $lower_percent) {
+            $this->loadFactor=$lower_value;
+        }
+    }
 }
