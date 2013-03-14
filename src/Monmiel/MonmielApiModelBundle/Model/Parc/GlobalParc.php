@@ -56,7 +56,7 @@ class GlobalParc{
 
     //Méthode permettant de vérifier si les valeurs en paramètre sont les max
     public function submitFlamePower($flamePower){
-        $this->flamme->setMaxFlamme($flamePower);
+        $this->flamme->setPower($flamePower);
     }
 
 
