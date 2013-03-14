@@ -94,6 +94,7 @@ class SimulationResultSeries
         $this->series["eolien"][] = $max['eolien'];
         $this->series["flamme"][] = $max['flamme'];
         $this->series["hydraulique"][] = $max['hydraulique'];
+        $this->series["total"][] = array_sum($max);
     }
 
     /**

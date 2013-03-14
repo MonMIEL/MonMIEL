@@ -18,8 +18,8 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     public $transformers;
 
     /**
-     * @DI\Inject("monmiel.facility.service")
-     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     * @DI\Inject("monmiel.parc.service")
+     * @var \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $facilityService
      */
     public $facilityService;
 
@@ -103,40 +103,44 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
 
     /**
-     * @param $quarter Quarter
+     * @param $quarterMax Quarter
      * @return Quarter
      */
-    protected function computeDistribution($quarter)
+    protected function computeDistribution($quarterMax)
     {
-        $consoTotal = $quarter->getConsoTotal();
-        $consoTotal = $consoTotal - $quarter->getEolien();
+        $quarter = new Quarter($quarterMax->getDate());
+        $consoTotal = $quarterMax->getConsoTotal();
+        $consoTotal = $consoTotal - $quarterMax->getEolien();
 
         if ($consoTotal < 0) {
-            $quarter->setEolien($quarter->getEolien() + $consoTotal);
-            echo "eolien: ".$quarter->getEolien()."\n";
+            $quarter->setEolien($quarterMax->getEolien() + $consoTotal);
             return $quarter;
         }
+        $quarter->setEolien($quarterMax->getEolien());
 
-        $consoTotal = $consoTotal - $quarter->getPhotovoltaique();
+        $consoTotal = $consoTotal - $quarterMax->getPhotovoltaique();
         if ($consoTotal < 0) {
-            $quarter->setPhotovoltaique($quarter->getPhotovoltaique() + $consoTotal);
+            $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique() + $consoTotal);
             return $quarter;
         }
+        $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique());
 
-        $consoTotal = $consoTotal - $quarter->getHydraulique();
+        $consoTotal = $consoTotal - $quarterMax->getHydraulique();
         if ($consoTotal < 0) {
-            $quarter->setHydraulique($quarter->getHydraulique() + $consoTotal);
+            $quarter->setHydraulique($quarterMax->getHydraulique() + $consoTotal);
             return $quarter;
         }
+        $quarter->setHydraulique($quarterMax->getHydraulique());
 
-        $consoTotal = $consoTotal - $quarter->getNucleaire();
+        $consoTotal = $consoTotal - $quarterMax->getNucleaire();
         if ($consoTotal <= 0) {
-            $quarter->setNucleaire($quarter->getNucleaire() + $consoTotal);
+            $quarter->setNucleaire($quarterMax->getNucleaire() + $consoTotal);
             return $quarter;
         }
+        $quarter->setNucleaire($quarterMax->getNucleaire());
 
         $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitQuarters($quarter->getFlamme());
+        $this->facilityService->submitFlamePower($quarter->getFlamme());
 
         return $quarter;
     }
@@ -153,14 +157,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
-
-        echo "prod n-1: ".$quarter->getEolien()."\n";
-        echo "parc eolien n-1: ".$referenceParcPower->getWind()."\n";
-
-        echo "parc eolien n: ".$targetParcPower->getWind()."\n";
-        echo "capacité prod eolien n: ".$aeolianProductionCapacity."\n";
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
-
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 

@@ -42,14 +42,14 @@ class TransformersServicesV1Test extends BaseTestCase
    public function getTest()
     {
         $expectedDay = $this->getDayObject()->getQuarters()[0]->getConsoTotal();
-        echo "\n";
-        $this->transformersService->setConsoTotalActuel(new Mesure(500,ConstantUtils::TERAWATT));
+
+       /*$this->transformersService->setConsoTotalActuel(new Mesure(500,ConstantUtils::TERAWATT));
         $this->transformersService->setConsoTotalDefinedByUser(new Mesure(600,ConstantUtils::TERAWATT));
 
         $result = $this->transformersService->get(1)->getQuarters()[0]->getConsoTotal();
         $expectedDay = 6000*600/500;
         var_dump($result);
-       assertThat($result, is($expectedDay));
+        assertThat($result, is($expectedDay));*/
     }
 
     /**
@@ -82,7 +82,7 @@ class TransformersServicesV1Test extends BaseTestCase
         $totalConsoDefineByUser = new Mesure(600,ConstantUtils::TERAWATT);//conso 2050
 
         //total quarter updated at 2050
-        $dayUpdated=  $this->transformersService->updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser(1,$totalConsoActual,$totalConsoDefineByUser);
+       /* $dayUpdated=  $this->transformersService->updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser(1,$totalConsoActual,$totalConsoDefineByUser);
 
         $result = $dayUpdated->getQuarters()[0]->getConsoTotal();
         $expectedDay = 6000*600/500;
@@ -90,7 +90,21 @@ class TransformersServicesV1Test extends BaseTestCase
 
         $result = $dayUpdated->getQuarters()[1]->getConsoTotal();
         $expectedDay = 7000*600/500;
-        assertThat($result, is($expectedDay));
+        assertThat($result, is($expectedDay));*/
+    }
+
+    /*
+     * @test
+     */
+    public function calculateMedianOfConsummationForYearTargetTest()
+    {
+        $this->transformersService->setConsoTotalActuel(new Mesure(500,ConstantUtils::TERAWATT));
+        $this->transformersService->setConsoTotalDefinedByUser(new Mesure(600,ConstantUtils::TERAWATT));
+
+        $expectedResult = 555*600/500;
+        $result = $this->transformersService->calculateMedianOfConsummationForYearTarget(5855);
+        var_dump($result);
+        assertThat($result, is($expectedResult));
     }
 
     public function getMockedDao()
@@ -101,8 +115,7 @@ class TransformersServicesV1Test extends BaseTestCase
                     ->getMock();
         $dao->expects($this->any())
             ->method("getDayConso")
-            ->will($this->returnValue($this->getDayObject()));
-
+            ->will($this->returnValue($day));
         return $dao;
     }
 

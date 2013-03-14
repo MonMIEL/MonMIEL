@@ -124,17 +124,13 @@ class TransformersV1 implements TransformersServiceInterfaceV1
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
             $updatedDay->setQuarters($newQuartersArray);
+            if(isset($this->stopWatch))
+            {
+                $this->stopWatch->stop("updateConsoTotal");
+            }
             return $updatedDay;
         }
-        else
-        {
-            return null;
-        }
-        if(isset($this->stopWatch))
-        {
-            $this->stopWach->stop("updateConsoTotal");
-        }
-
+        return null;
     }
 
     /**
@@ -179,6 +175,22 @@ class TransformersV1 implements TransformersServiceInterfaceV1
         $ret = ($totalActQuart* $consoDefineByUserValue)/$consoTotalActValue;
 
         return $ret;
+    }
+
+    /**
+     * calculate the median of consummation of yers in parameter
+     * @param $medianYearReference float median of current year reference
+     * @return float
+     */
+    public function calculateMedianOfConsummationForYearTarget($medianYearReference){
+        $retour = 0;
+        if(isset($medianYearReference) && isset($this->consoTotalActuel)){
+             $retour = (($medianYearReference*$this->consoTotalDefinedByUser)/$this->consoTotalActuel);
+        }
+        else{
+           //TODO à calculer avec les données en bases
+        }
+        return $retour;
     }
 
     /**
