@@ -1,66 +1,21 @@
 <?php
 
 namespace Monmiel\MonmielApiModelBundle\Model\Parc;
-/**
- * Created by JetBrains PhpStorm.
- * User: Miage
- * Date: 04/03/13
- * Time: 17:53
- * To change this template use File | Settings | File Templates.
- */
-class Hydraulic
+
+use Monmiel\MonmielApiModelBundle\Model\Parc\Energy;
+
+class Hydraulic extends Energy
 {
-    private $fc_hydraulic;
-    private $td_hydraulic;
-
-    private $power_hydraulic;
-    private $parc_hydraulic;
-
-    //Represente la puissance unitaire de l'hydaulique en MW
+    //Represente la puissance unitaire d'une éolienne en MW
     const POWERUNIT=1;
     const LOADFACTOR=1;
     const AVAILABILITYRATE=0.872;
 
-    //A la construction de l'objet on defini l'objet comme si il était toujours disponible avec un facteur de charge égale à 1
-    public function __construct($loadFactor= self::LOADFACTOR, $availabilityRate= self::AVAILABILITYRATE ,$power=0){
-        $this->fc_hydraulic=$loadFactor;
-        $this->td_hydraulic=$availabilityRate;
-        $this->max_hydraulic=$power;
+    function __construct($power = 0)
+    {
+        parent::__construct(self::AVAILABILITYRATE,
+            self::LOADFACTOR,
+            $power,
+            self::POWERUNIT);
     }
-
-    public function setPowerHydraulic($powerHydro){
-        if(isset($powerHydro)){
-            $this->power_hydraulic=$powerHydro/$this->fc_hydraulic;
-        }
-    }
-
-    public function getPowerHydraulic(){
-        return $this->power_hydraulic;
-    }
-
-    public function setFacteurChargeHydraulique($fcHydraulique){
-        if(isset($fcHydraulique)){
-            $this->fc_hydraulic=$fcHydraulique;
-        }
-    }
-
-    public function getFacteurChargeHydraulique(){
-        return $this->fc_hydraulic;
-    }
-
-    public function setTauxDisponibiliteHydraulique($tdHydraulique){
-        if(isset($tdHydraulique)){
-            $this->td_hydraulic=$tdHydraulique;
-        }
-    }
-
-    public function getTauxDisponibiliteHydraulique(){
-        return $this->td_hydraulic;
-    }
-
-    public function getParcHydraulic(){
-        $this->parc_hydraulic=( $this->power_hydraulic/ self::POWERUNIT );
-        return $this->parc_hydraulic;
-    }
-
 }

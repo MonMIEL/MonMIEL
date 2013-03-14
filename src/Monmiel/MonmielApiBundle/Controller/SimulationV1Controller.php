@@ -26,7 +26,7 @@ class SimulationV1Controller extends Controller
         $this->init($request);
 
         $result = new SimulationResultSeries();
-        for ($i = 1; $i < 365; $i++) {
+        for ($i = 1; $i < 363; $i++) {
             $day = $this->repartition->get($i);
             $result->addDay($day);
         }
@@ -34,7 +34,7 @@ class SimulationV1Controller extends Controller
         $computedYear = $this->repartition->getComputedYear();
 
         $parc = $this->repartition->getTargetParcPower();
-        $finaParc = $this->parc->getPower($targetYear);
+        $finaParc = $this->parc->getFinalPower();
 
 
         $result->setFinalConso($computedYear);
@@ -69,8 +69,10 @@ class SimulationV1Controller extends Controller
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
 
-        $targetParcPower = $this->parc->getPower($targetYear);
-        $refParcPower = $this->parc->getPower($refYear);
+        $this->parc->setTargetParcPower($targetYear);
+        $this->parc->setRefParcPower($refYear);
+        $targetParcPower = $this->parc->getTargetParcPower();
+        $refParcPower = $this->parc->getRefParcPower();
         $this->repartition->setReferenceYear($refYear);
         $this->repartition->setTargetYear($targetYear);
         $this->repartition->setReferenceParcPower($refParcPower);
@@ -83,12 +85,12 @@ class SimulationV1Controller extends Controller
         $totalNuclear = $request->get("nuke") * 1000000;
         $totalPhoto = $request->get("photo") * 1000000;
         $totalEol = $request->get("eol") * 1000000;
-        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 151998661/4, 0);
+        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 50000000, 0);
     }
 
      public function createRefYearObject()
      {
-         return new Year(2011, 1679207799/4, 4514598/4, 4966116/4, 0, 151998661/4, 0);
+         return new Year(2011, 421000000, 12000000, 2000000, 0, 50000000, 0);
      }
 
     public function getContent()
@@ -158,8 +160,8 @@ EOF;
     public $repartition;
 
     /**
-     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
-     * @DI\Inject("monmiel.facility.service")
+     * @var \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $parc
+     * @DI\Inject("monmiel.parc.service")
      */
     public $parc;
 
