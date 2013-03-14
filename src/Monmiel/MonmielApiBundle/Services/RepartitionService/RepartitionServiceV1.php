@@ -80,8 +80,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
      */
     public function  computeMixedTargetDailyConsumption($referenceDay)
     {
-
-        $this->stopWatch->start("computeDistribution", "repartition");
+        if(isset($this->stopWatch)){
+            $this->stopWatch->start("computeDistribution", "repartition");
+        }
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
 
@@ -94,7 +95,9 @@ class RepartitionServiceV1 implements RepartitionServiceInterface
 
             $this->updateYearComputed($computedQuarter);
         }
-        $this->stopWatch->stop("computeDistribution");
+        if(isset($this->stopWatch)){
+            $this->stopWatch->stop("computeDistribution");
+        }
         return $userMixDay;
     }
 

@@ -6,6 +6,9 @@ use Monmiel\MonmielApiBundle\Tests\BaseTestCase;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
 use Monmiel\MonmielApiModelBundle\Model\Power;
+use Monmiel\MonmielApiModelBundle\Model\Year;
+use Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService;
+
 /**
  * Created by JetBrains PhpStorm.
  * User: Dadoo
@@ -23,6 +26,8 @@ class RepartitionServiceTest extends BaseTestCase
     public function setup()
     {
         $this->repartitionService = new RepartitionServiceV1();
+        $this->repartitionService->setTargetYear(new Year(1,0,0,0,0,0,0));
+        $this->repartitionService->setFacilityService(new ComputeFacilityService());
     }
 
     /**
@@ -118,6 +123,10 @@ class RepartitionServiceTest extends BaseTestCase
          * @var $expectedTrue Quarter
          */
         $expectedTrue;
+        /**
+         * @var $toTest Quarter
+         */
+        $toTest;
 
         /*************************
          * Fin paramètres du test
@@ -131,10 +140,22 @@ class RepartitionServiceTest extends BaseTestCase
          */
         $resultat = $this->repartitionService->computeMixedTargetDailyConsumption($day);
 
-        //Verification du 1er quart d'heure (Eolien > ConsoTotal)
+        //Verification du 1er quart d'heure
+        //Eolien > ConsoTotal
         $expectedTrue = $day->getQuarter(1);
-        $expectedTrue->setEolien($day->getQuarter(1)->getConsoTotal() - ($powerTargetEolian*$day->getQuarter(1)->getEolien()/$powerRefEolian));
-        $this->assertEquals($expectedTrue->getEolien(),$resultat->getQuarters(1)->getEolien());
+        $toTest = $resultat->getQuarter(1);
+
+        $valueEnergy = $expectedTrue->getConsoTotal();
+        $expectedTrue->setEolien($valueEnergy);
+        $this->assertEquals($expectedTrue->getEolien(),$toTest->getEolien(),"La consommation de l'eolien du quart d'heure est de ".$toTest->getEolien()." alors qu'il doit etre a ".$expectedTrue->getEolien());
+
+        //Photovoltaique > ConsoTotal
+        $expectedTrue = $day->getQuarter(2);
+        $toTest = $resultat->getQuarter(2);
+
+        $valueEnergy = $expectedTrue->getConsoTotal()-($powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian);
+        $expectedTrue->setPhotovoltaique($valueEnergy);
+        $this->assertEquals($expectedTrue->getPhotovoltaique(),$toTest->getPhotovoltaique(),"La consommation du photovoltaique du quart d'heure est de ".$toTest->getPhotovoltaique()." alors qu'il doit etre a ".$expectedTrue->getPhotovoltaique());
     }
 
 
