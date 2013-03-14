@@ -20,7 +20,7 @@ abstract class Energy
     protected $availabilityRate;
 
     /**
-     * @var $powerUnit
+     * @var $powerUnit float
      */
     protected $powerUnit;
 
@@ -102,7 +102,7 @@ abstract class Energy
     }
 
     /**
-     * @return
+     * @return float
      */
     public function getPowerUnit()
     {
