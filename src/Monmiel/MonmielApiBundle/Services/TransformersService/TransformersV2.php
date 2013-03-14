@@ -20,14 +20,18 @@ class TransformersV2 implements TransformerServiceInterface
   public $riakDao;
 
   /**
+<<<<<<< HEAD
    * @var Year
+=======
+   * @var $yearDataDefineByUser Year
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
    */
   private $yearDataDefineByUser;
 
     /**
      * @var Year
      */
-    private $yearReference;
+  private $yearReference;
 
 
    public function setYearReference($yearReference)

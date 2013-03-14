@@ -13,10 +13,22 @@ class RiakDao implements DaoInterface
      * @param $keys array<string>
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function get($keys)
+    public function gets($keys)
+    {
+        $this->stopWatch->start("gets", "dao");
+        $days = $this->rteIndexBucket->fetch($keys)->getContents();
+        $this->stopWatch->stop('gets');
+        return $days;
+    }
+
+    /**
+     * @param $keys array<string>
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function get($key)
     {
         $this->stopWatch->start("get", "dao");
-        $days = $this->rteIndexBucket->fetch($keys)->getContents();
+        $days = $this->rteIndexBucket->uniq($key)->getContent();
         $this->stopWatch->stop('get');
         return $days;
     }
@@ -50,4 +62,10 @@ class RiakDao implements DaoInterface
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
+
+    /**
+     * @DI\Inject("serializer")
+     * @var \JMS\Serializer\Serializer $serializer
+     */
+    public $serializer;
 }

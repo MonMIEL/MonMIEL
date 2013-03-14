@@ -18,8 +18,8 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     public $transformers;
 
     /**
-     * @DI\Inject("monmiel.facility.service")
-     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     * @DI\Inject("monmiel.parc.service")
+     * @var \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $facilityService
      */
     public $facilityService;
 
@@ -121,11 +121,12 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
       }
 
     /**
-     * @param $quarter Quarter
+     * @param $quarterMax Quarter
      * @return Quarter
      */
-    protected function computeDistribution($quarter)
+    protected function computeDistribution($quarterMax)
     {
+<<<<<<< HEAD
         /**
          *@var Quarter
           */
@@ -143,8 +144,19 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
           //    $result->setEolien($quarter->getEolien());
             return $result;
-        }
+=======
+        $quarter = new Quarter($quarterMax->getDate());
+        $consoTotal = $quarterMax->getConsoTotal();
+        $consoTotal = $consoTotal - $quarterMax->getEolien();
 
+        if ($consoTotal < 0) {
+            $quarter->setEolien($quarterMax->getEolien() + $consoTotal);
+            return $quarter;
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
+        }
+        $quarter->setEolien($quarterMax->getEolien());
+
+<<<<<<< HEAD
         $result->setEolien($quarter->getEolien());
 
    //     echo "\n";
@@ -154,8 +166,16 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
             $result->setPhotovoltaique((int)$quarter->getPhotovoltaique() + $consoTotal);
 
             return $result;
+=======
+        $consoTotal = $consoTotal - $quarterMax->getPhotovoltaique();
+        if ($consoTotal < 0) {
+            $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique() + $consoTotal);
+            return $quarter;
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
         }
+        $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique());
 
+<<<<<<< HEAD
         $result->setHydraulique(52);
         $result->setPhotovoltaique($quarter->getPhotovoltaique());
         $consoTotal = $consoTotal - $quarter->getHydraulique();
@@ -169,14 +189,33 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         if ($consoTotal <= 0) {
             $result->setNucleaire((int) $quarter->getNucleaire() + $consoTotal);
             return $result;
+=======
+        $consoTotal = $consoTotal - $quarterMax->getHydraulique();
+        if ($consoTotal < 0) {
+            $quarter->setHydraulique($quarterMax->getHydraulique() + $consoTotal);
+            return $quarter;
         }
+        $quarter->setHydraulique($quarterMax->getHydraulique());
 
+        $consoTotal = $consoTotal - $quarterMax->getNucleaire();
+        if ($consoTotal <= 0) {
+            $quarter->setNucleaire($quarterMax->getNucleaire() + $consoTotal);
+            return $quarter;
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
+        }
+        $quarter->setNucleaire($quarterMax->getNucleaire());
+
+<<<<<<< HEAD
         $result->setNucleaire($quarter->getNucleaire());
         $result->setFlamme(0);
         $result->setFlamme( $consoTotal);
       // echo "dddddddddddddddd" . $consoTotal;
     //    $result->setFlamme($quarter->getFlamme());
         $this->facilityService->submitQuarters($quarter->getFlamme());
+=======
+        $quarter->setFlamme($consoTotal);
+        $this->facilityService->submitFlamePower($quarter->getFlamme());
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
 
 //       var_dump($result);
 //        exit;
@@ -197,7 +236,6 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
-
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
@@ -231,7 +269,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setTargetParcPower($targetParcPower)
     {
-        $this->targetParcPower = $targetParcPower;
+        $this->targetParcPower = clone $targetParcPower;
     }
 
     /**
@@ -247,7 +285,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setTargetYear($targetYear)
     {
-        $this->targetYear = $targetYear;
+        $this->targetYear = clone $targetYear;
         $this->initComputedYear();
     }
 
@@ -271,15 +309,19 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     protected function updateYearComputed($quarter,$coeff = 4)
     {
+<<<<<<< HEAD
       //  echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
+=======
+       // echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
+>>>>>>> bce6b6c1956b6bfe7dda39c4bc8a0d3449566273
 
 
-        $this->yearComputed->setConsoTotalEolien($quarter->getEolien()/$coeff+$this->yearComputed->getConsoTotalEolien());
-        $this->yearComputed->setConsoTotalFlamme($quarter->getFlamme()/$coeff+$this->yearComputed->getConsoTotalFlamme());
-        $this->yearComputed->setConsoTotalHydraulique($quarter->getHydraulique()/$coeff+$this->yearComputed->getConsoTotalHydraulique());
-        $this->yearComputed->setConsoTotalNucleaire($quarter->getNucleaire()/$coeff+$this->yearComputed->getConsoTotalNucleaire());
-        $this->yearComputed->setConsoTotalPhotovoltaique($quarter->getPhotovoltaique()/$coeff+$this->yearComputed->getConsoTotalPhotovoltaique());
-        $this->yearComputed->setConsoTotalGlobale($this->yearComputed->getConsoTotalEolien()+$this->yearComputed->getConsoTotalFlamme()+
+        $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
+        $this->yearComputed->setConsoTotalFlamme(($quarter->getFlamme()/$coeff)+$this->yearComputed->getConsoTotalFlamme());
+        $this->yearComputed->setConsoTotalHydraulique(($quarter->getHydraulique()/$coeff)+$this->yearComputed->getConsoTotalHydraulique());
+        $this->yearComputed->setConsoTotalNucleaire(($quarter->getNucleaire()/$coeff)+$this->yearComputed->getConsoTotalNucleaire());
+        $this->yearComputed->setConsoTotalPhotovoltaique(($quarter->getPhotovoltaique()/$coeff)+$this->yearComputed->getConsoTotalPhotovoltaique());
+        $this->yearComputed->setConsoTotalGlobale(($this->yearComputed->getConsoTotalEolien())+$this->yearComputed->getConsoTotalFlamme()+
             $this->yearComputed->getConsoTotalHydraulique()+$this->yearComputed->getConsoTotalNucleaire()+$this->yearComputed->getConsoTotalPhotovoltaique());
 
     }
@@ -297,7 +339,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setReferenceParcPower($referenceParcPower)
     {
-        $this->referenceParcPower = $referenceParcPower;
+        $this->referenceParcPower = clone $referenceParcPower;
     }
 
     /**
@@ -342,8 +384,6 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
     public function getComputedYear()
     {
-
-
         return $this->yearComputed;
     }
 }

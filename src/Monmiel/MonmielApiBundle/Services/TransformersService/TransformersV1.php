@@ -1,7 +1,9 @@
 <?php
 
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
+
 use JMS\DiExtraBundle\Annotation as DI;
+
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
@@ -101,9 +103,13 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function UpdateConsoTotalForQuatersForDay($day)
     {
-      $this->stopWatch->start("updateConsoTotal", "transformers");
-        $updatedDay = new Day($day->getDateTime());
-        if (isset($day)) {
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("updateConsoTotal", "transformers");
+        }
+        if (isset($day))
+        {
+            $updatedDay = new Day($day->getDateTime());
             $consoActuel = $this->getConsoTotalActuel();
             $consoTotalDefinedByUser = $this->getConsoTotalDefinedByUser();
 
@@ -118,9 +124,17 @@ class TransformersV1 implements TransformersServiceInterfaceV1
                 $newQuartersArray =  $this->transformeTotalToConsoTher($day->getQuarters(), $consoActuel, $consoTotalDefinedByUser);
             }
             $updatedDay->setQuarters($newQuartersArray);
+            return $updatedDay;
         }
-       $this->stopWatch->stop("updateConsoTotal");
-       return $updatedDay;
+        else
+        {
+            return null;
+        }
+        if(isset($this->stopWatch))
+        {
+            $this->stopWach->stop("updateConsoTotal");
+        }
+
     }
 
     /**
@@ -165,6 +179,22 @@ class TransformersV1 implements TransformersServiceInterfaceV1
         $ret = ($totalActQuart* $consoDefineByUserValue)/$consoTotalActValue;
 
         return $ret;
+    }
+
+    /**
+     * calculate the median of consummation of yers in parameter
+     * @param $medianYearReference float median of current year reference
+     * @return float
+     */
+    public function calculateMedianOfConsummationForYearTarget($medianYearReference){
+        $retour = 0;
+        if(isset($medianYearReference) && isset($this->consoTotalActuel)){
+             $retour = (($medianYearReference*$this->consoTotalDefinedByUser)/$this->consoTotalActuel);
+        }
+        else{
+           //TODO à calculer avec les données en bases
+        }
+        return $retour;
     }
 
     /**
@@ -232,7 +262,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
+    \Monmiel\MonmielApiBundle\Dao\RiakDao $riakDao
      */
     public function setRiakDao($riakDao)
     {

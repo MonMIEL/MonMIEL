@@ -11,7 +11,7 @@ use Monmiel\MonmielApiModelBundle\Model\Day;
  */
 class DaoClientService
 {
-    const BUFFER_SIZE = 10;
+    const BUFFER_SIZE = 20;
 
     /**
      * @var $dao RiakDao
@@ -28,7 +28,7 @@ class DaoClientService
      * @param $dayNumber integer
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
      */
-    public function get($dayNumber)
+    public function gets($dayNumber)
     {
         $this->stopWatch->start("createDate", "dao client");
         $date = date_create_from_format("Y-m-d", "2011-01-01");
@@ -44,6 +44,21 @@ class DaoClientService
 
 
         return $this->dayBuffer[$key];
+    }
+
+    /**
+     * @param $dayNumber integer
+     * @return \Monmiel\MonmielApiModelBundle\Model\Day
+     */
+    public function get($dayNumber)
+    {
+        $this->stopWatch->start("createDate", "dao client");
+        $date = date_create_from_format("Y-m-d", "2011-01-01");
+        $date->modify("+".($dayNumber-1)." day");
+        $key = $date->format("Y-m-d");
+        $this->stopWatch->stop('createDate');
+
+        return $this->dao->get($key);
     }
 
     /**
@@ -68,7 +83,7 @@ class DaoClientService
     public function updateBuffer($dateTime)
     {
         $keys = $this->createKeys($dateTime);
-        $days = $this->dao->get($keys);
+        $days = $this->dao->gets($keys);
         $dayBuffer = array();
         /** @var $day Day */
         foreach ($days as $day) {
