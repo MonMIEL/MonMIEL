@@ -30,85 +30,54 @@ class AutresTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::setPowerAutre
-     * @todo   Implement testSetPowerAutre().
      */
     public function testSetPowerAutre()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setPowerAutre(500);
+        $exceptedValue = 500*4;
+        $result = $this->object->getPowerAutre();
+        assertThat($result,is($exceptedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::getPowerAutre
-     * @todo   Implement testGetPowerAutre().
-     */
-    public function testGetPowerAutre()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::setFacteurChargeAutre
-     * @todo   Implement testSetFacteurChargeAutre().
+
      */
     public function testSetFacteurChargeAutre()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setFacteurChargeAutre(0.50);
+        $exceptedValue = 0.5;
+        $result = $this->object->getFacteurChargeAutre();
+        assertThat($result,is($exceptedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::getFacteurChargeAutre
-     * @todo   Implement testGetFacteurChargeAutre().
-     */
-    public function testGetFacteurChargeAutre()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
+
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::setTauxDisponibiliteAutre
-     * @todo   Implement testSetTauxDisponibiliteAutre().
+
      */
     public function testSetTauxDisponibiliteAutre()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setTauxDisponibiliteAutre(0.80);
+        $exceptedValue = 0.80;
+        $result = $this->object->getTauxDisponibiliteAutre();
+        assertThat($result,is($exceptedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::getTauxDisponibiliteAutre
-     * @todo   Implement testGetTauxDisponibiliteAutre().
-     */
-    public function testGetTauxDisponibiliteAutre()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Autres::getParcAutre
-     * @todo   Implement testGetParcAutre().
+
      */
     public function testGetParcAutre()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setFacteurChargeAutre(0.50);
+        $this->object->setTauxDisponibiliteAutre(0.80);
+        $this->object->setPowerAutre(5000);
+        $exceptedValue = 62500;
+        $result = intval($this->object->getParcAutre());
+        assertThat($result,is($exceptedValue));
     }
 }
