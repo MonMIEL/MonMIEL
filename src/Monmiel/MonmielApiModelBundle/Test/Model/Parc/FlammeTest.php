@@ -9,7 +9,7 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Flamme
      */
-    protected $object;
+    protected $flamme;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -17,7 +17,7 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Flamme;
+        $this->flamme = new Flamme;
     }
 
     /**
@@ -30,109 +30,63 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setMaxFlamme
-     * @todo   Implement testSetMaxFlamme().
      */
     public function testSetMaxFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->flamme->setMaxFlamme(60000);
+        $expectedValue = 60000;
+        $result = $this->flamme->getMaxFlamme();
+        assertThat($result, is($expectedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getMaxFlamme
-     * @todo   Implement testGetMaxFlamme().
-     */
-    public function testGetMaxFlamme()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setFacteurChargeFlamme
-     * @todo   Implement testSetFacteurChargeFlamme().
      */
     public function testSetFacteurChargeFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->flamme->setFacteurChargeFlamme(0.75);
+        $expectedValue = 0.75;
+        $result = $this->flamme->getFacteurChargeFlamme();
+        assertThat($result, is($expectedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getFacteurChargeFlamme
-     * @todo   Implement testGetFacteurChargeFlamme().
-     */
-    public function testGetFacteurChargeFlamme()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setTauxDisponibiliteFlamme
-     * @todo   Implement testSetTauxDisponibiliteFlamme().
      */
     public function testSetTauxDisponibiliteFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->flamme->setTauxDisponibiliteFlamme(0.70);
+        $expectedValue = 0.70;
+        $result = $this->flamme->getTauxDisponibiliteFlamme();
+        assertThat($result, is($expectedValue));
     }
 
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getTauxDisponibiliteFlamme
-     * @todo   Implement testGetTauxDisponibiliteFlamme().
-     */
-    public function testGetTauxDisponibiliteFlamme()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setPowerFlamme
-     * @todo   Implement testSetPowerFlamme().
      */
     public function testSetPowerFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getPowerFlamme
-     * @todo   Implement testGetPowerFlamme().
-     */
-    public function testGetPowerFlamme()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->flamme->setMaxFlamme(3500);
+        $this->flamme->setPowerFlamme();
+        $this->flamme->setTauxDisponibiliteFlamme(0.70);
+        $expectedValue = 3500;
+        $result = $this->flamme->getPowerFlamme();
+        assertThat($result, is($expectedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getParcFlamme
-     * @todo   Implement testGetParcFlamme().
      */
     public function testGetParcFlamme()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->flamme->setMaxFlamme(6000);
+        $this->flamme->setPowerFlamme();
+        $this->flamme->setTauxDisponibiliteFlamme(0.70);
+        $expectedValue = intval((6000*100/70)/500);
+        $result = intval($this->flamme->getParcFlamme());
+        assertThat($result, is($expectedValue));
     }
 }

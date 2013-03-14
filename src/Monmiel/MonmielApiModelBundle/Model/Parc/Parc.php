@@ -93,7 +93,7 @@ class Parc{
     public function setPowerForEachEnergy($year,$interval){
 
         $percentNuclear=$year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale();
-        $this->nucleaire->setPowerNuclear($this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval),($year->getConsoTotalNucleaire()/$year->getConsoTotalGlobale()),$percentNuclear);
+        $this->nucleaire->setPowerNuclear(($this->calculateWattHour2Power($year->getConsoTotalNucleaire(),$interval)),$percentNuclear);
         $this->eolien->setPowerEolien($this->calculateWattHour2Power($year->getConsoTotalEolien(),$interval));
         $this->pv->setPowerPv($this->calculateWattHour2Power($year->getConsoTotalPhotovoltaique(),$interval));
         $this->hydraulique->setPowerHydraulic($this->calculateWattHour2Power($year->getConsoTotalHydraulique(),$interval));

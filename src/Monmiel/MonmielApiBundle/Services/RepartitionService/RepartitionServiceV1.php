@@ -110,6 +110,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
         if ($consoTotal < 0) {
             $quarter->setEolien($quarter->getEolien() + $consoTotal);
+            echo "eolien: ".$quarter->getEolien()."\n";
             return $quarter;
         }
 
@@ -149,13 +150,15 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $targetParcPower = $this->getTargetParcPower();
         $referenceParcPower = $this->getReferenceParcPower();
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
-        echo "eolProdCap";
-        echo $aeolianProductionCapacity;
+
+        echo "prod n-1: ".$quarter->getEolien()."\n";
+        echo "parc eolien n-1: ".$referenceParcPower->getWind()."\n";
+
+        echo "parc eolien n: ".$targetParcPower->getWind()."\n";
+        echo "capacité prod eolien n: ".$aeolianProductionCapacity."\n";
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
 
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
-        echo "nukProdCap";
-        echo $nuclearProductionCapacity;
         $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
 
         $maxProductionQuarter = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
@@ -172,7 +175,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setReferenceYear($referenceYear)
     {
-        $this->referenceYear = $referenceYear;
+        $this->referenceYear = clone $referenceYear;
     }
 
     /**
@@ -188,7 +191,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setTargetParcPower($targetParcPower)
     {
-        $this->targetParcPower = $targetParcPower;
+        $this->targetParcPower = clone $targetParcPower;
     }
 
     /**
@@ -204,7 +207,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setTargetYear($targetYear)
     {
-        $this->targetYear = $targetYear;
+        $this->targetYear = clone $targetYear;
         $this->initComputedYear();
     }
 
@@ -228,7 +231,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     protected function updateYearComputed($quarter,$coeff = 4)
     {
-        echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
+       // echo "-------------------------------------------------------------------------------\n" .$this->yearComputed->toString();
 
 
         $this->yearComputed->setConsoTotalEolien(($quarter->getEolien()/$coeff)+$this->yearComputed->getConsoTotalEolien());
@@ -254,7 +257,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function setReferenceParcPower($referenceParcPower)
     {
-        $this->referenceParcPower = $referenceParcPower;
+        $this->referenceParcPower = clone $referenceParcPower;
     }
 
     /**
@@ -299,8 +302,6 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
     public function getComputedYear()
     {
-
-
         return $this->yearComputed;
     }
 }

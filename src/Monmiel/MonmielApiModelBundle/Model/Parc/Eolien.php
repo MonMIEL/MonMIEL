@@ -29,7 +29,9 @@ class Eolien
 
     public function setPowerEolien($powerEolien){
         if(isset($powerEolien)){
+
             $this->power_eolien=$powerEolien/$this->getFacteurChargeEolien();
+            echo "setPowerEnergie: ".$this->power_eolien."\n" ;
         }
     }
 
