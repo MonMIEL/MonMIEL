@@ -108,4 +108,13 @@ class ParcService implements ParcServiceInterface
     {
         return $this->targetParcPower->getPower();
     }
+
+    /**
+     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\GlobalParc
+     */
+    public function getFinalParcPower()
+    {
+        return $this->finalParcPower;
+    }
+
 }
