@@ -74,7 +74,7 @@ abstract class Energy
      */
     public function setPower($power)
     {
-        $this->power = $power / $this->getLoadFactor();
+        $this->power = ($power / $this->getLoadFactor())*$this->getAvailabilityRate();
     }
 
     /**
