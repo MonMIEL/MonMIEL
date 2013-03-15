@@ -60,10 +60,10 @@ class DecisionSelector
      */
     public function set($coeffOfMixYear = 1)
     {
-        DecisionSelector:: $max_import = 8000 * $coeffOfMixYear;
-        DecisionSelector::  $max_storable_in_steps = 5000 * $coeffOfMixYear;
-        DecisionSelector::  $energy_step_max = 90000 * $coeffOfMixYear; //GWH
-        DecisionSelector:: $energy_import_max = 45000000 * $coeffOfMixYear;
+        DecisionSelector:: $max_import = DecisionSelector:: $max_import * $coeffOfMixYear;
+        DecisionSelector::  $max_storable_in_steps =  DecisionSelector::  $max_storable_in_steps  * $coeffOfMixYear;
+        DecisionSelector::  $energy_step_max =    DecisionSelector::  $energy_step_max * $coeffOfMixYear; //GWH
+        DecisionSelector:: $energy_import_max = DecisionSelector:: $energy_import_max  * $coeffOfMixYear;
     }
 
     /**
@@ -165,7 +165,7 @@ class DecisionSelector
 
         $energy_import_used = $soldeToDistribute/(60 /$quarter->getInterval()) + DecisionSelector::$energy_import_used;
         $result = $energy_import_used >= DecisionSelector::$energy_import_max;
-      
+
         return $result;
     }
 
