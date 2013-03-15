@@ -140,7 +140,10 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $quarter->setNucleaire($quarterMax->getNucleaire());
 
         $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitFlamePower($quarter->getFlamme());
+
+        if(isset($this->facilityService)){
+            $this->facilityService->submitFlamePower($quarter->getFlamme());
+        }
 
         return $quarter;
     }
@@ -269,7 +272,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     * @param $facilityService \Monmiel\MonmielApiBundle\Services\ParcService\ParcService
      */
     public function setFacilityService($facilityService)
     {
@@ -277,7 +280,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @return \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService
+     * @return \Monmiel\MonmielApiBundle\Services\ParcService\ParcService
      */
     public function getFacilityService()
     {

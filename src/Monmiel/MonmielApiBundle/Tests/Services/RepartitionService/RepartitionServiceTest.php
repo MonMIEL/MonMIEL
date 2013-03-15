@@ -7,7 +7,7 @@ use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
 use Monmiel\MonmielApiModelBundle\Model\Power;
 use Monmiel\MonmielApiModelBundle\Model\Year;
-use Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService;
+use Monmiel\MonmielApiBundle\Services\ParcService\ParcService;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -27,7 +27,7 @@ class RepartitionServiceTest extends BaseTestCase
     {
         $this->repartitionService = new RepartitionServiceV1();
         $this->repartitionService->setTargetYear(new Year(1,0,0,0,0,0,0));
-        $this->repartitionService->setFacilityService(new ComputeFacilityService());
+        $this->repartitionService->setTransformers($this->getMockedReferenceDay());
     }
 
     /**
@@ -50,15 +50,17 @@ class RepartitionServiceTest extends BaseTestCase
         $powerTargetPhotovoltaique = 200;
         $powerTargetEolian = 300;
 
-        /**
-         * @var $day Day
-         */
-        $day = $this->getDayObject();
+        $date1 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:00:00");
+        $day = new Day($date1);
+
+        $q1 = new Quarter($date1, 1026, 500, 100, 0, 20, 344, 62, 0);
+
+        $day->addQuarters($q1);
 
        /**
         * @var $quarter Quarter
         */
-        $quarter = $day->getQuarter(1);
+        $quarter = $day->getQuarter(0);
 
         /**
          * Valeurs vraies pour le test
@@ -95,17 +97,14 @@ class RepartitionServiceTest extends BaseTestCase
 
 
     /**
-     * Test de la méthode computeMixedTargetDailyConsumption du service RepartitionService
+     * Test de la méthode get du service RepartitionService
      * @test
      */
-    public function testComputeMixedTargetDailyConsumption(){
+    public function testGet(){
+
         /*************************
          * Début paramètres du test
          *************************/
-        /**
-         * @var $day Day
-         */
-        $day = $this->getDayObject();
 
         //Puissances de l'année de référence
         $powerRefNuclear = 400;
@@ -118,6 +117,11 @@ class RepartitionServiceTest extends BaseTestCase
         $powerTargetHydraulic = 1500;
         $powerTargetPhotovoltaique = 200;
         $powerTargetEolian = 300;
+
+        /**
+         * @var $dayRef Day
+         */
+        $dayRef = $this->getDayObject();
 
         /**
          * @var $expectedTrue Quarter
@@ -138,21 +142,19 @@ class RepartitionServiceTest extends BaseTestCase
         /**
          * @var $resultat Day
          */
-        $resultat = $this->repartitionService->computeMixedTargetDailyConsumption($day);
-
-        //Verification du 1er quart d'heure
+        $resultat = $this->repartitionService->get(0);
 
         //Eolien > ConsoTotal
-        $expectedTrue = $day->getQuarter(1);
-        $toTest = $resultat->getQuarter(1);
+        $expectedTrue = $dayRef->getQuarter(0);
+        $toTest = $resultat->getQuarter(0);
 
         $valueEnergy = $expectedTrue->getConsoTotal();
         $expectedTrue->setEolien($valueEnergy);
         $this->assertEquals($expectedTrue->getEolien(),$toTest->getEolien(),"La consommation de l'eolien du quart d'heure est de ".$toTest->getEolien()." alors qu'il doit etre a ".$expectedTrue->getEolien());
 
         //Photovoltaique > ConsoTotal
-        $expectedTrue = $day->getQuarter(2);
-        $toTest = $resultat->getQuarter(2);
+        $expectedTrue = $dayRef->getQuarter(1);
+        $toTest = $resultat->getQuarter(1);
 
         $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
         $valueEnergy = $expectedTrue->getConsoTotal() - $eolian;
@@ -160,8 +162,8 @@ class RepartitionServiceTest extends BaseTestCase
         $this->assertEquals($expectedTrue->getPhotovoltaique(),$toTest->getPhotovoltaique(),"La consommation du photovoltaique du quart d'heure est de ".$toTest->getPhotovoltaique()." alors qu'il doit etre a ".$expectedTrue->getPhotovoltaique());
 
         //Hydraulique > ConsoTotal
-        $expectedTrue = $day->getQuarter(3);
-        $toTest = $resultat->getQuarter(3);
+        $expectedTrue = $dayRef->getQuarter(2);
+        $toTest = $resultat->getQuarter(2);
 
         $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
         $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
@@ -171,8 +173,8 @@ class RepartitionServiceTest extends BaseTestCase
         $this->assertEquals($expectedTrue->getHydraulique(),$toTest->getHydraulique(),"La consommation de l'hydraulique du quart d'heure est de ".$toTest->getHydraulique()." alors qu'il doit etre a ".$expectedTrue->getHydraulique());
 
         //Nucleaire > ConsoTotal
-        $expectedTrue = $day->getQuarter(4);
-        $toTest = $resultat->getQuarter(4);
+        $expectedTrue = $dayRef->getQuarter(3);
+        $toTest = $resultat->getQuarter(3);
 
         $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
         $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
@@ -182,8 +184,8 @@ class RepartitionServiceTest extends BaseTestCase
         $this->assertEquals($expectedTrue->getNucleaire(),$toTest->getNucleaire(),"La consommation du nucleaire du quart d'heure est de ".$toTest->getNucleaire()." alors qu'il doit etre a ".$expectedTrue->getNucleaire());
 
         //Flamme
-        $expectedTrue = $day->getQuarter(5);
-        $toTest = $resultat->getQuarter(5);
+        $expectedTrue = $dayRef->getQuarter(4);
+        $toTest = $resultat->getQuarter(4);
 
         $eolian = $powerTargetEolian*$expectedTrue->getEolien()/$powerRefEolian;
         $photovoltaic = $powerTargetPhotovoltaique*$expectedTrue->getPhotovoltaique()/$powerRefPhotovoltaique;
@@ -193,39 +195,49 @@ class RepartitionServiceTest extends BaseTestCase
         $valueEnergy = $expectedTrue->getConsoTotal() - $eolian - $photovoltaic - $hydraulic - $nuclear;
         $expectedTrue->setFlamme($valueEnergy);
         $this->assertEquals($expectedTrue->getFlamme(),$toTest->getFlamme(),"La consommation de flamme du quart d'heure est de ".$toTest->getFlamme()." alors qu'il doit etre a ".$expectedTrue->getFlamme());
+
     }
+
 
     /**
      * @return Day
      */
     public function getDayObject()
     {
-        $date1 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:00:00");
-        $date2 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:15:00");
-        $date3 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:30:00");
-        $date4 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:45:00");
-        $date5 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 01:00:00");
-        $date6 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 01:15:00");
+        $date1 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:15:00");
+        $date2 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:30:00");
+        $date3 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 00:45:00");
+        $date4 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 01:00:00");
+        $date5 = date_create_from_format("Y-m-d H:i:s", "2011-01-01 01:15:00");
 
-        $object = new Day($date1);
-
-        $q1 = new Quarter($date1, 1026, 500, 100, 0, 20, 344, 62, 0); //Test de ComputeMaxProductionPerEnergy
+        $day = new Day($date1);
 
         //Différents quarts d'heure pour tester computeMixedTargetDailyConsumption avec différents cas
-        $q2 = new Quarter($date2, 2000, 2000, 0, 0, 0, 0, 0, 0); //Eolien
-        $q3 = new Quarter($date3, 2000, 500, 0, 0, 0, 1500, 0, 0); //Photovoltaique
-        $q4 = new Quarter($date4, 2000, 100, 0, 1500, 0, 400, 0, 0); //Hydraulique
-        $q5 = new Quarter($date5, 2000, 200, 0, 500, 1000, 0, 300, 0); //Nucleaire
-        $q6 = new Quarter($date6, 10000, 200, 0, 300, 500, 0, 50, 0); //Flamme
+        $q1 = new Quarter($date1, 2000, 2000, 0, 0, 0, 0, 0, 0); //Eolien
+        $q2 = new Quarter($date2, 2000, 500, 0, 0, 0, 1500, 0, 0); //Photovoltaique
+        $q3 = new Quarter($date3, 2000, 100, 0, 1500, 0, 400, 0, 0); //Hydraulique
+        $q4 = new Quarter($date4, 2000, 200, 0, 500, 1000, 0, 300, 0); //Nucleaire
+        $q5 = new Quarter($date5, 10000, 200, 0, 300, 500, 0, 50, 0); //Flamme
 
-        $object->addQuarters($q1);
-        $object->addQuarters($q2);
-        $object->addQuarters($q3);
-        $object->addQuarters($q4);
-        $object->addQuarters($q5);
-        $object->addQuarters($q6);
+        $day->addQuarters($q1);
+        $day->addQuarters($q2);
+        $day->addQuarters($q3);
+        $day->addQuarters($q4);
+        $day->addQuarters($q5);
 
+        return $day;
+    }
 
-        return $object;
+    //création du mock
+    public function getMockedReferenceDay()
+    {
+        $day = $this->getDayObject();
+        $dao = $this->getMockBuilder("Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1")
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dao->expects($this->any())
+            ->method("get")
+            ->will($this->returnValue($day));
+        return $dao;
     }
 }
