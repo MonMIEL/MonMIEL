@@ -160,7 +160,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         //echo (" \n \n\n\n");
 
-    //   echo($this->repartition->getComputedYear()->toString());
+ echo($this->repartition->getComputedYear()->toString());
 
 
         //echo "Fin :";

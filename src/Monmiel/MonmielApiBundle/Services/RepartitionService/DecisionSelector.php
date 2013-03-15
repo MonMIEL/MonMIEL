@@ -162,7 +162,8 @@ class DecisionSelector
 
     private function  maxImportEnegyReached($quarter, $soldeToDistribute)
     {
-        $energy_import_used = $soldeToDistribute(60 / $quarter->getInterval()) + DecisionSelector::$energy_import_used;
+       // echo "\n \n fjhfjfjfjfjf" .($quarter->getInterval());
+        $energy_import_used = $soldeToDistribute/(60 /$quarter->getInterval()) + DecisionSelector::$energy_import_used;
         $result = $energy_import_used >= DecisionSelector::$energy_import_max;
         return $result;
     }

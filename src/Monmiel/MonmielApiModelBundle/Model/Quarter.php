@@ -62,7 +62,7 @@ class Quarter
      * @var integer
      * @Ser\Type("integer")
      */
-    protected $interval;
+    protected $interval=15;//default
 
     function __construct($date, $consoTotal = 0, $eolien = 0, $flamme = 0, $hydraulique = 0, $nucleaire = 0, $photovoltaique = 0, $autre = 0, $interval = 0)
     {
@@ -218,6 +218,9 @@ class Quarter
      */
     public function getInterval()
     {
+        if ($this->interval==0)
+            return 15;
+
         return $this->interval;
     }
 
