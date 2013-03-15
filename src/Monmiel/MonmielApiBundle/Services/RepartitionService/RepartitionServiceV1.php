@@ -80,8 +80,9 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function  computeMixedTargetDailyConsumption($referenceDay)
     {
-
-        $this->stopWatch->start("computeDistribution", "repartition");
+        if(isset($this->stopWatch)){
+            $this->stopWatch->start("computeDistribution", "repartition");
+        }
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
 
@@ -94,7 +95,9 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
             $this->updateYearComputed($computedQuarter);
         }
-        $this->stopWatch->stop("computeDistribution");
+        if(isset($this->stopWatch)){
+            $this->stopWatch->stop("computeDistribution");
+        }
         return $userMixDay;
     }
 
@@ -137,7 +140,10 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $quarter->setNucleaire($quarterMax->getNucleaire());
 
         $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitFlamePower($quarter->getFlamme());
+
+        if(isset($this->facilityService)){
+            $this->facilityService->submitFlamePower($quarter->getFlamme());
+        }
 
         return $quarter;
     }
@@ -271,7 +277,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     * @param $facilityService \Monmiel\MonmielApiBundle\Services\ParcService\ParcService
      */
     public function setFacilityService($facilityService)
     {
@@ -279,7 +285,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @return \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService
+     * @return \Monmiel\MonmielApiBundle\Services\ParcService\ParcService
      */
     public function getFacilityService()
     {
