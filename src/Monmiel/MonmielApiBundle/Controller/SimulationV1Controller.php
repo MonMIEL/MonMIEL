@@ -33,7 +33,7 @@ class SimulationV1Controller extends Controller
         $targetYear = $this->createTargetYearObject($request);
         $computedYear = $this->repartition->getComputedYear();
 
-        $parc = $this->repartition->getTargetParcPower();
+        $parc = $this->parc->getTargetParcPower();
         $finaParc = $this->parc->getFinalPower();
 
 
@@ -58,7 +58,7 @@ class SimulationV1Controller extends Controller
     {
         $this->stopWatch->start("init", "controller");
         $userConsoMesure = new Mesure($request->get("targetConso"), \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
-        $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
+        $actualConsoMesure = new Mesure(531, \Monmiel\Utils\ConstantUtils::TERAWATT_HOUR);
 
         $this->transformers->setConsoTotalActuel($actualConsoMesure);
         $this->transformers->setConsoTotalDefinedByUser($userConsoMesure);
@@ -85,12 +85,13 @@ class SimulationV1Controller extends Controller
         $totalNuclear = $request->get("nuke") * 1000000;
         $totalPhoto = $request->get("photo") * 1000000;
         $totalEol = $request->get("eol") * 1000000;
-        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, 50000000, 0);
+        $totalHydro = $request->get("hydro") * 1000000;
+        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, $totalHydro, 0);
     }
 
      public function createRefYearObject()
      {
-         return new Year(2011, 421000000, 12000000, 2000000, 0, 50000000, 0);
+         return new Year(2011, 419801949, 11253649, 2000000, 0, 38000000, 0);
      }
 
     public function getContent()

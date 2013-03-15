@@ -51,7 +51,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
         $targetYear = $this->createTargetYearObject();
         $this->toto=$targetYear;
 
-  echo("target year     au debut ---------------------------------\n              ".$targetYear->toString());
+  ////echo("target year     au debut ---------------------------------\n              ".$targetYear->toString());
 
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
@@ -70,24 +70,29 @@ class RepartitionTestCommand extends ContainerAwareCommand
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
 
-        echo "........end of init";
+        ////echo "........end of init";
       //  exit();
     }
 
     public function createTargetYearObject()
     {
-        $totalNuclear = 150 * 1000000;
-        $totalPhoto = 250 * 100000;
-        $totalEol = 150 * 10000;
-        return new Year(2050, $totalNuclear, $totalEol, $totalPhoto, 0, ($totalEol+$totalPhoto+$totalNuclear)/4, 0);
+        //  function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
+        $totalNuclear =           1679100240
+            * 10^1;
+        $totalPhoto = 5  * 10^6;
+        $totalEol = 45008188 * 10^1;
+        $totalHydro=50*  10^6;
+        return new Year(2050, 419801949, 11253649, 2000000, 0, 38000000, 0);
     }
 
     public function createRefYearObject()
     {
-        $totalNuclear = 150 * 1000000;
-        $totalPhoto = 150 * 1000000;
-        $totalEol = 150 * 1000000;
-        return new Year(2011, $totalNuclear, $totalEol, $totalPhoto, 0, 151998661/4, 0);
+        $totalNuclear =           1679100240
+            * 10^1;
+        $totalPhoto = 5  * 10^6;
+        $totalEol = 45008188 * 10^1;
+        $totalHydro=50*  10^6;
+        return new Year(2011, 419801949, 11253649, 2000000, 0, 38000000, 0);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -96,7 +101,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
 // Start event named 'eventName'
    $stopwatch->start('eventName');
 
-      //  echo "\n start time" .     $event->getStartTime();
+      //  //echo "\n start time" .     $event->getStartTime();
 // ... some code goes here
 
         $debut = microtime(true);
@@ -121,7 +126,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
         for ($boucle=1; $boucle<=$occ; $boucle++)
         {
         for ($i = 1; $i <= 365; $i++) {
-          //  echo "\n je suis dans la boucle";
+          //  //echo "\n je suis dans la boucle";
             /*
              * @var Day $val
              */
@@ -134,29 +139,29 @@ class RepartitionTestCommand extends ContainerAwareCommand
         $fin = microtime(true);
 
         $result = $fin - $debut;
-        echo "\n debut:   " . $debut;
-        echo " \n fin:" . $fin;
+        //echo "\n debut:   " . $debut;
+        //echo " \n fin:" . $fin;
 
-        echo "\n \n";
+        //echo "\n \n";
 
-        echo "le resultat final est: " . $result;
-        echo "\n \n \n";
+        //echo "le resultat final est: " . $result;
+        //echo "\n \n \n";
 
 
         $event = $stopwatch->stop('eventName');
-        echo "\n end time" . $event->getEndTime();
-        echo "\n start time" . $event->getStartTime();
+        //echo "\n end time" . $event->getEndTime();
+        //echo "\n start time" . $event->getStartTime();
 
- echo (" \n \n\n\n");
-        echo("target year APres calcul -------->".$this->toto->toString());
-        echo (" \n \n\n\n");
+ //echo (" \n \n\n\n");
+        //echo("target year APres calcul -------->".$this->toto->toString());
+        //echo (" \n \n\n\n");
 
 
-        echo (" \n \n\n\n");
+        //echo (" \n \n\n\n");
 
        echo($this->repartition->getComputedYear()->toString());
 
 
-        echo "Fin :";
+        //echo "Fin :";
     }
 }

@@ -20,7 +20,7 @@ abstract class Energy
     protected $availabilityRate;
 
     /**
-     * @var $powerUnit
+     * @var $powerUnit float
      */
     protected $powerUnit;
 
@@ -70,7 +70,7 @@ abstract class Energy
     }
 
     /**
-     * @param int $power
+     * @param float $power
      */
     public function setPower($power)
     {
@@ -78,7 +78,7 @@ abstract class Energy
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getPower()
     {
@@ -86,7 +86,7 @@ abstract class Energy
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getParc()
     {
@@ -102,7 +102,7 @@ abstract class Energy
     }
 
     /**
-     * @return
+     * @return float
      */
     public function getPowerUnit()
     {
