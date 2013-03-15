@@ -55,7 +55,7 @@ class DecisionSelector
     private $filename = '/app/Resources/rte/monmiel-prices.yml';
 
     /**
-     * Set maximal values for steps and imports
+     * Set maximal values for steps and imports 
      * @param int $coeffOfMixYear based on totalMixYearConsumption /refYear
      */
     public function set($coeffOfMixYear = 1)
