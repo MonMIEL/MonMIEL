@@ -18,11 +18,11 @@ class RepartitionTestCommand extends ContainerAwareCommand
     public $transformers;
 
     /**
-     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1 $repartition
+     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV2 $repartition
      */
     public $repartition;
     /**
-     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
+     * @var \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $parc
      */
     public $parc;
 
@@ -31,15 +31,15 @@ class RepartitionTestCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName("monmiel:test:perf")
+            ->setName("monmiel:test:rep")
             ->setDescription("Extract Data from RTE and populate Riak");
     }
 
     public function init()
     {
         $this->transformers = $this->getContainer()->get("monmiel.transformers.v1.service");
-        $this->repartition=$this->getContainer()->get("monmiel.repartition.service");
-        $this->parc=$this->getContainer()->get("monmiel.facility.service");
+        $this->repartition=$this->getContainer()->get("monmiel.repartition.v2.service");
+        $this->parc=$this->getContainer()->get("monmiel.parc.service");
 
         $userConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT);
         $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT);
@@ -55,13 +55,23 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
+        $refYear = $this->createRefYearObject();
+        $targetYear = $this->createTargetYearObject( );
 
-        $targetParcPower = $this->parc->getPower($targetYear);
-        $refParcPower = $this->parc->getPower($refYear);
+        $this->transformers->setReferenceYear($refYear);
+        $this->transformers->setTargetYear($targetYear);
+
+        $this->parc->setTargetParcPower($targetYear);
+        $this->parc->setRefParcPower($refYear);
+        $targetParcPower = $this->parc->getTargetParcPower();
+        $refParcPower = $this->parc->getRefParcPower();
         $this->repartition->setReferenceYear($refYear);
         $this->repartition->setTargetYear($targetYear);
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
+
+        echo "........end of init";
+      //  exit();
     }
 
     public function createTargetYearObject()
@@ -103,16 +113,21 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         $this->init();
 
+
+
         $days = array();
 
 
         for ($boucle=1; $boucle<=$occ; $boucle++)
         {
         for ($i = 1; $i <= 365; $i++) {
+          //  echo "\n je suis dans la boucle";
             /*
              * @var Day $val
              */
+
            $val = $this->repartition->get($i);
+
 
         }
         }

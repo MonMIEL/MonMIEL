@@ -230,6 +230,76 @@ class Year
     {
         return $this->yearIdentifiant;
     }
+
+    /**
+     * steps used
+     * @var float
+     * @Ser\Exclude
+     */
+    protected $stepsTotal=0;
+
+    /**
+     * value imported
+     * @var float
+     * @Ser\Exclude
+     */
+      protected $importTotal=0;
+    /**
+     * value exported
+     * @var float
+     * @Ser\Exclude
+     */
+    protected $exportTotal=0;
+
+    /**
+     * @param float $exportTotal
+     */
+    public function setExportTotal($exportTotal)
+    {
+        $this->exportTotal = $exportTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getExportTotal()
+    {
+        return $this->exportTotal;
+    }
+
+    /**
+     * @param float $stepsTotal
+     */
+    public function setStepsTotal($stepsTotal)
+    {
+        $this->stepsTotal = $stepsTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getStepsTotal()
+    {
+        return $this->stepsTotal;
+    }
+
+    /**
+     * @param float $importTotal
+     */
+    public function setImportTotal($importTotal)
+    {
+        $this->importTotal = $importTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getImportTotal()
+    {
+        return $this->importTotal;
+    }
+
+
 }
 
 

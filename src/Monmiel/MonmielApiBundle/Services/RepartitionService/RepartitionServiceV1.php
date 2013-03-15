@@ -56,6 +56,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     public function get($day)
     {
         $referenceDay = $this->getReferenceDay($day);
+
         $ComputeDay = $this->computeMixedTargetDailyConsumption($referenceDay);
         return $ComputeDay;
     }
@@ -266,7 +267,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @param \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $facilityService
+     * @param \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $facilityService
      */
     public function setFacilityService($facilityService)
     {
@@ -274,7 +275,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     }
 
     /**
-     * @return \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService
+     * @return \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $facilityService
      */
     public function getFacilityService()
     {

@@ -5,12 +5,22 @@ namespace Monmiel\MonmielApiBundle\Services\RepartitionService;
 use JMS\DiExtraBundle\Annotation as DI;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
+use Monmiel\MonmielApiBundle\Services\RepartitionService\DecisionSelector;
 
 /**
  * @DI\Service("monmiel.repartition.v2.service")
  */
 class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionServiceInterface
 {
+
+
+
+
+    /**
+     * @DI\Inject("monmiel.repartition.decision.service")
+     * @var DecisionSelector $decision
+     */
+    public $decision;
     /**
      * @DI\Inject("monmiel.transformers.v1.service")
      * @var \Monmiel\MonmielApiBundle\Services\TransformersService\TransformersV1 $transformers
@@ -103,39 +113,54 @@ class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionSe
      * @param $quarter Quarter
      * @return Quarter
      */
-    protected function computeDistribution($quarter)
+    protected function computeDistribution($quarterMax)
     {
-        $consoTotal = $quarter->getConsoTotal();
-        $consoTotal = $consoTotal - $quarter->getEolien();
+       $this->decision->storeInStepsOrExport($quarterMax);
+        $quarter = new Quarter($quarterMax->getDate());
+        $consoTotal = $quarterMax->getConsoTotal();
+        $consoTotal = $consoTotal - $quarterMax->getEolien();
 
         if ($consoTotal < 0) {
-            $quarter->setEolien($quarter->getEolien() + $consoTotal);
+            $quarter->setEolien($quarterMax->getEolien() + $consoTotal);
             return $quarter;
         }
+        $quarter->setEolien($quarterMax->getEolien());
 
-        $consoTotal = $consoTotal - $quarter->getPhotovoltaique();
+        $consoTotal = $consoTotal - $quarterMax->getPhotovoltaique();
         if ($consoTotal < 0) {
-            $quarter->setPhotovoltaique($quarter->getPhotovoltaique() + $consoTotal);
+            $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique() + $consoTotal);
             return $quarter;
         }
+        $quarter->setPhotovoltaique($quarterMax->getPhotovoltaique());
 
-        $consoTotal = $consoTotal - $quarter->getHydraulique();
+        $consoTotal = $consoTotal - $quarterMax->getHydraulique();
         if ($consoTotal < 0) {
-            $quarter->setHydraulique($quarter->getHydraulique() + $consoTotal);
+            $quarter->setHydraulique($quarterMax->getHydraulique() + $consoTotal);
             return $quarter;
         }
+        $quarter->setHydraulique($quarterMax->getHydraulique());
 
-        $consoTotal = $consoTotal - $quarter->getNucleaire();
+        $consoTotal = $consoTotal - $quarterMax->getNucleaire();
         if ($consoTotal <= 0) {
-            $quarter->setNucleaire($quarter->getNucleaire() + $consoTotal);
+            $quarter->setNucleaire($quarterMax->getNucleaire() + $consoTotal);
             return $quarter;
         }
+        $quarter->setNucleaire($quarterMax->getNucleaire());
 
-//        $quarter->setFlamme($consoTotal);
-//        $this->facilityService->submitQuarters($quarter->getFlamme());
+        $quarter->setFlamme($consoTotal);
+        $this->facilityService->submitFlamePower($quarter->getFlamme());
 
 
-        return DecisionSelector::getDecisionAndUpdatesQuarter($quarter,$consoTotal);;
+
+    $quarter=  $this->decision->getDecisionAndUpdatesQuarterDeficit($quarter,$consoTotal);
+        echo "\n------result: \n";
+        var_dump($quarter->getFlamme());
+        $this->facilityService->submitFlamePower($quarter->getFlamme());
+
+       return $quarter;
+
+
+
     }
 
 //    /**

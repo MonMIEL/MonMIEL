@@ -220,4 +220,76 @@ class Quarter
     {
         return $this->interval;
     }
+
+
+    /**
+     * steps used
+     * @var float
+     * @Ser\Exclude
+     */
+    protected $steps=0;
+
+    /**
+     * value imported
+     * @var float
+     * @Ser\Exclude
+     */
+    protected $import=0;
+    /**
+     * value exported
+     * @var float
+     * @Ser\Exclude
+     */
+    protected $export=0;
+
+    /**
+     * @param float $export
+     */
+    public function setExport($export)
+    {
+        $this->export = $export;
+    }
+
+    /**
+     * @return float
+     */
+    public function getExport()
+    {
+        return $this->export;
+    }
+
+    /**
+     * @param float $steps
+     */
+    public function setSteps($steps)
+    {
+        $this->steps = $steps;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSteps()
+    {
+        return $this->steps;
+    }
+
+    /**
+     * @param float $import
+     */
+    public function setImport($import)
+    {
+        $this->import = $import;
+    }
+
+    /**
+     * @return float
+     */
+    public function getImport()
+    {
+        return $this->import;
+    }
+
+
+
 }
