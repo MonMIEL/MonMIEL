@@ -31,7 +31,7 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::setPowerHydraulic
      */
-    public function testSetPowerHydraulic()
+   /* public function testSetPowerHydraulic()
     {
         $this->hydraulic->setFacteurChargeHydraulique(0.75);
         $this->hydraulic->setPowerHydraulic(500);
@@ -44,31 +44,31 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::setFacteurChargeHydraulique
      */
-    public function testSetFacteurChargeHydraulique()
+    /*public function testSetFacteurChargeHydraulique()
     {
         $this->hydraulic->setFacteurChargeHydraulique(0.75);
         $expectedValue = 0.75;
         $result = $this->hydraulic->getFacteurChargeHydraulique();
         $this->assertNotNull($result);
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getFacteurChargeHydraulique
      */
-    public function testGetFacteurChargeHydraulique()
+    /*public function testGetFacteurChargeHydraulique()
     {
         $this->hydraulic->setFacteurChargeHydraulique(0.75);
         $expectedValue = 0.75;
         $result = $this->hydraulic->getFacteurChargeHydraulique();
         $this->assertNotNull($result);
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic::getParcHydraulic
      */
-    public function testGetParcHydraulic()
+  /*  public function testGetParcHydraulic()
     {
         $this->hydraulic->setFacteurChargeHydraulique(0.75);
         $this->hydraulic->setPowerHydraulic(500);
@@ -77,5 +77,52 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
         $result = $this->hydraulic->getParcHydraulic();
         $this->assertNotNull($result);
         assertThat($result, is($expectedValue));
+    }*/
+
+    /**
+     * @test
+     */
+    public function testAvalaibilityRatePv(){
+        $this->hydraulic = new Pv(0,60,0,75,6000,1);
+        $this->hydraulic->setAvailabilityRate(0.60);
+        $exceptedValue = 0.6;
+        $result = $this->hydraulic->getAvailabilityRate();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testLoadFactorPv(){
+        $this->hydraulic = new Pv(0,60,0,75,5000,1);
+        $this->hydraulic->setLoadFactor(0.75);
+        $exceptedValue = 0.75;
+        $result = $this->hydraulic->getLoadFactor();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPowerUnitPv(){
+        $this->hydraulic = new Pv(0,70,0,75,5000,1);
+        $this->hydraulic->setLoadFactor(0.75);
+        $this->hydraulic->setAvailabilityRate(0.55);
+        $exceptedValue = 0.001;
+        $result = $this->hydraulic->getPowerUnit();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPower(){
+        $this->hydraulic = new Nuclear(0,60,0,75,5000,1);
+        $this->hydraulic->setLoadFactor(0.75);
+        $this->hydraulic->setAvailabilityRate(0.60);
+        $this->hydraulic->setPower(5000);
+        $exceptedValue = 5605;
+        $result = intval($this->hydraulic->getPower());
+        assertThat($result,is($exceptedValue));
     }
 }
