@@ -34,8 +34,8 @@ class Nuclear extends Energy
         }
     }
 
-    public function setAvailabilityRate($percentOfNuclear){
-
+    public function setAvailabilityRate($percentOfNuclear)
+    {
         $upper_percent=0.75;
         $upper_value=0.81;
         $lower_percent=0.25;
@@ -49,7 +49,6 @@ class Nuclear extends Energy
         } elseif ($percentOfNuclear <= $lower_percent) {
             $this->availabilityRate=$lower_value;
         }
-        echo "taux dispo nucleaire: ".$this->getAvailabilityRate()."\n"."Pour un % de nucleaire de :".$percentOfNuclear."\n";
     }
 
     public function setPowerNuc($power,$percentNuclear)

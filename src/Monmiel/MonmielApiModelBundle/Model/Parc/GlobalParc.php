@@ -41,6 +41,18 @@ class GlobalParc{
     protected $flamme;
 
     /**
+     * @var Step $step
+     */
+
+    protected $step;
+
+    /**
+     * @var Import $import
+     */
+
+    protected $import;
+
+    /**
      * @param $power Power
      * @param $nukePercent float
      */
@@ -51,6 +63,8 @@ class GlobalParc{
         $this->pv=new Pv($power->getPhotovoltaic());
         $this->hydraulique=new Hydraulic($power->getHydraulic());
         $this->flamme=new Flamme();
+        $this->step= new Step($power->getStep());
+        $this->import=new Import($power->getImport());
     }
 
 
@@ -58,7 +72,6 @@ class GlobalParc{
     public function submitFlamePower($flamePower){
         $this->flamme->setPower($flamePower);
     }
-
 
     /**
      * @var $year Year
@@ -68,92 +81,12 @@ class GlobalParc{
         return new Power(
             $this->flamme->getPower(),
             $this->hydraulique->getPower(),
-            0,
+            $this->import->getPower(),
             $this->nucleaire->getPower(),
             0,
             $this->pv->getPower(),
-            0,
+            $this->step->getPower(),
             $this->eolien->getPower()
         );
-    }
-
-    /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Parc\Eolien $eolien
-     */
-    public function setEolien($eolien)
-    {
-        $this->eolien = $eolien;
-    }
-
-    /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\Eolien
-     */
-    public function getEolien()
-    {
-        return $this->eolien;
-    }
-
-    /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Parc\Flamme $flamme
-     */
-    public function setFlamme($flamme)
-    {
-        $this->flamme = $flamme;
-    }
-
-    /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\Flamme
-     */
-    public function getFlamme()
-    {
-        return $this->flamme;
-    }
-
-    /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic $hydraulique
-     */
-    public function setHydraulique($hydraulique)
-    {
-        $this->hydraulique = $hydraulique;
-    }
-
-    /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\Hydraulic
-     */
-    public function getHydraulique()
-    {
-        return $this->hydraulique;
-    }
-
-    /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear $nucleaire
-     */
-    public function setNucleaire($nucleaire)
-    {
-        $this->nucleaire = $nucleaire;
-    }
-
-    /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear
-     */
-    public function getNucleaire()
-    {
-        return $this->nucleaire;
-    }
-
-    /**
-     * @param \Monmiel\MonmielApiModelBundle\Model\Parc\Pv $pv
-     */
-    public function setPv($pv)
-    {
-        $this->pv = $pv;
-    }
-
-    /**
-     * @return \Monmiel\MonmielApiModelBundle\Model\Parc\Pv
-     */
-    public function getPv()
-    {
-        return $this->pv;
     }
 }
