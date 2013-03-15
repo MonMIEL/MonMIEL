@@ -51,7 +51,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
         $targetYear = $this->createTargetYearObject();
         $this->toto=$targetYear;
 
-  ////echo("target year     au debut ---------------------------------\n              ".$targetYear->toString());
+ echo("target year     au debut ---------------------------------\n              ".$targetYear->toString());
 
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
@@ -125,6 +125,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         for ($boucle=1; $boucle<=$occ; $boucle++)
         {
+
         for ($i = 1; $i <= 365; $i++) {
           //  //echo "\n je suis dans la boucle";
             /*
@@ -159,7 +160,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         //echo (" \n \n\n\n");
 
-       echo($this->repartition->getComputedYear()->toString());
+    //   echo($this->repartition->getComputedYear()->toString());
 
 
         //echo "Fin :";
