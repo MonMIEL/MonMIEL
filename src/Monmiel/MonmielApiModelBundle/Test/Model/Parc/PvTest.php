@@ -29,50 +29,49 @@ class PvTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setPowerPv
+     * @test
      */
-    public function testSetPowerPv()
-    {
-      $this->pv->setFacteurChargePv(0.75);
-      $this->pv->setPowerPv(400);
-      $expectedValue = 400*100/75;
-      $result = $this->pv->getPowerPv();
-      assertThat($result, is($expectedValue));
+    public function testAvalaibilityRatePv(){
+        $this->pv = new Pv(0,60,0,75,5000,1);
+        $this->pv->setAvailabilityRate(0.85);
+        $exceptedValue = 0.85;
+        $result = $this->pv->getAvailabilityRate();
+        assertThat($result,is($exceptedValue));
     }
 
     /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setFacteurChargePv
+     * @test
      */
-    public function testSetFacteurChargePv()
-    {
-        $this->pv->setFacteurChargePv(0.75);
-        $expectedValue = 0.75;
-        $result = $this->pv->getFacteurChargePv();
-        assertThat($result, is($expectedValue));
+    public function testLoadFactorPv(){
+        $this->pv = new Pv(0,60,0,75,5000,1);
+        $this->pv->setLoadFactor(0.75);
+        $exceptedValue = 0.75;
+        $result = $this->pv->getLoadFactor();
+        assertThat($result,is($exceptedValue));
     }
 
     /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::setTauxDisponibilitePv
-
+     * @test
      */
-    public function testSetTauxDisponibilitePv()
-    {
-        $this->pv->setTauxDisponibilitePv(0.75);
-        $expectedValue = 0.75;
-        $result = $this->pv->getTauxDisponibilitePv();
-        assertThat($result, is($expectedValue));
+    public function testPowerUnitPv(){
+        $this->pv = new Pv(0,60,0,75,5000,1);
+        $this->pv->setLoadFactor(0.75);
+        $this->pv->setAvailabilityRate(0.60);
+        $exceptedValue = 0.001;
+        $result = $this->pv->getPowerUnit();
+        assertThat($result,is($exceptedValue));
     }
 
     /**
-     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Pv::getParcPv
+     * @test
      */
-    public function testGetParcPv()
-    {
-        $this->pv->setFacteurChargePv(0.75);
-        $this->pv->setPowerPv(400);
-        $this->pv->setTauxDisponibilitePv(0.80);
-        $expectedValue = intval(((400*100/75)*100/80)/0.001);
-        $result = intval($this->pv->getParcPv());
-        assertThat($result, is($expectedValue));
+    public function testPowerPv(){
+        $this->pv = new Pv(0,60,0,75,5000,1);
+        $this->pv->setLoadFactor(0.75);
+        $this->pv->setAvailabilityRate(0.60);
+        $this->pv->setPower(5000);
+        $exceptedValue = 4000;
+        $result = intval($this->pv->getPower());
+        assertThat($result,is($exceptedValue));
     }
 }

@@ -29,21 +29,62 @@ class EolienTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @test
+     */
+    public function testAvalaibilityRate(){
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
+        $this->eolien->setAvailabilityRate(0.60);
+        $exceptedValue = 0.6;
+        $result = $this->eolien->getAvailabilityRate();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testLoadFactor(){
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
+        $this->eolien->setLoadFactor(0.75);
+        $exceptedValue = 0.75;
+        $result = $this->eolien->getLoadFactor();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPowerUnit(){
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
+        $this->eolien->setLoadFactor(0.75);
+        $this->eolien->setAvailabilityRate(0.60);
+        $exceptedValue = 1.5;
+        $result = $this->eolien->getPowerUnit();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPower(){
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
+        $this->eolien->setLoadFactor(0.75);
+        $this->eolien->setAvailabilityRate(0.60);
+        $this->eolien->setPower(5000);
+        $exceptedValue = 4000;
+        $result = intval($this->eolien->getPower());
+        assertThat($result,is($exceptedValue));
+    }
 
 
     /**
      *
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::setPowerEolien
-     * @todo   Implement testSetPowerEolien().
      */
-    public function testSetPowerEolien()
+    /*public function testSetPowerEolien()
     {
 
-
-       /* $this->object->setPowerEolien(4);
-        $result= 4 / $this->object->getFacteurChargeEolien();
-        assertThat($this->object->getPowerEolien(),is($result));*/
-
+        $this->eolien =
         $this->eolien->setFacteurChargeEolien(75/100);
         $this->eolien->setPowerEolien(500);
 
@@ -51,13 +92,12 @@ class EolienTest extends \PHPUnit_Framework_TestCase
         $result = $this->eolien->getPowerEolien();
         assertThat($result, is($expectedValue));
 
-    }
+    }*/
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::getPowerEolien
-     * @todo   Implement testGetPowerEolien().
      */
-    public function testGetPowerEolien()
+    /*public function testGetPowerEolien()
     {
         $this->eolien->setFacteurChargeEolien(25/100);
         $this->eolien->setPowerEolien(400);
@@ -65,17 +105,15 @@ class EolienTest extends \PHPUnit_Framework_TestCase
         $result = $this->eolien->getPowerEolien();
 
         $this->assertNotNull($result, "must not null");
-    }
+    }*/
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Eolien::setFacteurChargeEolien
-     * @todo   Implement testSetFacteurChargeEolien().
      */
-    public function testSetFacteurChargeEolien()
+    /*public function testSetFacteurChargeEolien()
     {
         $this->eolien->setFacteurChargeEolien(75/100);
         $result = $this->eolien->getFacteurChargeEolien();
         $this->assertNotNull($result, "must not null");
-    }
-
+    }*/
 }
