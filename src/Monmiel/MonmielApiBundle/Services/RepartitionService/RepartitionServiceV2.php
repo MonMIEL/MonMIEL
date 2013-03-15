@@ -49,8 +49,7 @@ class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionSe
             return $quarter;
         }
         $quarter->setNucleaire($quarterMax->getNucleaire());
-        $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitFlamePower($quarter->getFlamme());
+
         $quarter = $this->decision->getDecisionAndUpdatesQuarterDeficit($quarter, $consoTotal);
         $this->facilityService->submitFlamePower($quarter->getFlamme());
         return $quarter;

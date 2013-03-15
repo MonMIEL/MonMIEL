@@ -35,7 +35,7 @@ class DecisionSelector
      * @base des calculs
      */
     private static $median_value = 5474; //median value of consumption for this year
-    protected static $max_import = 8000; //MW
+    protected static $max_import = 40000; //MW
     protected static $max_export = 12000000000; //MW
     protected static $max_storable_in_steps = 5000; //MW
     private static $peak_coeff = 1.25; //
@@ -162,9 +162,10 @@ class DecisionSelector
 
     private function  maxImportEnegyReached($quarter, $soldeToDistribute)
     {
-       // echo "\n \n fjhfjfjfjfjf" .($quarter->getInterval());
+
         $energy_import_used = $soldeToDistribute/(60 /$quarter->getInterval()) + DecisionSelector::$energy_import_used;
         $result = $energy_import_used >= DecisionSelector::$energy_import_max;
+      
         return $result;
     }
 
