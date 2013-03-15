@@ -134,7 +134,7 @@ class Quarter
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getEolien()
     {
@@ -142,7 +142,7 @@ class Quarter
     }
 
     /**
-     * @param int $flamme
+     * @param float $flamme
      */
     public function setFlamme($flamme)
     {
@@ -150,7 +150,7 @@ class Quarter
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getFlamme()
     {
