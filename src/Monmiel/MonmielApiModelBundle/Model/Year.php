@@ -73,6 +73,29 @@ class Year
      */
     protected $solde;
 
+    /**
+     * Represent sum of interval of quarter, useful is missing value during year
+     * @var float
+     *
+     */
+    protected $nbInterval;
+
+    /**
+     * @param float $nbInterval
+     */
+    public function setNbInterval($nbInterval)
+    {
+        $this->nbInterval = $nbInterval;
+    }
+
+    /**
+     * @return float
+     */
+    public function getNbInterval()
+    {
+        return $this->nbInterval;
+    }
+
     function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
     {
         $this->consoTotalEolien = $consoTotalEolien;
@@ -83,6 +106,7 @@ class Year
         $this->solde = $solde;
         $this->yearIdentifiant = $yearIdentifiant;
         $this->consoTotalGlobale=$consoTotalEolien + $consoTotalFlamme + $consoTotalHydraulique + $consoTotalNucleaire + $consoTotalPhotovoltaique;
+        $this->nbInterval=0;
     }
 
     /**

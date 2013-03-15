@@ -22,7 +22,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
      */
     public $repartition;
     /**
-     * @var \Monmiel\MonmielApiBundle\Services\FacilityService\ComputeFacilityService $parc
+     * @var \Monmiel\MonmielApiBundle\Services\ParcService\ParcService $parc
      */
     public $parc;
 
@@ -37,7 +37,7 @@ class RepartitionTestCommand extends ContainerAwareCommand
     {
         $this->transformers = $this->getContainer()->get("monmiel.transformers.v1.service");
         $this->repartition=$this->getContainer()->get("monmiel.repartition.service");
-        $this->parc=$this->getContainer()->get("monmiel.facility.service");
+        $this->parc=$this->getContainer()->get("monmiel.parc.service");
 
         $userConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT);
         $actualConsoMesure = new Mesure(478, \Monmiel\Utils\ConstantUtils::TERAWATT);
@@ -48,17 +48,18 @@ class RepartitionTestCommand extends ContainerAwareCommand
         $refYear = $this->createRefYearObject();
         $targetYear = $this->createTargetYearObject();
 
-        var_dump($targetYear);
-
         $this->transformers->setReferenceYear($refYear);
         $this->transformers->setTargetYear($targetYear);
 
-        $targetParcPower = $this->parc->getPower($targetYear);
-        $refParcPower = $this->parc->getPower($refYear);
+        $this->parc->setTargetParcPower($targetYear);
+        $this->parc->setRefParcPower($refYear);
+        $targetParcPower = $this->parc->getTargetParcPower();
+        $refParcPower = $this->parc->getRefParcPower();
         $this->repartition->setReferenceYear($refYear);
         $this->repartition->setTargetYear($targetYear);
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
+      //  $this->stopWatch->stop("init");
     }
 
     public function createTargetYearObject()
@@ -100,37 +101,15 @@ class RepartitionTestCommand extends ContainerAwareCommand
 
         $this->init();
 
-        $days = array();
 
-
-        for ($boucle=1; $boucle<=$occ; $boucle++)
-        {
-        for ($i = 1; $i <= 10; $i++) {
-            /*
-             * @var Day $val
-             */
-           $val = $this->repartition->get($i);
-
+        for ($i = 1; $i < 363; $i++) {
+            $day = $this->repartition->get($i);
         }
-        }
-        $fin = microtime(true);
+        $computedYear = $this->repartition->getComputedYear();
 
-        $result = $fin - $debut;
-        echo "\n debut:   " . $debut;
-        echo " \n fin:" . $fin;
+        $parc = $this->parc->getTargetParcPower();
+        echo "Nombre d'heure réelle dans l'année: ".$computedYear->getNbInterval();
 
-        echo "\n \n";
-
-        echo "le resultat final est: " . $result;
-        echo "\n \n \n";
-
-
-        $event = $stopwatch->stop('eventName');
-        echo "\n end time" . $event->getEndTime();
-        echo "\n start time" . $event->getStartTime();
-
- echo (" \n \n\n\n");
-        echo "Fin :";
     //    echo($this->repartition->getComputedYear()->toString());
     }
 }

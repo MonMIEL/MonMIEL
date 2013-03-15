@@ -8,6 +8,7 @@ use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 use Monmiel\Utils\ConstantUtils;
+use Monmiel\MonmielApiBundle\Services\ParcService\ParcService;
 class TransformersServicesV1Test extends BaseTestCase
 {
     /**
@@ -15,10 +16,17 @@ class TransformersServicesV1Test extends BaseTestCase
      */
     protected $transformersService;
 
+    /**
+     * @var
+     */
+    protected $parkService;
+
+
     public function setup()
     {
        $this->transformersService = new TransformersV1();
        $this->transformersService->setRiakDao($this->getMockedDao());
+
     }
 
     /**
@@ -43,13 +51,13 @@ class TransformersServicesV1Test extends BaseTestCase
     {
         $expectedDay = $this->getDayObject()->getQuarters()[0]->getConsoTotal();
 
-       /*$this->transformersService->setConsoTotalActuel(new Mesure(500,ConstantUtils::TERAWATT));
+       $this->transformersService->setConsoTotalActuel(new Mesure(500,ConstantUtils::TERAWATT));
         $this->transformersService->setConsoTotalDefinedByUser(new Mesure(600,ConstantUtils::TERAWATT));
 
-        $result = $this->transformersService->get(1)->getQuarters()[0]->getConsoTotal();
+       $result = $this->transformersService->get(1)->getQuarters()[0]->getConsoTotal();
         $expectedDay = 6000*600/500;
         var_dump($result);
-        assertThat($result, is($expectedDay));*/
+        assertThat($result, is($expectedDay));
     }
 
     /**
@@ -82,7 +90,7 @@ class TransformersServicesV1Test extends BaseTestCase
         $totalConsoDefineByUser = new Mesure(600,ConstantUtils::TERAWATT);//conso 2050
 
         //total quarter updated at 2050
-       /* $dayUpdated=  $this->transformersService->updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser(1,$totalConsoActual,$totalConsoDefineByUser);
+       $dayUpdated=  $this->transformersService->updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser(1,$totalConsoActual,$totalConsoDefineByUser);
 
         $result = $dayUpdated->getQuarters()[0]->getConsoTotal();
         $expectedDay = 6000*600/500;
@@ -90,7 +98,7 @@ class TransformersServicesV1Test extends BaseTestCase
 
         $result = $dayUpdated->getQuarters()[1]->getConsoTotal();
         $expectedDay = 7000*600/500;
-        assertThat($result, is($expectedDay));*/
+        assertThat($result, is($expectedDay));
     }
 
     /*
@@ -114,7 +122,7 @@ class TransformersServicesV1Test extends BaseTestCase
                     ->disableOriginalConstructor()
                     ->getMock();
         $dao->expects($this->any())
-            ->method("getDayConso")
+            ->method("get")
             ->will($this->returnValue($day));
         return $dao;
     }

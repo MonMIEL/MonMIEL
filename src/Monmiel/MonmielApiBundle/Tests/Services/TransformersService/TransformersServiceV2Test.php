@@ -32,6 +32,4 @@ class TransformersServiceV2Test extends BaseTestCase
 
         assertThat($result, is($expectedResult));
     }
-
-
 }
