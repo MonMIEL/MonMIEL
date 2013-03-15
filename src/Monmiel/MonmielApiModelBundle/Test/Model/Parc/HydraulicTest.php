@@ -82,10 +82,10 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testAvalaibilityRatePv(){
-        $this->hydraulic = new Pv(0,60,0,75,6000,1);
+    public function testAvalaibilityRateHydro(){
+        $this->hydraulic = new Hydraulic(0,60,0,75,6000,1);
         $this->hydraulic->setAvailabilityRate(0.60);
-        $exceptedValue = 0.6;
+        $exceptedValue = 0.60;
         $result = $this->hydraulic->getAvailabilityRate();
         assertThat($result,is($exceptedValue));
     }
@@ -93,10 +93,10 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testLoadFactorPv(){
-        $this->hydraulic = new Pv(0,60,0,75,5000,1);
-        $this->hydraulic->setLoadFactor(0.75);
-        $exceptedValue = 0.75;
+    public function testLoadFactorHydro(){
+        $this->hydraulic = new Hydraulic(0,60,0,75,5000,1);
+        $this->hydraulic->setLoadFactor(0.72);
+        $exceptedValue = 0.72;
         $result = $this->hydraulic->getLoadFactor();
         assertThat($result,is($exceptedValue));
     }
@@ -104,11 +104,11 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testPowerUnitPv(){
-        $this->hydraulic = new Pv(0,70,0,75,5000,1);
+    public function testPowerUnitHydro(){
+        $this->hydraulic = new Hydraulic(0,70,0,75,5000,1);
         $this->hydraulic->setLoadFactor(0.75);
-        $this->hydraulic->setAvailabilityRate(0.55);
-        $exceptedValue = 0.001;
+        $this->hydraulic->setAvailabilityRate(0.60);
+        $exceptedValue = 1;
         $result = $this->hydraulic->getPowerUnit();
         assertThat($result,is($exceptedValue));
     }
@@ -116,12 +116,12 @@ class HydraulicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testPower(){
-        $this->hydraulic = new Nuclear(0,60,0,75,5000,1);
+    public function testPowerHydro(){
+        $this->hydraulic = new Hydraulic(0,60,0,75,5000,1);
         $this->hydraulic->setLoadFactor(0.75);
         $this->hydraulic->setAvailabilityRate(0.60);
-        $this->hydraulic->setPower(5000);
-        $exceptedValue = 5605;
+        $this->hydraulic->setPower(50000);
+        $exceptedValue = 40000;
         $result = intval($this->hydraulic->getPower());
         assertThat($result,is($exceptedValue));
     }

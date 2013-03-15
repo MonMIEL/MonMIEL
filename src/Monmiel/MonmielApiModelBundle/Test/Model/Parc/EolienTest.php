@@ -33,9 +33,9 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testAvalaibilityRate(){
-        $this->eolien = new Nuclear(0,60,0,75,5000,1);
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
         $this->eolien->setAvailabilityRate(0.60);
-        $exceptedValue = 0.852;
+        $exceptedValue = 0.6;
         $result = $this->eolien->getAvailabilityRate();
         assertThat($result,is($exceptedValue));
     }
@@ -44,9 +44,9 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testLoadFactor(){
-        $this->eolien = new Nuclear(0,60,0,75,5000,1);
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
         $this->eolien->setLoadFactor(0.75);
-        $exceptedValue = 0.76;
+        $exceptedValue = 0.75;
         $result = $this->eolien->getLoadFactor();
         assertThat($result,is($exceptedValue));
     }
@@ -55,10 +55,10 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testPowerUnit(){
-        $this->eolien = new Nuclear(0,60,0,75,5000,1);
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
         $this->eolien->setLoadFactor(0.75);
         $this->eolien->setAvailabilityRate(0.60);
-        $exceptedValue = 1090;
+        $exceptedValue = 1.5;
         $result = $this->eolien->getPowerUnit();
         assertThat($result,is($exceptedValue));
     }
@@ -67,11 +67,11 @@ class EolienTest extends \PHPUnit_Framework_TestCase
      * @test
      */
     public function testPower(){
-        $this->eolien = new Nuclear(0,60,0,75,5000,1);
+        $this->eolien = new Eolien(0,60,0,75,5000,1);
         $this->eolien->setLoadFactor(0.75);
         $this->eolien->setAvailabilityRate(0.60);
         $this->eolien->setPower(5000);
-        $exceptedValue = 5605;
+        $exceptedValue = 4000;
         $result = intval($this->eolien->getPower());
         assertThat($result,is($exceptedValue));
     }
