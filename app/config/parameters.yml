@@ -13,3 +13,6 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    dynamo_accesskey: foo
+    dynamo_secretkey: bar
