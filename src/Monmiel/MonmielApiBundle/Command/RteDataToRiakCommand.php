@@ -30,7 +30,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
 
     /**
      * @DI\Inject(monmiel.dao.riak)
-     * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
+     * @var \Monmiel\MonmielApiBundle\Dao\DynamoDbDao
      */
     protected $dao;
 
@@ -43,7 +43,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
     {
         $this
             ->setName("monmiel:populate")
-            ->setDescription("Extract Data from RTE and populate Riak")
+            ->setDescription("Extract Data from RTE and populate DataBase")
             ->addArgument(
             "csv",
             InputArgument::REQUIRED,
@@ -64,7 +64,8 @@ class RteDataToRiakCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->serializer = $this->getContainer()->get("serializer");
-        $this->dao = $this->getContainer()->get("monmiel.dao.riak");
+        $this->dao = $this->getContainer()->get("monmiel.dao.dynamo");
+        $this->dao->createTable();
 
         //get and open the csv file
         $handle = fopen($input->getArgument("csv"), "r");

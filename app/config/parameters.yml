@@ -16,3 +16,4 @@ parameters:
 
     dynamo_accesskey: foo
     dynamo_secretkey: bar
+    dynamo_region: eu-west-1

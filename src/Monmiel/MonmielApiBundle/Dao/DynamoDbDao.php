@@ -2,10 +2,8 @@
 
 namespace Monmiel\MonmielApiBundle\Dao;
 
+use Aws\DynamoDb\DynamoDbClient;
 use JMS\DiExtraBundle\Annotation as DI;
-use Riverline\DynamoDB\Connection;
-use Riverline\DynamoDB\Item;
-use Aws\Common\Enum\Region;
 
 /**
  * @DI\Service("monmiel.dao.dynamo")
@@ -18,10 +16,6 @@ class DynamoDbDao implements DaoInterface
      */
     public function gets($keys)
     {
-        $this->stopWatch->start("gets", "dao");
-        $days = $this->rteIndexBucket->fetch($keys)->getContents();
-        $this->stopWatch->stop('gets');
-        return $days;
     }
 
     /**
@@ -30,10 +24,6 @@ class DynamoDbDao implements DaoInterface
      */
     public function get($key)
     {
-        $this->stopWatch->start("get", "dao");
-        $days = $this->rteIndexBucket->uniq($key)->getContent();
-        $this->stopWatch->stop('get');
-        return $days;
     }
 
     /**
@@ -42,25 +32,56 @@ class DynamoDbDao implements DaoInterface
      */
     public function put($day)
     {
-        $this->rteIndexBucket->put(array($day->getKey() => $day));
+        $key = $day->getKey();
+        echo "put $key";
+        $serializedDay = $this->serializer->serialize($day, "json");
+        $result = $this->client->putItem(
+            array(
+                'TableName' => 'rteIndex',
+                'Item' => $this->client->formatAttributes(
+                    array(
+                        'id'      => $key,
+                        'content' => $serializedDay
+                    )
+                )
+            )
+        );
     }
 
-    public function createConnection()
+    public function createTable()
     {
-        $connectionEU = new Connection($this->accessKey, $this->secretKey, Region::EU_WEST_1);
-
-// Attach a simple logger (or write your own logger class)
-        $connection->setLogger(new \Riverline\DynamoDB\Logger\EchoLogger());
+        $this->client->createTable(array(
+            'TableName' => 'rteIndex',
+            'KeySchema' => array(
+                'HashKeyElement' => array(
+                    'AttributeName' => 'id',
+                    'AttributeType' => 'S'
+                )
+            ),
+            'ProvisionedThroughput' => array(
+                'ReadCapacityUnits'  => 10,
+                'WriteCapacityUnits' => 5
+            )
+        ));
+        $this->client->waitUntilTableExists(array('TableName' => 'rteIndex'));
     }
 
     /**
      * @DI\InjectParams({
-     *     "riakCluster" = @DI\Inject("riak.cluster.monmiel")
+     *     "key" = @DI\Inject("%dynamo_accesskey%"),
+     *     "secret" = @DI\Inject("%dynamo_secretkey%"),
+     *     "region" = @DI\Inject("%dynamo_region%")
      * })
      */
-    public function __construct($riakCluster)
+    public function __construct($key, $secret, $region)
     {
-        $this->rteIndexBucket = $riakCluster->getBucket("rte_index");
+        $this->client = DynamoDbClient::factory(
+            array(
+                'key'    => $key,
+                'secret' => $secret,
+                'region' => $region
+            )
+        );
     }
 
     /**
@@ -76,14 +97,8 @@ class DynamoDbDao implements DaoInterface
     public $serializer;
 
     /**
-     * @var string
-     * @DI\Inject("%dynamo_accesskey%")
+     * @var DynamoDbClient;
      */
-    public $accessKey;
+    public $client;
 
-    /**
-     * @var string
-     * @DI\Inject("%dynamo_secretkey%")
-     */
-    public $secretKey;
 }

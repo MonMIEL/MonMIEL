@@ -1,35 +1,44 @@
 {
-    "hash": "495201e557059273dd518245bfd4a42f",
+    "hash": "19918d00cfb7557c3563165f6e120262",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.1.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2.1.2"
+                "reference": "7491462899510361077dc0866e00140104ec2c40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2.1.2",
-                "reference": "2.1.2",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7491462899510361077dc0866e00140104ec2c40",
+                "reference": "7491462899510361077dc0866e00140104ec2c40",
                 "shasum": ""
             },
             "require": {
-                "guzzle/guzzle": ">=3.2,<3.3",
+                "guzzle/guzzle": ">=3.3,<3.4",
                 "php": ">=5.3.3"
             },
             "require-dev": {
                 "doctrine/common": "2.3.*",
                 "ext-apc": "*",
-                "monolog/monolog": "1.2.*",
+                "ext-openssl": "*",
+                "monolog/monolog": "1.4.*",
                 "phpunit/phpunit": "3.7.*",
-                "symfony/class-loader": "2.*"
+                "symfony/class-loader": "2.*",
+                "symfony/yaml": "2.*"
+            },
+            "suggest": {
+                "doctrine/cache": "Adds support for caching of credentials and responses",
+                "ext-apc": "Allows service description opcode caching, request and response caching, and credentials caching",
+                "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages",
+                "monolog/monolog": "Adds support for logging HTTP requests and responses",
+                "symfony/yaml": "Eases the ability to write manifests for creating jobs in AWS Import/Export"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.2.x-dev"
                 }
             },
             "autoload": {
@@ -57,7 +66,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2013-02-19 01:30:36"
+            "time": "2013-03-29 18:12:57"
         },
         {
             "name": "doctrine/annotations",
@@ -647,16 +656,16 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.2.0",
+            "version": "v3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "v3.2.0"
+                "reference": "v3.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.2.0",
-                "reference": "v3.2.0",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/v3.3.1",
+                "reference": "v3.3.1",
                 "shasum": ""
             },
             "require": {
@@ -679,6 +688,7 @@
                 "guzzle/plugin-cache": "self.version",
                 "guzzle/plugin-cookie": "self.version",
                 "guzzle/plugin-curlauth": "self.version",
+                "guzzle/plugin-error-response": "self.version",
                 "guzzle/plugin-history": "self.version",
                 "guzzle/plugin-log": "self.version",
                 "guzzle/plugin-md5": "self.version",
@@ -688,7 +698,7 @@
                 "guzzle/stream": "self.version"
             },
             "require-dev": {
-                "doctrine/common": "*",
+                "doctrine/cache": "*",
                 "monolog/monolog": "1.*",
                 "phpunit/phpunit": "3.7.*",
                 "symfony/class-loader": "*",
@@ -700,7 +710,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -735,7 +745,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-02-15 01:33:10"
+            "time": "2013-03-10 23:05:38"
         },
         {
             "name": "hamcrest/hamcrest",
@@ -1389,16 +1399,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Seldaek/monolog",
-                "reference": "1.4.0"
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "1.4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.4.0",
-                "reference": "1.4.0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.4.1",
+                "reference": "1.4.1",
                 "shasum": ""
             },
             "require": {
@@ -1447,7 +1457,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-02-13 18:06:51"
+            "time": "2013-04-01 10:04:58"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -1501,16 +1511,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "git://github.com/schmittjoh/php-option",
-                "reference": "1.1.0"
+                "url": "https://github.com/schmittjoh/php-option.git",
+                "reference": "1.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/schmittjoh/php-option/archive/1.1.0.zip",
-                "reference": "1.1.0",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/1.2.0",
+                "reference": "1.2.0",
                 "shasum": ""
             },
             "require": {
@@ -1519,7 +1529,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1535,7 +1545,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1546,7 +1556,7 @@
                 "php",
                 "type"
             ],
-            "time": "2013-01-19 11:01:32"
+            "time": "2013-03-25 02:51:40"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1781,16 +1791,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.18",
+            "version": "3.7.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.18"
+                "reference": "3.7.19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.18",
-                "reference": "3.7.18",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.19",
+                "reference": "3.7.19",
                 "shasum": ""
             },
             "require": {
@@ -1804,7 +1814,7 @@
                 "phpunit/php-text-template": ">=1.1.1",
                 "phpunit/php-timer": ">=1.0.2,<1.1.0",
                 "phpunit/phpunit-mock-objects": ">=1.2.0,<1.3.0",
-                "symfony/yaml": ">=2.2.0"
+                "symfony/yaml": ">=2.0.0,<2.3.0"
             },
             "require-dev": {
                 "pear-pear/pear": "1.9.4"
@@ -1851,7 +1861,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-03-07 21:45:39"
+            "time": "2013-03-25 11:45:06"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1939,53 +1949,6 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
-        },
-        {
-            "name": "riverline/dynamodb",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rcambien/riverline-dynamodb.git",
-                "reference": "2.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rcambien/riverline-dynamodb/zipball/2.0.0",
-                "reference": "2.0.0",
-                "shasum": ""
-            },
-            "require": {
-                "aws/aws-sdk-php": ">=2.1.2,<2.2",
-                "php": ">=5.3.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Riverline\\DynamoDB": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Romain Cambien",
-                    "email": "romain@riverline.fr"
-                },
-                {
-                    "name": "Riverline",
-                    "homepage": "http://www.riverline.fr"
-                }
-            ],
-            "description": "Amazon WebService DynamoDB PHP object wrapper",
-            "homepage": "https://github.com/rcambien/riverline-dynamodb",
-            "keywords": [
-                "amazon",
-                "aws",
-                "dynamodb"
-            ],
-            "time": "2013-03-01 09:02:38"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -2556,9 +2519,9 @@
 
     ],
     "minimum-stability": "alpha",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "aws/aws-sdk-php": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },
