@@ -68,17 +68,13 @@ class DynamoDbDao implements DaoInterface
 
     /**
      * @DI\InjectParams({
-     *     "key" = @DI\Inject("%dynamo_accesskey%"),
-     *     "secret" = @DI\Inject("%dynamo_secretkey%"),
      *     "region" = @DI\Inject("%dynamo_region%")
      * })
      */
-    public function __construct($key, $secret, $region)
+    public function __construct($region)
     {
         $this->client = DynamoDbClient::factory(
             array(
-                'key'    => $key,
-                'secret' => $secret,
                 'region' => $region
             )
         );
