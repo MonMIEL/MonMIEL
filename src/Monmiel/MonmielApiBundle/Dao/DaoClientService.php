@@ -15,7 +15,7 @@ class DaoClientService
 
     /**
      * @var $dao RiakDao
-     * @DI\Inject("monmiel.dao.riak")
+     * @DI\Inject("monmiel.dao.dynamo")
      */
     public $dao;
 

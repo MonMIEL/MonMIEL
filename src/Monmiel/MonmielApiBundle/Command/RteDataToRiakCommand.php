@@ -29,7 +29,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
     protected $yamlFileConf = NULL;
 
     /**
-     * @DI\Inject(monmiel.dao.riak)
+     * @DI\Inject(monmiel.dao.dynamo)
      * @var \Monmiel\MonmielApiBundle\Dao\DynamoDbDao
      */
     protected $dao;

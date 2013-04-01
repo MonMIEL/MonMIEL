@@ -33,7 +33,7 @@ class DynamoDbDao implements DaoInterface
     public function put($day)
     {
         $key = $day->getKey();
-        echo "put $key";
+        echo "put $key\n";
         $serializedDay = $this->serializer->serialize($day, "json");
         $result = $this->client->putItem(
             array(
