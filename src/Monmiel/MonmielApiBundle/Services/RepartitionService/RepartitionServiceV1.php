@@ -24,7 +24,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     public $facilityService;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
@@ -81,8 +81,10 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function  computeMixedTargetDailyConsumption($referenceDay)
     {
-
-        $this->stopWatch->start("computeDistribution", "repartition");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("computeDistribution", "repartition");
+        }
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
 
@@ -95,7 +97,11 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
             $this->updateYearComputed($computedQuarter);
         }
-        $this->stopWatch->stop("computeDistribution");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop("computeDistribution");
+        }
+
         return $userMixDay;
     }
 
