@@ -14,7 +14,7 @@ class DaoClientService
     const BUFFER_SIZE = 20;
 
     /**
-     * @var $dao RiakDao
+     * @var $dao DynamoDbDao
      * @DI\Inject("monmiel.dao.dynamo")
      */
     public $dao;

@@ -10,6 +10,7 @@ use JMS\DiExtraBundle\Annotation as DI;
  */
 class DynamoDbDao implements DaoInterface
 {
+    const TABLE_NAME = "rteIndex";
     /**
      * @param $keys array<string>
      * @return \Monmiel\MonmielApiModelBundle\Model\Day
@@ -24,6 +25,18 @@ class DynamoDbDao implements DaoInterface
      */
     public function get($key)
     {
+        $item = $this->client->getItem(array(
+            'ConsistentRead' => true,
+            'TableName' => self::TABLE_NAME,
+            'Key'       => array(
+                'HashKeyElement'  => array('S' => $key),
+            )
+        ));
+        $result = $item['Item']['content']['S'];
+        /** @var $day Day */
+        $day = $this->serializer->deserialize($result, 'Monmiel\MonmielApiModelBundle\Model\Day', "json");
+
+        return $day;
     }
 
     /**
@@ -37,7 +50,7 @@ class DynamoDbDao implements DaoInterface
         $serializedDay = $this->serializer->serialize($day, "json");
         $result = $this->client->putItem(
             array(
-                'TableName' => 'rteIndex',
+                'TableName' => self::TABLE_NAME,
                 'Item' => $this->client->formatAttributes(
                     array(
                         'id'      => $key,
