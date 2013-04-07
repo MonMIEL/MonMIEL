@@ -74,7 +74,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso)
     {
-        $currentDay = $this->riakDao->get($dayId);//get the current day by id
+        $currentDay = $this->riakDao->gets($dayId);//get the current day by id
 
         return $this->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($currentDay,$actualConso,$inputConso);
     }
