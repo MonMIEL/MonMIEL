@@ -3,12 +3,10 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 use Monmiel\MonmielApiModelBundle\Model\Year;
-use Monmiel\MonmielApiModelBundle\Model\Power;
 
 /**
  * @DI\Service("monmiel.transformers.v1.service")
@@ -62,7 +60,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function get($day)
     {
-        $consoDay = $this->riakDao->get($day);
+        $consoDay = $this->riakDao->gets($day);
 
         return $this->UpdateConsoTotalForQuatersForDay($consoDay);
     }
