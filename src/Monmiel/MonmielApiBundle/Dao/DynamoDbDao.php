@@ -3,6 +3,7 @@
 namespace Monmiel\MonmielApiBundle\Dao;
 
 use Aws\DynamoDb\DynamoDbClient;
+use Guzzle\Service\Resource\Model;
 use JMS\DiExtraBundle\Annotation as DI;
 
 /**
@@ -17,6 +18,28 @@ class DynamoDbDao implements DaoInterface
      */
     public function gets($keys)
     {
+        $queryKeys = array();
+        foreach ($keys as $key) {
+            $queryKeys[] = array('HashKeyElement' => array('S' => $key));
+        }
+        /** @var $items Model */
+        $items = $this->client->batchGetItem(
+            array(
+                "ConsistentRead" => true,
+                'RequestItems' => array(
+                    self::TABLE_NAME => array(
+                        'Keys' => $queryKeys
+                )
+            )
+        ));
+        $keysString = $items->get("Responses");
+        $keysArray = $keysString['rteIndex']['Items'];
+        $days = array();
+        foreach ($keysArray as $content) {
+            $days[] = $this->serializer->deserialize($content['content']['S'], 'Monmiel\MonmielApiModelBundle\Model\Day', "json");
+        }
+
+        return $days;
     }
 
     /**
@@ -109,5 +132,4 @@ class DynamoDbDao implements DaoInterface
      * @var DynamoDbClient;
      */
     public $client;
-
 }
