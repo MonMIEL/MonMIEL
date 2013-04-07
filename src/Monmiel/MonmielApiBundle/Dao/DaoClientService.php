@@ -2,16 +2,16 @@
 
 namespace Monmiel\MonmielApiBundle\Dao;
 
+use Doctrine\Common\Cache\ApcCache;
 use JMS\DiExtraBundle\Annotation as DI;
-use Monmiel\MonmielApiBundle\Dao\RiakDao;
-
 use Monmiel\MonmielApiModelBundle\Model\Day;
+
 /**
  * @DI\Service("monmiel.dao.client")
  */
 class DaoClientService
 {
-    const BUFFER_SIZE = 20;
+    const BUFFER_SIZE = 5;
 
     /**
      * @var $dao DynamoDbDao
@@ -19,10 +19,10 @@ class DaoClientService
      */
     public $dao;
 
-    /**
-     * @var $dayBuffer array<Day>
-     */
-    protected $dayBuffer = array();
+    function __construct()
+    {
+        $this->apc = new ApcCache();
+    }
 
     /**
      * @param $dayNumber integer
@@ -36,14 +36,12 @@ class DaoClientService
         $key = $date->format("Y-m-d");
         $this->stopWatch->stop('createDate');
         $this->stopWatch->start("retrieve Days", "dao client");
-        if (! $this->isInBuffer($key)) {
-            $this->updateBuffer($date);
+        if (! $this->isInCache($key)) {
+            $this->updateCache($date);
         }
         $this->stopWatch->stop("retrieve Days");
 
-
-
-        return $this->dayBuffer[$key];
+        return $this->apc->fetch($key);
     }
 
     /**
@@ -75,22 +73,19 @@ class DaoClientService
         return $keys;
     }
 
-    public function isInBuffer($key)
+    public function isInCache($key)
     {
-        return array_key_exists($key, $this->dayBuffer);
+        return $this->apc->contains($key);
     }
 
-    public function updateBuffer($dateTime)
+    public function updateCache($dateTime)
     {
         $keys = $this->createKeys($dateTime);
         $days = $this->dao->gets($keys);
-        $dayBuffer = array();
         /** @var $day Day */
         foreach ($days as $day) {
-            $dayBuffer[$day->getKey()] = $day;
+            $this->apc->save($day->getKey(), $day);
         }
-
-        $this->setDayBuffer($dayBuffer);
     }
 
     /**
@@ -100,18 +95,7 @@ class DaoClientService
     public $stopWatch;
 
     /**
-     * @param array $dayBuffer
+     * @var ApcCache $apc
      */
-    public function setDayBuffer($dayBuffer)
-    {
-        $this->dayBuffer = $dayBuffer;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDayBuffer()
-    {
-        return $this->dayBuffer;
-    }
+    protected $apc;
 }

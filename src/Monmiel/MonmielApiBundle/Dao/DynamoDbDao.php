@@ -25,7 +25,7 @@ class DynamoDbDao implements DaoInterface
         /** @var $items Model */
         $items = $this->client->batchGetItem(
             array(
-                "ConsistentRead" => true,
+                "ConsistentRead" => false,
                 'RequestItems' => array(
                     self::TABLE_NAME => array(
                         'Keys' => $queryKeys
@@ -49,7 +49,7 @@ class DynamoDbDao implements DaoInterface
     public function get($key)
     {
         $item = $this->client->getItem(array(
-            'ConsistentRead' => true,
+            'ConsistentRead' => false,
             'TableName' => self::TABLE_NAME,
             'Key'       => array(
                 'HashKeyElement'  => array('S' => $key),
