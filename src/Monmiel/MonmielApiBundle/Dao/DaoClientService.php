@@ -3,15 +3,14 @@
 namespace Monmiel\MonmielApiBundle\Dao;
 
 use JMS\DiExtraBundle\Annotation as DI;
-use Monmiel\MonmielApiBundle\Dao\RiakDao;
-
 use Monmiel\MonmielApiModelBundle\Model\Day;
+
 /**
  * @DI\Service("monmiel.dao.client")
  */
 class DaoClientService
 {
-    const BUFFER_SIZE = 20;
+    const BUFFER_SIZE = 5;
 
     /**
      * @var $dao DynamoDbDao
