@@ -30,16 +30,28 @@ class DaoClientService
      */
     public function gets($dayNumber)
     {
-        $this->stopWatch->start("createDate", "dao client");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("createDate", "dao client");
+        }
         $date = date_create_from_format("Y-m-d", "2011-01-01");
         $date->modify("+".($dayNumber-1)." day");
         $key = $date->format("Y-m-d");
-        $this->stopWatch->stop('createDate');
-        $this->stopWatch->start("retrieve Days", "dao client");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('createDate');
+        }
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("retrieve Days", "dao client");
+        }
         if (! $this->isInCache($key)) {
             $this->updateCache($date);
         }
-        $this->stopWatch->stop("retrieve Days");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop("retrieve Days");
+        }
 
         return $this->apc->fetch($key);
     }
@@ -50,11 +62,17 @@ class DaoClientService
      */
     public function get($dayNumber)
     {
-        $this->stopWatch->start("createDate", "dao client");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("createDate", "dao client");
+        }
         $date = date_create_from_format("Y-m-d", "2011-01-01");
         $date->modify("+".($dayNumber-1)." day");
         $key = $date->format("Y-m-d");
-        $this->stopWatch->stop('createDate');
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('createDate');
+        }
 
         return $this->dao->get($key);
     }
@@ -89,7 +107,7 @@ class DaoClientService
     }
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;

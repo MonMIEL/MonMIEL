@@ -22,7 +22,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     public $riakDao;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;

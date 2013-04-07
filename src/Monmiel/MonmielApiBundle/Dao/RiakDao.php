@@ -15,9 +15,15 @@ class RiakDao implements DaoInterface
      */
     public function gets($keys)
     {
-        $this->stopWatch->start("gets", "dao");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("gets", "dao");
+        }
         $days = $this->rteIndexBucket->fetch($keys)->getContents();
-        $this->stopWatch->stop('gets');
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('gets');
+        }
         return $days;
     }
 
@@ -27,9 +33,15 @@ class RiakDao implements DaoInterface
      */
     public function get($key)
     {
-        $this->stopWatch->start("get", "dao");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("get", "dao");
+        }
         $days = $this->rteIndexBucket->uniq($key)->getContent();
-        $this->stopWatch->stop('get');
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('get');
+        }
         return $days;
     }
 
@@ -58,7 +70,7 @@ class RiakDao implements DaoInterface
     public $rteIndexBucket;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
