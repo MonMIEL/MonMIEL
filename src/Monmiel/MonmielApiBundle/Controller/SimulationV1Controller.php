@@ -56,7 +56,9 @@ class SimulationV1Controller extends Controller
      */
     public function init(HttpRequest $request = null)
     {
-        $this->stopWatch->start("init", "controller");
+        if (isset($this->stopWatch)) {
+            $this->stopWatch->start("init", "controller");
+        }
         /**
          * On renseigne le service transformers, des la consommation total en 2011 (531 TwH)
          * et celle qu'a rentré l'utilisateur.
@@ -92,7 +94,9 @@ class SimulationV1Controller extends Controller
         $this->repartition->setTargetYear($targetYear);
         $this->repartition->setReferenceParcPower($refParcPower);
         $this->repartition->setTargetParcPower($targetParcPower);
-        $this->stopWatch->stop("init");
+        if (isset($this->stopWatch)) {
+            $this->stopWatch->stop("init");
+        }
     }
 
     public function createTargetYearObject(HttpRequest $request = null)
@@ -128,7 +132,7 @@ class SimulationV1Controller extends Controller
     public $parc;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
