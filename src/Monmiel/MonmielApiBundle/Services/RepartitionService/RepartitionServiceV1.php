@@ -163,7 +163,8 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
-        $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
+//        $nuclearProductionCapacity = ($targetParcPower->getNuclear() * $quarter->getNucleaire()) / $referenceParcPower->getNuclear();
+        $hydraulicProductionCapacity = ($quarter->getHydraulique());
 
         $maxProductionQuarter = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
         $maxProductionQuarter->setEolien($aeolianProductionCapacity);
