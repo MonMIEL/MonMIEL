@@ -56,6 +56,8 @@ class SimulationResultSeries
             "eolien" => array(),
             "flamme" => array(),
             "hydraulique" => array(),
+            "import" => array(),
+            "steps" => array()
         );
     }
 
@@ -94,6 +96,8 @@ class SimulationResultSeries
         $this->series["eolien"][] = $max['eolien'];
         $this->series["flamme"][] = $max['flamme'];
         $this->series["hydraulique"][] = $max['hydraulique'];
+        $this->series['import'][] = $max['import'];
+        $this->series['steps'][] = $max['steps'];
         $this->series["total"][] = array_sum($max);
     }
 

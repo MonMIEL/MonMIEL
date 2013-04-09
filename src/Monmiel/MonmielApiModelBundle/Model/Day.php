@@ -38,7 +38,7 @@ class Day
 
     public function getMax()
     {
-        $max = array("nucleaire" => 0, "photovoltaique" => 0, "eolien" => 0, "flamme" => 0, "hydraulique" => 0);
+        $max = array("nucleaire" => 0, "photovoltaique" => 0, "eolien" => 0, "flamme" => 0, "hydraulique" => 0, "import" => 0, "steps" => 0);
         /** @var $quarter Quarter */
         foreach ($this->quarters as $quarter) {
             if ($max["nucleaire"] < $quarter->getNucleaire()) { $max["nucleaire"] = $quarter->getNucleaire(); }
@@ -46,6 +46,8 @@ class Day
             if ($max["eolien"] < $quarter->getEolien()) { $max["eolien"] = $quarter->getEolien(); }
             if ($max["flamme"] < $quarter->getFlamme()) { $max["flamme"] = $quarter->getFlamme(); }
             if ($max["hydraulique"] < $quarter->getHydraulique()) { $max["hydraulique"] = $quarter->getHydraulique(); }
+            if ($max["import"] < $quarter->getImport()) { $max["import"] = $quarter->getImport(); }
+            if ($max["steps"] < $quarter->getSteps()) { $max["steps"] = $quarter->getSteps(); }
         }
 
         return $max;

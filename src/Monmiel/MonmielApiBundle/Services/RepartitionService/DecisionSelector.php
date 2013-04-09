@@ -76,7 +76,7 @@ class DecisionSelector
         $plusValue = $produced - $quarter->getConsoTotal();
         $valueToStore = $plusValue / $this->storingCoeff;
         if ($plusValue > 0) {
-            //echo "\n ENERGIE STOCKABLE \n";
+//            echo "\n ENERGIE STOCKABLE \n";
             $valueToExport = $plusValue - (DecisionSelector::$max_storable_in_steps - DecisionSelector::$stored_in_steps);
             DecisionSelector::$stored_in_steps = min(DecisionSelector::$stored_in_steps + $valueToStore, DecisionSelector::$max_storable_in_steps - DecisionSelector::$stored_in_steps);
             if ($valueToExport < 0)
@@ -92,10 +92,6 @@ class DecisionSelector
          * @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter
          */
         $quarter = clone $quarterToCompute;
-        /**
-         * @var DateTime $date
-         */
-        $date = $quarter->getDate();
         if ($soldeToDistribute < DecisionSelector::$stored_in_steps && !$this->maxStepEnegyReached($quarter, $soldeToDistribute)) {
             DecisionSelector::$energy_step_used = $soldeToDistribute / (60 / $quarter->getInterval()) + DecisionSelector::$energy_step_used;
             //echo "\n UTILISATION DES STEPPES \n";
@@ -107,6 +103,7 @@ class DecisionSelector
             return $quarter;
         } else {
             $soldeToDistribute = $soldeToDistribute - DecisionSelector::$stored_in_steps;
+            $quarter->setSteps(DecisionSelector::$stored_in_steps);
             DecisionSelector::$stored_in_steps = 0; //emptying steps
             return $this->chooseBetweenThermalOrImport($quarter, $soldeToDistribute);
         }

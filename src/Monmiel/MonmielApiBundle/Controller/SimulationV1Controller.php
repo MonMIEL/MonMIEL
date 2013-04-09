@@ -120,8 +120,8 @@ class SimulationV1Controller extends Controller
     public $transformers;
 
     /**
-     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1 $repartition
-     * @DI\Inject("monmiel.repartition.service")
+     * @var \Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV2 $repartition
+     * @DI\Inject("monmiel.repartition.v2.service")
      */
     public $repartition;
 
