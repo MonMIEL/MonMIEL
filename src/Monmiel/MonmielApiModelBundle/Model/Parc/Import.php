@@ -17,6 +17,7 @@ class Import extends Energy
                             self::LOADFACTOR,
                             $power,
                             self::POWERUNIT);
+        $this->power = 0;
     }
 
     /**
