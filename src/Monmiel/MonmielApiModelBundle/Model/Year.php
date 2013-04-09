@@ -60,6 +60,22 @@ class Year
     protected $consoTotalFlamme;
 
     /**
+     * sum consummation for the Import of Year
+     * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("import")
+     */
+    protected $consoTotalImport;
+
+    /**
+     * sum consummation for the Steps
+     * @var float
+     * @Ser\Type("double")
+     * @Ser\SerializedName("steps")
+     */
+    protected $consoTotalSteps;
+
+    /**
      * @var float
      * @Ser\Exclude
      */
@@ -96,13 +112,15 @@ class Year
         return $this->nbInterval;
     }
 
-    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde)
+    function __construct($yearIdentifiant,$consoTotalNucleaire, $consoTotalEolien,$consoTotalPhotovoltaique, $consoTotalFlamme, $consoTotalHydraulique, $solde, $consoTotalImport = 0, $consoTotalSteps = 0)
     {
         $this->consoTotalEolien = $consoTotalEolien;
         $this->consoTotalFlamme = $consoTotalFlamme;
         $this->consoTotalHydraulique = $consoTotalHydraulique;
         $this->consoTotalNucleaire = $consoTotalNucleaire;
         $this->consoTotalPhotovoltaique = $consoTotalPhotovoltaique;
+        $this->consoTotalImport = $consoTotalImport;
+        $this->consoTotalSteps = $consoTotalSteps;
         $this->solde = $solde;
         $this->yearIdentifiant = $yearIdentifiant;
         $this->consoTotalGlobale=$consoTotalEolien + $consoTotalFlamme + $consoTotalHydraulique + $consoTotalNucleaire + $consoTotalPhotovoltaique;
@@ -126,6 +144,38 @@ class Year
     }
 
     /**
+     * @param float $consoTotalFlamme
+     */
+    public function setConsoTotalFlamme($consoTotalFlamme)
+    {
+        $this->consoTotalFlamme = $consoTotalFlamme;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConsoTotalFlamme()
+    {
+        return $this->consoTotalFlamme;
+    }
+
+    /**
+     * @param float $consoTotalGlobale
+     */
+    public function setConsoTotalGlobale($consoTotalGlobale)
+    {
+        $this->consoTotalGlobale = $consoTotalGlobale;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConsoTotalGlobale()
+    {
+        return $this->consoTotalGlobale;
+    }
+
+    /**
      * @param float $consoTotalHydraulique
      */
     public function setConsoTotalHydraulique($consoTotalHydraulique)
@@ -139,6 +189,38 @@ class Year
     public function getConsoTotalHydraulique()
     {
         return $this->consoTotalHydraulique;
+    }
+
+    /**
+     * @param float $consoTotalImport
+     */
+    public function setConsoTotalImport($consoTotalImport)
+    {
+        $this->consoTotalImport = $consoTotalImport;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConsoTotalImport()
+    {
+        return $this->consoTotalImport;
+    }
+
+    /**
+     * @param float $consoTotalNucleaire
+     */
+    public function setConsoTotalNucleaire($consoTotalNucleaire)
+    {
+        $this->consoTotalNucleaire = $consoTotalNucleaire;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConsoTotalNucleaire()
+    {
+        return $this->consoTotalNucleaire;
     }
 
     /**
@@ -158,45 +240,19 @@ class Year
     }
 
     /**
-     * @param float $consoTotalflamme
+     * @param float $consoTotalSteps
      */
-    public function setConsoTotalFlamme($consoTotalflamme)
+    public function setConsoTotalSteps($consoTotalSteps)
     {
-        $this->consoTotalFlamme = $consoTotalflamme;
-    }
-
-    /**
-     * @param float $consoTotalGlobale
-     */
-    public function setConsoTotalGlobale($consoTotalGlobale)
-    {
-        $this->consoTotalGlobale = $consoTotalGlobale;
-    }
-
-
-
-    /**
-     * @return float
-     */
-    public function getConsoTotalFlamme()
-    {
-        return $this->consoTotalFlamme;
-    }
-
-    /**
-     * @param float $consoTotalnucleaire
-     */
-    public function setConsoTotalNucleaire($consoTotalnucleaire)
-    {
-        $this->consoTotalNucleaire = $consoTotalnucleaire;
+        $this->consoTotalSteps = $consoTotalSteps;
     }
 
     /**
      * @return float
      */
-    public function getConsoTotalNucleaire()
+    public function getConsoTotalSteps()
     {
-        return $this->consoTotalNucleaire;
+        return $this->consoTotalSteps;
     }
 
     /**
@@ -216,33 +272,6 @@ class Year
     }
 
     /**
-     * @return float
-     */
-    public function getConsoTotalGlobale()
-    {
-        return $this->consoTotalGlobale;
-    }
-
-    public function toString ()
-    {
-        $result="";
-
-        $result=$result . "Nuclear: " .$this->consoTotalNucleaire/1000000 . " TW \n";
-        $result=$result . "Eolian: " .$this->consoTotalEolien/1000000 . " TW \n";
-        $result=$result . "Hydraulic: " .$this->consoTotalHydraulique/1000000 . " TW \n";
-        $result=$result . "Photovoltaic: " .$this->consoTotalPhotovoltaique/1000000 . " TW \n";
-        $result=$result . "Steps: " .$this->getStepsTotal()/1000000 . " TW \n";
-        $result=$result . "Import: " .$this->getImportTotal()/1000000 . " TW \n";
-
-        $result=$result . "Thermal: " .$this->consoTotalFlamme/1000000 . " TW \n";
-        $result=$result . "Global: " .$this->consoTotalGlobale/1000000 . " TW \n";
-
-        $result=$result . "Export: " .$this->getExportTotal()/1000000 . " TW \n";
-        return $result;
-
-    }
-
-    /**
      * @param int $yearIdentifiant
      */
     public function setYearIdentifiant($yearIdentifiant)
@@ -256,74 +285,6 @@ class Year
     public function getYearIdentifiant()
     {
         return $this->yearIdentifiant;
-    }
-
-    /**
-     * steps used
-     * @var float
-     * @Ser\Exclude
-     */
-    protected $stepsTotal=0;
-
-    /**
-     * value imported
-     * @var float
-     * @Ser\Exclude
-     */
-      protected $importTotal=0;
-    /**
-     * value exported
-     * @var float
-     * @Ser\Exclude
-     */
-    protected $exportTotal=0;
-
-    /**
-     * @param float $exportTotal
-     */
-    public function setExportTotal($exportTotal)
-    {
-        $this->exportTotal = $exportTotal;
-    }
-
-    /**
-     * @return float
-     */
-    public function getExportTotal()
-    {
-        return $this->exportTotal;
-    }
-
-    /**
-     * @param float $stepsTotal
-     */
-    public function setStepsTotal($stepsTotal)
-    {
-        $this->stepsTotal = $stepsTotal;
-    }
-
-    /**
-     * @return float
-     */
-    public function getStepsTotal()
-    {
-        return $this->stepsTotal;
-    }
-
-    /**
-     * @param float $importTotal
-     */
-    public function setImportTotal($importTotal)
-    {
-        $this->importTotal = $importTotal;
-    }
-
-    /**
-     * @return float
-     */
-    public function getImportTotal()
-    {
-        return $this->importTotal;
     }
 
 

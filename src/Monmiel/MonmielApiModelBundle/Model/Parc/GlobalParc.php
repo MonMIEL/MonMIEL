@@ -73,6 +73,11 @@ class GlobalParc{
         $this->flamme->setPower($flamePower);
     }
 
+    //Méthode permettant de vérifier si les valeurs en paramètre sont les max
+    public function submitImportPower($importPower){
+        $this->import->setPower($importPower);
+    }
+
     /**
      * @var $year Year
      */

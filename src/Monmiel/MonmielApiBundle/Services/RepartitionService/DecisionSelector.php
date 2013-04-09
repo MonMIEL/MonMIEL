@@ -35,7 +35,7 @@ class DecisionSelector
      * @base des calculs
      */
     private static $median_value = 5474; //median value of consumption for this year
-    protected static $max_import = 40000; //MW
+    protected static $max_import = 8000; //MW
     protected static $max_export = 12000000000; //MW
     protected static $max_storable_in_steps = 5000; //MW
     private static $peak_coeff = 1.25; //
@@ -92,21 +92,21 @@ class DecisionSelector
          * @var \Monmiel\MonmielApiModelBundle\Model\Quarter $quarter
          */
         $quarter = clone $quarterToCompute;
-        if ($soldeToDistribute < DecisionSelector::$stored_in_steps && !$this->maxStepEnegyReached($quarter, $soldeToDistribute)) {
-            DecisionSelector::$energy_step_used = $soldeToDistribute / (60 / $quarter->getInterval()) + DecisionSelector::$energy_step_used;
-            //echo "\n UTILISATION DES STEPPES \n";
-            //checking for steps
-            //maj steps
-            DecisionSelector::$stored_in_steps = DecisionSelector::$stored_in_steps - $soldeToDistribute;
-            $quarter->setSteps($soldeToDistribute);
-            $quarter->setFlamme(0);
-            return $quarter;
-        } else {
-            $soldeToDistribute = $soldeToDistribute - DecisionSelector::$stored_in_steps;
-            $quarter->setSteps(DecisionSelector::$stored_in_steps);
-            DecisionSelector::$stored_in_steps = 0; //emptying steps
+//        if ($soldeToDistribute < DecisionSelector::$stored_in_steps && !$this->maxStepEnegyReached($quarter, $soldeToDistribute)) {
+//            DecisionSelector::$energy_step_used = $soldeToDistribute / (60 / $quarter->getInterval()) + DecisionSelector::$energy_step_used;
+//            echo "\n UTILISATION DES STEPPES \n";
+//            checking for steps
+//            maj steps
+//            DecisionSelector::$stored_in_steps = DecisionSelector::$stored_in_steps - $soldeToDistribute;
+//            $quarter->setSteps($soldeToDistribute);
+//            $quarter->setFlamme(0);
+//            return $quarter;
+//        } else {
+//            $soldeToDistribute = $soldeToDistribute - DecisionSelector::$stored_in_steps;
+//            $quarter->setSteps(DecisionSelector::$stored_in_steps);
+//            DecisionSelector::$stored_in_steps = 0; //emptying steps
             return $this->chooseBetweenThermalOrImport($quarter, $soldeToDistribute);
-        }
+//        }
     }
 
     /**
@@ -123,7 +123,7 @@ class DecisionSelector
      * @param $quarter Quarter
      * @param $solde
      */
-    private function chooseBetweenThermalOrImport($quarter, $solde)
+    private function chooseBetweenThermalOrImport2($quarter, $solde)
     {
         $currentCost = $this->computeImportPeakCost();
         if (($this->isAPeak($quarter) && DecisionSelector::$thermal_cost < $currentCost) || $this->maxImportEnegyReached($quarter, $solde)) {
@@ -131,17 +131,50 @@ class DecisionSelector
             //echo "\n FLAMME SEULEMENT \n";
         } else {
             //echo "\n FLAMME ET IMPORT \n";
-            if (!$this->isAPeak($quarter))
+            if (!$this->isAPeak($quarter)) {
                 $currentCost = DecisionSelector::$import_base_cost;
-            $quarter->setImport(min($solde, DecisionSelector::$max_import - DecisionSelector::$imported));
+            }
+//            if ( $currentCost <)
             $solde = max($solde, DecisionSelector::$max_import - DecisionSelector::$imported);
             $import_value = min($solde, DecisionSelector::$max_import - DecisionSelector::$imported);
             DecisionSelector::$energy_import_used = DecisionSelector::$energy_import_used + $solde / (60 / $quarter->getInterval());
             DecisionSelector::$imported = $import_value;
             $solde = $solde - $import_value;
+
+//            $quarter->setImport($import);
             $quarter->setFlamme($solde);
-            $this->updatesTarification($import_value, $solde, $currentCost);
+//            $this->updatesTarification($import_value, $solde, $currentCost);
         }
+        return $quarter;
+    }
+
+    /**
+     * @param $quarter Quarter
+     * @param $solde
+     */
+    private function chooseBetweenThermalOrImport($quarter, $solde)
+    {
+        $currentCost = $this->computeImportPeakCost();
+        if ($this->isAPeak($quarter)) {
+            if (DecisionSelector::$thermal_cost < $currentCost) {
+                $quarter->setFlamme($solde);
+            } else {
+                if ($solde > DecisionSelector::$max_import) {
+                    $quarter->setImport(DecisionSelector::$max_import);
+                    $quarter->setFlamme($solde - DecisionSelector::$max_import);
+                } else {
+                    $quarter->setImport($solde);
+                }
+            }
+        } else {
+            if ($solde > DecisionSelector::$max_import) {
+                $quarter->setImport(DecisionSelector::$max_import);
+                $quarter->setFlamme($solde - DecisionSelector::$max_import);
+            } else {
+                $quarter->setImport($solde);
+            }
+        }
+
         return $quarter;
     }
 

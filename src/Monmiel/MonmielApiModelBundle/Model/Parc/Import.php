@@ -18,4 +18,14 @@ class Import extends Energy
                             $power,
                             self::POWERUNIT);
     }
+
+    /**
+     * @param float $power
+     */
+    public function setPower($power)
+    {
+        if ($power > $this->getPower()) {
+            $this->power = $power;
+        }
+    }
 }

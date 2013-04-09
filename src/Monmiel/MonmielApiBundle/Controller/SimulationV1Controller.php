@@ -35,7 +35,6 @@ class SimulationV1Controller extends Controller
         $parc = $this->parc->getTargetParcPower();
         $finaParc = $this->parc->getFinalPower();
 
-
         $result->setFinalConso($computedYear);
         $result->setTargetConso($targetYear);
         $result->setTargetParcPower($parc);

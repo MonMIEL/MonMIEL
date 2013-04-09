@@ -38,6 +38,11 @@ class ParcService implements ParcServiceInterface
         $this->finalParcPower->submitFlamePower($flamePower);
     }
 
+    public function submitImportPower($importPower)
+    {
+        $this->finalParcPower->submitImportPower($importPower);
+    }
+
     /**
      * @param \Monmiel\MonmielApiModelBundle\Model\Year $year
      * @param float $hourInterval
