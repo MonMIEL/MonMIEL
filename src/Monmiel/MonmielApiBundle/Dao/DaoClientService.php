@@ -2,27 +2,27 @@
 
 namespace Monmiel\MonmielApiBundle\Dao;
 
+use Doctrine\Common\Cache\ApcCache;
 use JMS\DiExtraBundle\Annotation as DI;
-use Monmiel\MonmielApiBundle\Dao\RiakDao;
-
 use Monmiel\MonmielApiModelBundle\Model\Day;
+
 /**
  * @DI\Service("monmiel.dao.client")
  */
 class DaoClientService
 {
-    const BUFFER_SIZE = 20;
+    const BUFFER_SIZE = 5;
 
     /**
-     * @var $dao RiakDao
-     * @DI\Inject("monmiel.dao.riak")
+     * @var $dao DynamoDbDao
+     * @DI\Inject("monmiel.dao.dynamo")
      */
     public $dao;
 
-    /**
-     * @var $dayBuffer array<Day>
-     */
-    protected $dayBuffer = array();
+    function __construct()
+    {
+        $this->apc = new ApcCache();
+    }
 
     /**
      * @param $dayNumber integer
@@ -30,20 +30,30 @@ class DaoClientService
      */
     public function gets($dayNumber)
     {
-        $this->stopWatch->start("createDate", "dao client");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("createDate", "dao client");
+        }
         $date = date_create_from_format("Y-m-d", "2011-01-01");
         $date->modify("+".($dayNumber-1)." day");
         $key = $date->format("Y-m-d");
-        $this->stopWatch->stop('createDate');
-        $this->stopWatch->start("retrieve Days", "dao client");
-        if (! $this->isInBuffer($key)) {
-            $this->updateBuffer($date);
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('createDate');
         }
-        $this->stopWatch->stop("retrieve Days");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("retrieve Days", "dao client");
+        }
+        if (! $this->isInCache($key)) {
+            $this->updateCache($date);
+        }
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop("retrieve Days");
+        }
 
-
-
-        return $this->dayBuffer[$key];
+        return $this->apc->fetch($key);
     }
 
     /**
@@ -52,11 +62,17 @@ class DaoClientService
      */
     public function get($dayNumber)
     {
-        $this->stopWatch->start("createDate", "dao client");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("createDate", "dao client");
+        }
         $date = date_create_from_format("Y-m-d", "2011-01-01");
         $date->modify("+".($dayNumber-1)." day");
         $key = $date->format("Y-m-d");
-        $this->stopWatch->stop('createDate');
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop('createDate');
+        }
 
         return $this->dao->get($key);
     }
@@ -75,43 +91,29 @@ class DaoClientService
         return $keys;
     }
 
-    public function isInBuffer($key)
+    public function isInCache($key)
     {
-        return array_key_exists($key, $this->dayBuffer);
+        return $this->apc->contains($key);
     }
 
-    public function updateBuffer($dateTime)
+    public function updateCache($dateTime)
     {
         $keys = $this->createKeys($dateTime);
         $days = $this->dao->gets($keys);
-        $dayBuffer = array();
         /** @var $day Day */
         foreach ($days as $day) {
-            $dayBuffer[$day->getKey()] = $day;
+            $this->apc->save($day->getKey(), $day);
         }
-
-        $this->setDayBuffer($dayBuffer);
     }
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
 
     /**
-     * @param array $dayBuffer
+     * @var ApcCache $apc
      */
-    public function setDayBuffer($dayBuffer)
-    {
-        $this->dayBuffer = $dayBuffer;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDayBuffer()
-    {
-        return $this->dayBuffer;
-    }
+    protected $apc;
 }

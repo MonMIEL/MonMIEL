@@ -29,45 +29,91 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function testAvalaibilityRateFlame(){
+        $this->flamme = new Flamme(0,60,0,75,5000,1);
+        $this->flamme->setAvailabilityRate(0.50);
+        $exceptedValue = 0.50;
+        $result = $this->flamme->getAvailabilityRate();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testLoadFactorFlame(){
+        $this->flamme = new Flamme(0,60,0,75,5000,1);
+        $this->flamme->setLoadFactor(0.60);
+        $exceptedValue = 0.60;
+        $result = $this->flamme->getLoadFactor();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPowerUnitFlame(){
+        $this->flamme = new Flamme(0,60,0,75,5000,1);
+        $this->flamme->setLoadFactor(0.4);
+        $this->flamme->setAvailabilityRate(0.60);
+        $exceptedValue = 500;
+        $result = $this->flamme->getPowerUnit();
+        assertThat($result,is($exceptedValue));
+    }
+
+    /**
+     * @test
+     */
+    public function testPowerFlame(){
+        $this->flamme = new Flamme(0,60,0,75,5000,1);
+        $this->flamme->setLoadFactor(0.75);
+        $this->flamme->setAvailabilityRate(0.60);
+        $this->flamme->setPower(5000);
+        $exceptedValue = 5000;
+        $result = intval($this->flamme->getPower());
+        assertThat($result,is($exceptedValue));
+    }
+    /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setMaxFlamme
      */
-    public function testSetMaxFlamme()
+    /*public function testSetMaxFlamme()
     {
         $this->flamme->setMaxFlamme(60000);
         $expectedValue = 60000;
         $result = $this->flamme->getMaxFlamme();
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setFacteurChargeFlamme
      */
-    public function testSetFacteurChargeFlamme()
+    /*public function testSetFacteurChargeFlamme()
     {
         $this->flamme->setFacteurChargeFlamme(0.75);
         $expectedValue = 0.75;
         $result = $this->flamme->getFacteurChargeFlamme();
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setTauxDisponibiliteFlamme
      */
-    public function testSetTauxDisponibiliteFlamme()
+    /*public function testSetTauxDisponibiliteFlamme()
     {
         $this->flamme->setTauxDisponibiliteFlamme(0.70);
         $expectedValue = 0.70;
         $result = $this->flamme->getTauxDisponibiliteFlamme();
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::setPowerFlamme
      */
-    public function testSetPowerFlamme()
+    /*public function testSetPowerFlamme()
     {
         $this->flamme->setMaxFlamme(3500);
         $this->flamme->setPowerFlamme();
@@ -75,12 +121,12 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 3500;
         $result = $this->flamme->getPowerFlamme();
         assertThat($result, is($expectedValue));
-    }
+    }*/
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Flamme::getParcFlamme
      */
-    public function testGetParcFlamme()
+    /*public function testGetParcFlamme()
     {
         $this->flamme->setMaxFlamme(6000);
         $this->flamme->setPowerFlamme();
@@ -88,5 +134,5 @@ class FlammeTest extends \PHPUnit_Framework_TestCase
         $expectedValue = intval((6000*100/70)/500);
         $result = intval($this->flamme->getParcFlamme());
         assertThat($result, is($expectedValue));
-    }
+    }*/
 }

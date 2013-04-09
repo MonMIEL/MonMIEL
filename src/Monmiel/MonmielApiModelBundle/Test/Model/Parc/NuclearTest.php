@@ -17,7 +17,7 @@ class NuclearTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->nuclear = new Nuclear;
+        $this->nuclear = new Nuclear(1,1);
     }
     /**
      * Tears down the fixture, for example, closes a network connection.
@@ -30,39 +30,43 @@ class NuclearTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear::setPowerNuclear
      */
-    public function testSetPowerNuclear()
+    public function testSetLoadFactor()
     {
         $PowerNuclear = 500;
         $percentOfMix = 0.50;
-        $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
-        $this->assertNotNull($this->nuclear->getFacteurChargeNuclear(), "this value mast not null becase it is initialize at setPowerNuclear method ");
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        //$this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->assertNotNull($this->nuclear->getLoadFactor(), "this value mast not null becase it is initialize at setPowerNuclear method ");
 
         //cas 1, pourcentage mix >= 0.75
         $percentOfMix = 0.88;
         $exeptedValue = 0.76;//max
-        $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
-        $result = $this->nuclear->getFacteurChargeNuclear();
+      //  $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getLoadFactor();
         assertThat($result, is($exeptedValue));
 
         //cas 2: 0.25<pourcentage mix < 0.75
         $percentOfMix = 0.50;
         $exeptedValue = 0.855;//(0.75 - 0.50)*0.38 + 0.75
-        $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
-        $result = $this->nuclear->getFacteurChargeNuclear();
+       // $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getLoadFactor();
         assertThat($result, is($exeptedValue));
 
         //cas 3: pourcentage mix <= 0.25
         $percentOfMix = 0.25;
         $exeptedValue = 0.95;//max
-        $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
-        $result = $this->nuclear->getFacteurChargeNuclear();
+        //$this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getLoadFactor();
         assertThat($result, is($exeptedValue));
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear::getPowerNuclear
      */
-    public function testGetPowerNuclear()
+   /*  public function testGetPowerNuclear()
     {
         $PowerNuclear = 500;
         $percentOfMix = 0.50;
@@ -72,20 +76,20 @@ class NuclearTest extends \PHPUnit_Framework_TestCase
         $result = $this->nuclear->getPowerNuclear();
         assertThat($result, is($exeptedValue));
 
-    }
+    }*/
 
     public function testConstructeur(){
-        $this->nuclear = new Nuclear();
+        $this->nuclear = new Nuclear(1,1);
         //they must take the default values
-        $this->assertNotNull($this->nuclear->getFacteurChargeNuclear(),"this value must a default");
-        $this->assertNotNull($this->nuclear->getParcNuclear(),"this value must a default");
-        $this->assertNotNull($this->nuclear->getPowerNuclear(),"this value must a default");
+        $this->assertNotNull($this->nuclear->getAvailabilityRate(),"this value must a default");
+        $this->assertNotNull($this->nuclear->getLoadFactor(),"this value must a default");
+        $this->assertNotNull($this->nuclear->getParc(),"this value must a default");
     }
 
     /**
      * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear::getParcNuclear
      */
-    public function testGetParcNuclear()
+   /*public function testGetParcNuclear()
     {
         $PowerNuclear = 500;
         $percentOfMix = 0.50;
@@ -96,6 +100,54 @@ class NuclearTest extends \PHPUnit_Framework_TestCase
         assertThat($result, is($exeptedValue));
         //à faire après confirmation Talbot
 
+    }*/
+    /**
+     * @test
+     */
+    public function  testSetPowerNuc(){
+        $PowerNuclear = 500;
+        $percentNuclear = 0.50;
+        $this->nuclear = new Nuclear($PowerNuclear,$percentNuclear);
+        $this->nuclear->setPowerNuc($PowerNuclear,$percentNuclear);
+        $exeptedValue = 514;
+        $result = intval($this->nuclear->getPower());
+        assertThat($result,is($exeptedValue));
+    }
+
+    /**
+     * @covers Monmiel\MonmielApiModelBundle\Model\Parc\Nuclear::setPowerNuclear
+     */
+    public function testSetAvailabilityRate()
+    {
+        $PowerNuclear = 500;
+        $percentOfMix = 0.50;
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+
+        $this->assertNotNull($this->nuclear->getLoadFactor(), "this value mast not null becase it is initialize at setPowerNuclear method ");
+
+        //cas 1, pourcentage mix >= 0.81
+        $percentOfMix = 0.88;
+        $exeptedValue = 0.81;//max
+        //  $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getAvailabilityRate();
+        assertThat($result, is($exeptedValue));
+
+        //cas 2: 0.25<pourcentage mix < 0.75
+        $percentOfMix = 0.50;
+        $exeptedValue = 0.88;//(0.75 - 0.50)*0.38 + 0.75
+        // $this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getAvailabilityRate();
+        assertThat($result, is($exeptedValue));
+
+        //cas 3: pourcentage mix <= 0.25
+        $percentOfMix = 0.25;
+        $exeptedValue = 0.95;//max
+        //$this->nuclear->setPowerNuclear($PowerNuclear,$percentOfMix);
+        $this->nuclear = new Nuclear($PowerNuclear,$percentOfMix);
+        $result = $this->nuclear->getAvailabilityRate();
+        assertThat($result, is($exeptedValue));
     }
 
 

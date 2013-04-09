@@ -24,7 +24,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     public $facilityService;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
@@ -81,8 +81,10 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
      */
     public function  computeMixedTargetDailyConsumption($referenceDay)
     {
-
-        $this->stopWatch->start("computeDistribution", "repartition");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->start("computeDistribution", "repartition");
+        }
         $referenceQuarters = $referenceDay->getQuarters();
         $userMixDay = new Day();
 
@@ -95,7 +97,11 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
             $this->updateYearComputed($computedQuarter);
         }
-        $this->stopWatch->stop("computeDistribution");
+        if(isset($this->stopWatch))
+        {
+            $this->stopWatch->stop("computeDistribution");
+        }
+
         return $userMixDay;
     }
 
@@ -157,7 +163,8 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
         $aeolianProductionCapacity = ($targetParcPower->getWind() == 0) ? 0 : ($targetParcPower->getWind() * $quarter->getEolien()) / $referenceParcPower->getWind();
         $photovoltaicProductionCapacity = ($targetParcPower->getPhotovoltaic() == 0) ? 0 : ($targetParcPower->getPhotovoltaic() * $quarter->getPhotovoltaique()) / $referenceParcPower->getPhotovoltaic();
         $nuclearProductionCapacity = ($targetParcPower->getNuclear());
-        $hydraulicProductionCapacity = ($targetParcPower->getHydraulic());
+//        $nuclearProductionCapacity = ($targetParcPower->getNuclear() * $quarter->getNucleaire()) / $referenceParcPower->getNuclear();
+        $hydraulicProductionCapacity = ($quarter->getHydraulique());
 
         $maxProductionQuarter = new Quarter($quarter->getDate(), $quarter->getConsoTotal(), 0, 0, 0, 0, 0, 0, 0);
         $maxProductionQuarter->setEolien($aeolianProductionCapacity);

@@ -3,12 +3,10 @@
 namespace Monmiel\MonmielApiBundle\Services\TransformersService;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
 use Monmiel\MonmielApiBundle\Services\TransformersService\TransformersServiceInterfaceV1;
 use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Mesure;
 use Monmiel\MonmielApiModelBundle\Model\Year;
-use Monmiel\MonmielApiModelBundle\Model\Power;
 
 /**
  * @DI\Service("monmiel.transformers.v1.service")
@@ -24,7 +22,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
     public $riakDao;
 
     /**
-     * @DI\Inject("debug.stopwatch")
+     * @DI\Inject("debug.stopwatch", required=false)
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     public $stopWatch;
@@ -62,7 +60,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function get($day)
     {
-        $consoDay = $this->riakDao->get($day);
+        $consoDay = $this->riakDao->gets($day);
 
         return $this->UpdateConsoTotalForQuatersForDay($consoDay);
     }
@@ -76,7 +74,7 @@ class TransformersV1 implements TransformersServiceInterfaceV1
      */
     public function updateConsoQuartersByDayIdAndConsoTotalActuelAndConsoDefineByUser($dayId, $actualConso, $inputConso)
     {
-        $currentDay = $this->riakDao->get($dayId);//get the current day by id
+        $currentDay = $this->riakDao->gets($dayId);//get the current day by id
 
         return $this->updateConsoTotalQuartersForDayByConsoTotalActualAndConsoDefineByUser($currentDay,$actualConso,$inputConso);
     }

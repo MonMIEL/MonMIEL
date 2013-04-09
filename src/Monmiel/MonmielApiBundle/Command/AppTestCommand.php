@@ -3,29 +3,26 @@
 namespace Monmiel\MonmielApiBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Monmiel\MonmielApiModelBundle\Model\Mesure;
-
-use Monmiel\MonmielApiBundle\Services\RepartitionService\RepartitionServiceV1;
 class AppTestCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName("monmiel:test:daoclient")
+            ->setName("monmiel:test:dao")
             ->setDescription("Extract Data from RTE and populate Riak");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var $dao  \Monmiel\MonmielApiBundle\Dao\DaoClientService */
-        $dao = $this->getContainer()->get("monmiel.dao.client");
-
-        var_dump($dao->get("5"));exit;
-
+        /** @var $client  \Monmiel\MonmielApiBundle\Dao\DaoClientService */
+        $client = $this->getContainer()->get("monmiel.dao.client");
+        for ($i = 1; $i < 360 ; $i++) {
+            $item = $client->gets($i);
+            var_dump($item->getKey());
+        }
     }
 }

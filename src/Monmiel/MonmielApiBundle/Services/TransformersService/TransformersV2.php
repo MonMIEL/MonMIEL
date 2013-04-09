@@ -14,7 +14,7 @@ class TransformersV2 implements TransformerServiceInterface
 {
   /**
    * Injection of the RiakDao
-   * @DI\Inject("monmiel.dao.riak")
+   * @DI\Inject("monmiel.dao.client")
    * @var \Monmiel\MonmielApiBundle\Dao\RiakDao
    */
   public $riakDao;
