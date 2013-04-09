@@ -7,7 +7,7 @@ use Monmiel\MonmielApiModelBundle\Model\Day;
 use Monmiel\MonmielApiModelBundle\Model\Quarter;
 
 /**
- * @DI\Service("monmiel.repartition.service")
+ * @DI\Service("monmiel.repartition.v1.service")
  */
   class RepartitionServiceV1 implements RepartitionServiceInterface
 {
@@ -215,7 +215,7 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
     protected function initComputedYear()
 {
     $this->yearComputed=$this->targetYear;
-       $this->yearComputed->setConsoTotalEolien(0);
+    $this->yearComputed->setConsoTotalEolien(0);
     $this->yearComputed->setConsoTotalFlamme(0);
     $this->yearComputed->setConsoTotalHydraulique(0);
     $this->yearComputed->setConsoTotalNucleaire(0);

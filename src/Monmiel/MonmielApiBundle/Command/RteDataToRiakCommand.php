@@ -121,6 +121,9 @@ class RteDataToRiakCommand extends ContainerAwareCommand
             fclose($handle);
             $handle = fopen($input->getArgument("csv"), "r");
 
+            $dateTime = NULL;
+            $dateTimeLast = NULL;
+
             //for each line of csv file
             while ($line = fgetcsv($handle)) {
                 //extract hour of the current step
@@ -148,6 +151,7 @@ class RteDataToRiakCommand extends ContainerAwareCommand
                             $this->dao->put($day);
                             //add one day to the date of last step
                             $dateTime->modify($interval->format('+1 day'));
+
                             //generate new date with correct hour
                             $dateTime = date_create_from_format('Y-m-d H:i',$dateTime->format("Y-m-d")." ".$hour[0][0] );
                             $interval = $dateTime->diff($dateTimeLast);

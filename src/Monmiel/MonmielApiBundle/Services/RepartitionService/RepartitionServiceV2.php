@@ -8,14 +8,10 @@ use Monmiel\MonmielApiModelBundle\Model\Quarter;
 use Monmiel\MonmielApiBundle\Services\RepartitionService\DecisionSelector;
 
 /**
- * @DI\Service("monmiel.repartition.v2.service")
+ * @DI\Service("monmiel.repartition.service")
  */
-class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionServiceInterface
+class RepartitionServiceV2 extends RepartitionServiceV1
 {
-
-
-
-
     /**
      * @DI\Inject("monmiel.repartition.decision.service")
      * @var DecisionSelector $decision
@@ -60,27 +56,17 @@ class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionSe
         }
         $quarter->setNucleaire($quarterMax->getNucleaire());
 
-        $quarter->setFlamme($consoTotal);
-        $this->facilityService->submitFlamePower($quarter->getFlamme());
-
-
-
-    $quarter=  $this->decision->getDecisionAndUpdatesQuarterDeficit($quarter,$consoTotal);
-
-
+        $quarter=  $this->decision->getDecisionAndUpdatesQuarterDeficit($quarter,$consoTotal);
         $this->facilityService->submitFlamePower($quarter->getFlamme());
 
        return $quarter;
-
-
-
     }
 
 
     protected function initComputedYear()
-{
+    {
     $this->yearComputed=$this->targetYear;
-       $this->yearComputed->setConsoTotalEolien(0);
+    $this->yearComputed->setConsoTotalEolien(0);
     $this->yearComputed->setConsoTotalFlamme(0);
     $this->yearComputed->setConsoTotalHydraulique(0);
     $this->yearComputed->setConsoTotalNucleaire(0);
@@ -88,8 +74,7 @@ class RepartitionServiceV2 extends RepartitionServiceV1 implements RepartitionSe
     $this->yearComputed->setImportTotal(0);
     $this->yearComputed->setStepsTotal(0);
     $this->yearComputed->setExportTotal(0);
-
-}
+    }
 
     /**
      * Updating values with quarter
